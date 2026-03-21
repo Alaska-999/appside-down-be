@@ -23,10 +23,14 @@ export class AuthService {
                     password: passwordHash,
                 },
             });
+            const token = await this.generateToken(user.id, user.email);
             return {
-                email: user.email,
-                username: user.username,
-                id: user.id,
+                user: {
+                    email: user.email,
+                    username: user.username,
+                    id: user.id,
+                },
+                access_token: token,
             };
         } catch (error) {
             console.error('Signup error:', error);
@@ -58,6 +62,11 @@ export class AuthService {
         const token = await this.generateToken(user.id, user.email);
 
         return {
+            user: {
+                email: user.email,
+                username: user.username,
+                id: user.id,
+            },
             access_token: token,
         };
     }
