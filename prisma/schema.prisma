@@ -15,4 +15,5 @@ model User {
   password  String
   avatarUrl String?
   createdAt DateTime @default(now())
+  hashedRt  String?
 }
