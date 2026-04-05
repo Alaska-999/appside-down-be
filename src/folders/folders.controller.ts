@@ -11,27 +11,27 @@ export class FoldersController {
 
   @Post()
   create(@Body() createFolderDto: CreateFolderDto, @Req() req: any) {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     return this.foldersService.create(userId, createFolderDto);
   }
 
   @Get()
   findAll(@Req() req: any) {
-    return this.foldersService.findAll(req.user.id);
+    return this.foldersService.findAll(req.user.userId);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string, @Req() req: any) {
-    return this.foldersService.findOne(req.user.id, id);
+    return this.foldersService.findOne(req.user.userId, id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFolderDto: UpdateFolderDto, @Req() req: any) {
-    return this.foldersService.update(req.user.id, id, updateFolderDto);
+    return this.foldersService.update(req.user.userId, id, updateFolderDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string, @Req() req: any) {
-    return this.foldersService.remove(req.user.id, id);
+    return this.foldersService.remove(req.user.userId, id);
   }
 }
