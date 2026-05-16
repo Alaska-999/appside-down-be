@@ -30,6 +30,16 @@ export class FoldersController {
     return this.foldersService.update(req.user.userId, id, updateFolderDto);
   }
 
+  @Patch(':id/modules/remove')
+  removeModulesFromFolder(
+    @Param('id') folderId: string,
+    @Body() body: { moduleIds: string[] },
+    @Req() req: any
+  ) {
+    const userId = req.user.userId;
+    return this.foldersService.removeModules(userId, folderId, body.moduleIds);
+  }
+
   @Patch(':id/modules')
   addModulesToFolder(
     @Param('id') folderId: string,

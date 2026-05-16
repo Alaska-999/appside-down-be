@@ -74,6 +74,25 @@ export class FoldersService {
       },
     });
   }
+
+  async removeModules(userId: string, folderId: string, moduleIds: string[]) {
+    const folder = await this.findOne(userId, folderId);
+    if (!folder) {
+      throw new NotFoundException('Folder not found or does not belong to you');
+    }
+
+    return this.prisma.folder.update({
+      where: { id: folderId },
+      data: {
+        modules: {
+          disconnect: moduleIds.map((id) => ({ id })),
+        },
+      },
+      include: {
+        modules: true,
+      },
+    });
+  }
 }
 
 
