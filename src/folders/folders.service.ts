@@ -27,6 +27,13 @@ export class FoldersService {
   findOne(userId: string, id: string) {
     return this.prisma.folder.findFirst({
       where: { id, userId },
+      include: {
+        modules: {
+          include: {
+            _count: { select: { flashcards: true } },
+          },
+        },
+      },
     });
   }
 
@@ -48,4 +55,25 @@ export class FoldersService {
       where: { id },
     });
   }
+
+  async addModules(userId: string, folderId: string, moduleIds: string[]) {
+    const folder = await this.findOne(userId, folderId);
+    if (!folder) {
+      throw new NotFoundException('Folder not found or does not belong to you');
+    }
+
+    return this.prisma.folder.update({
+      where: { id: folderId },
+      data: {
+        modules: {
+          connect: moduleIds.map((id) => ({ id })),
+        },
+      },
+      include: {
+        modules: true,
+      },
+    });
+  }
 }
+
+
