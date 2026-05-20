@@ -47,6 +47,7 @@ export class FoldersController {
     @Req() req: any
   ) {
     const userId = req.user.userId;
+    console.log(`[BACKEND] Додаємо в папку ${folderId} модулі:`, body.moduleIds);
     return this.foldersService.addModules(userId, folderId, body.moduleIds);
   }
 

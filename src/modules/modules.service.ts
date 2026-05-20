@@ -18,7 +18,9 @@ export class ModulesService {
       data: {
         name: createModuleDto.name,
         isFavorite: createModuleDto.isFavorite ?? false,
-        folderId: createModuleDto.folderId,
+        folders: createModuleDto.folderId ? {
+          connect: { id: createModuleDto.folderId },
+        } : undefined,
         flashcards: createModuleDto.flashcards?.length ? {
           create: createModuleDto.flashcards.map(flashcard => ({
             term: flashcard.term,
@@ -69,7 +71,6 @@ export class ModulesService {
       }
     }
 
-    //  Виконуємо оновлення через транзакцію (щоб видалення і створення було одним кроком)
     return this.prisma.$transaction(async (tx) => {
       if (updateModuleDto.flashcards) {
         await tx.flashcard.deleteMany({
@@ -82,7 +83,9 @@ export class ModulesService {
         data: {
           name: updateModuleDto.name,
           isFavorite: updateModuleDto.isFavorite,
-          folderId: updateModuleDto.folderId,
+          folders: updateModuleDto.folderId ? {
+            connect: { id: updateModuleDto.folderId },
+          } : undefined,
           flashcards: updateModuleDto.flashcards ? {
             create: updateModuleDto.flashcards.map(card => ({
               term: card.term,

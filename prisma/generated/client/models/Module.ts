@@ -31,6 +31,7 @@ export type ModuleMinAggregateOutputType = {
   updatedAt: Date | null
   isFavorite: boolean | null
   userId: string | null
+  folderId: string | null
 }
 
 export type ModuleMaxAggregateOutputType = {
@@ -40,6 +41,7 @@ export type ModuleMaxAggregateOutputType = {
   updatedAt: Date | null
   isFavorite: boolean | null
   userId: string | null
+  folderId: string | null
 }
 
 export type ModuleCountAggregateOutputType = {
@@ -49,6 +51,7 @@ export type ModuleCountAggregateOutputType = {
   updatedAt: number
   isFavorite: number
   userId: number
+  folderId: number
   _all: number
 }
 
@@ -60,6 +63,7 @@ export type ModuleMinAggregateInputType = {
   updatedAt?: true
   isFavorite?: true
   userId?: true
+  folderId?: true
 }
 
 export type ModuleMaxAggregateInputType = {
@@ -69,6 +73,7 @@ export type ModuleMaxAggregateInputType = {
   updatedAt?: true
   isFavorite?: true
   userId?: true
+  folderId?: true
 }
 
 export type ModuleCountAggregateInputType = {
@@ -78,6 +83,7 @@ export type ModuleCountAggregateInputType = {
   updatedAt?: true
   isFavorite?: true
   userId?: true
+  folderId?: true
   _all?: true
 }
 
@@ -160,6 +166,7 @@ export type ModuleGroupByOutputType = {
   updatedAt: Date
   isFavorite: boolean
   userId: string
+  folderId: string | null
   _count: ModuleCountAggregateOutputType | null
   _min: ModuleMinAggregateOutputType | null
   _max: ModuleMaxAggregateOutputType | null
@@ -190,6 +197,7 @@ export type ModuleWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   isFavorite?: Prisma.BoolFilter<"Module"> | boolean
   userId?: Prisma.StringFilter<"Module"> | string
+  folderId?: Prisma.StringNullableFilter<"Module"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   folders?: Prisma.FolderListRelationFilter
   flashcards?: Prisma.FlashcardListRelationFilter
@@ -202,6 +210,7 @@ export type ModuleOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   folders?: Prisma.FolderOrderByRelationAggregateInput
   flashcards?: Prisma.FlashcardOrderByRelationAggregateInput
@@ -217,6 +226,7 @@ export type ModuleWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   isFavorite?: Prisma.BoolFilter<"Module"> | boolean
   userId?: Prisma.StringFilter<"Module"> | string
+  folderId?: Prisma.StringNullableFilter<"Module"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   folders?: Prisma.FolderListRelationFilter
   flashcards?: Prisma.FlashcardListRelationFilter
@@ -229,6 +239,7 @@ export type ModuleOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ModuleCountOrderByAggregateInput
   _max?: Prisma.ModuleMaxOrderByAggregateInput
   _min?: Prisma.ModuleMinOrderByAggregateInput
@@ -244,6 +255,7 @@ export type ModuleScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Module"> | Date | string
   isFavorite?: Prisma.BoolWithAggregatesFilter<"Module"> | boolean
   userId?: Prisma.StringWithAggregatesFilter<"Module"> | string
+  folderId?: Prisma.StringNullableWithAggregatesFilter<"Module"> | string | null
 }
 
 export type ModuleCreateInput = {
@@ -252,6 +264,7 @@ export type ModuleCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
+  folderId?: string | null
   user: Prisma.UserCreateNestedOneWithoutModulesInput
   folders?: Prisma.FolderCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardCreateNestedManyWithoutModuleInput
@@ -264,6 +277,7 @@ export type ModuleUncheckedCreateInput = {
   updatedAt?: Date | string
   isFavorite?: boolean
   userId: string
+  folderId?: string | null
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutModuleInput
 }
@@ -274,6 +288,7 @@ export type ModuleUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutModulesNestedInput
   folders?: Prisma.FolderUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUpdateManyWithoutModuleNestedInput
@@ -286,6 +301,7 @@ export type ModuleUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   folders?: Prisma.FolderUncheckedUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutModuleNestedInput
 }
@@ -297,6 +313,7 @@ export type ModuleCreateManyInput = {
   updatedAt?: Date | string
   isFavorite?: boolean
   userId: string
+  folderId?: string | null
 }
 
 export type ModuleUpdateManyMutationInput = {
@@ -305,6 +322,7 @@ export type ModuleUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ModuleUncheckedUpdateManyInput = {
@@ -314,6 +332,7 @@ export type ModuleUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ModuleListRelationFilter = {
@@ -333,6 +352,7 @@ export type ModuleCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
 }
 
 export type ModuleMaxOrderByAggregateInput = {
@@ -342,6 +362,7 @@ export type ModuleMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
 }
 
 export type ModuleMinOrderByAggregateInput = {
@@ -351,6 +372,7 @@ export type ModuleMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  folderId?: Prisma.SortOrder
 }
 
 export type ModuleScalarRelationFilter = {
@@ -462,6 +484,7 @@ export type ModuleCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
+  folderId?: string | null
   folders?: Prisma.FolderCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardCreateNestedManyWithoutModuleInput
 }
@@ -472,6 +495,7 @@ export type ModuleUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
+  folderId?: string | null
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutModuleInput
 }
@@ -512,6 +536,7 @@ export type ModuleScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   isFavorite?: Prisma.BoolFilter<"Module"> | boolean
   userId?: Prisma.StringFilter<"Module"> | string
+  folderId?: Prisma.StringNullableFilter<"Module"> | string | null
 }
 
 export type ModuleCreateWithoutFoldersInput = {
@@ -520,6 +545,7 @@ export type ModuleCreateWithoutFoldersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
+  folderId?: string | null
   user: Prisma.UserCreateNestedOneWithoutModulesInput
   flashcards?: Prisma.FlashcardCreateNestedManyWithoutModuleInput
 }
@@ -531,6 +557,7 @@ export type ModuleUncheckedCreateWithoutFoldersInput = {
   updatedAt?: Date | string
   isFavorite?: boolean
   userId: string
+  folderId?: string | null
   flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutModuleInput
 }
 
@@ -561,6 +588,7 @@ export type ModuleCreateWithoutFlashcardsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
+  folderId?: string | null
   user: Prisma.UserCreateNestedOneWithoutModulesInput
   folders?: Prisma.FolderCreateNestedManyWithoutModulesInput
 }
@@ -572,6 +600,7 @@ export type ModuleUncheckedCreateWithoutFlashcardsInput = {
   updatedAt?: Date | string
   isFavorite?: boolean
   userId: string
+  folderId?: string | null
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutModulesInput
 }
 
@@ -597,6 +626,7 @@ export type ModuleUpdateWithoutFlashcardsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutModulesNestedInput
   folders?: Prisma.FolderUpdateManyWithoutModulesNestedInput
 }
@@ -608,6 +638,7 @@ export type ModuleUncheckedUpdateWithoutFlashcardsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   folders?: Prisma.FolderUncheckedUpdateManyWithoutModulesNestedInput
 }
 
@@ -617,6 +648,7 @@ export type ModuleCreateManyUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
+  folderId?: string | null
 }
 
 export type ModuleUpdateWithoutUserInput = {
@@ -625,6 +657,7 @@ export type ModuleUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   folders?: Prisma.FolderUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUpdateManyWithoutModuleNestedInput
 }
@@ -635,6 +668,7 @@ export type ModuleUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   folders?: Prisma.FolderUncheckedUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutModuleNestedInput
 }
@@ -645,6 +679,7 @@ export type ModuleUncheckedUpdateManyWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ModuleUpdateWithoutFoldersInput = {
@@ -653,6 +688,7 @@ export type ModuleUpdateWithoutFoldersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUpdateManyWithoutModuleNestedInput
 }
@@ -664,6 +700,7 @@ export type ModuleUncheckedUpdateWithoutFoldersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutModuleNestedInput
 }
 
@@ -674,6 +711,7 @@ export type ModuleUncheckedUpdateManyWithoutFoldersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -723,6 +761,7 @@ export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   isFavorite?: boolean
   userId?: boolean
+  folderId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   folders?: boolean | Prisma.Module$foldersArgs<ExtArgs>
   flashcards?: boolean | Prisma.Module$flashcardsArgs<ExtArgs>
@@ -736,6 +775,7 @@ export type ModuleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   updatedAt?: boolean
   isFavorite?: boolean
   userId?: boolean
+  folderId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["module"]>
 
@@ -746,6 +786,7 @@ export type ModuleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   updatedAt?: boolean
   isFavorite?: boolean
   userId?: boolean
+  folderId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["module"]>
 
@@ -756,9 +797,10 @@ export type ModuleSelectScalar = {
   updatedAt?: boolean
   isFavorite?: boolean
   userId?: boolean
+  folderId?: boolean
 }
 
-export type ModuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "isFavorite" | "userId", ExtArgs["result"]["module"]>
+export type ModuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "isFavorite" | "userId" | "folderId", ExtArgs["result"]["module"]>
 export type ModuleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   folders?: boolean | Prisma.Module$foldersArgs<ExtArgs>
@@ -786,6 +828,7 @@ export type $ModulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     updatedAt: Date
     isFavorite: boolean
     userId: string
+    folderId: string | null
   }, ExtArgs["result"]["module"]>
   composites: {}
 }
@@ -1218,6 +1261,7 @@ export interface ModuleFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"Module", 'DateTime'>
   readonly isFavorite: Prisma.FieldRef<"Module", 'Boolean'>
   readonly userId: Prisma.FieldRef<"Module", 'String'>
+  readonly folderId: Prisma.FieldRef<"Module", 'String'>
 }
     
 

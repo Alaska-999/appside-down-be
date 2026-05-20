@@ -44,9 +44,7 @@ model Module {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  folderId String?
-  folder   Folder? @relation(fields: [folderId], references: [id])
-
+  folders    Folder[]
   flashcards Flashcard[]
 }
 
