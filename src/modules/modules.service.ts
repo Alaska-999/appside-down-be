@@ -36,6 +36,9 @@ export class ModulesService {
     return this.prisma.module.findMany({
       where: { userId },
       include: {
+        folders: {
+          select: { id: true },
+        },
         _count: {
           select: { flashcards: true },
         },
@@ -47,6 +50,12 @@ export class ModulesService {
     return this.prisma.module.findFirst({
       where: { id, userId },
       include: {
+        user: {
+          select: { id: true, username: true, avatarUrl: true },
+        },
+        folders: {
+          select: { id: true },
+        },
         _count: {
           select: { flashcards: true },
         },
