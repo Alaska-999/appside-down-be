@@ -113,6 +113,8 @@ export class ModulesService {
     });
     if (!module) throw new NotFoundException('Module not found or not belongs to you');
 
+    await this.prisma.flashcard.deleteMany({ where: { moduleId: id } });
+
     return this.prisma.module.delete({
       where: { id },
     });
