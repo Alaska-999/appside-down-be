@@ -10,9 +10,9 @@
 */
 
 export const CardStatus = {
-  NEW: 'NEW',
-  LEARNING: 'LEARNING',
-  MASTERED: 'MASTERED'
+  UNSTUDIED: 'UNSTUDIED',
+  STILL_LEARNING: 'STILL_LEARNING',
+  KNOWN: 'KNOWN',
 } as const
 
-export type CardStatus = (typeof CardStatus)[keyof typeof CardStatus]
+export type CardStatus = typeof CardStatus[keyof typeof CardStatus]

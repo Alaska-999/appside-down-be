@@ -49,9 +49,9 @@ model Module {
 }
 
 enum CardStatus {
-  NEW
-  LEARNING
-  MASTERED
+  UNSTUDIED
+  STILL_LEARNING
+  KNOWN
 }
 
 model Flashcard {
@@ -61,7 +61,7 @@ model Flashcard {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   isStarred  Boolean    @default(false)
-  status     CardStatus @default(NEW)
+  status     CardStatus @default(UNSTUDIED)
 
   moduleId String
   module   Module @relation(fields: [moduleId], references: [id])
