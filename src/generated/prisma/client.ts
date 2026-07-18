@@ -64,3 +64,8 @@ export type Module = Prisma.ModuleModel
  * 
  */
 export type Flashcard = Prisma.FlashcardModel
+/**
+ * Model StudyEvent
+ * 
+ */
+export type StudyEvent = Prisma.StudyEventModel

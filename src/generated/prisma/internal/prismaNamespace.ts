@@ -388,7 +388,8 @@ export const ModelName = {
   PushToken: 'PushToken',
   Folder: 'Folder',
   Module: 'Module',
-  Flashcard: 'Flashcard'
+  Flashcard: 'Flashcard',
+  StudyEvent: 'StudyEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "pushToken" | "folder" | "module" | "flashcard"
+    modelProps: "user" | "pushToken" | "folder" | "module" | "flashcard" | "studyEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +779,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StudyEvent: {
+      payload: Prisma.$StudyEventPayload<ExtArgs>
+      fields: Prisma.StudyEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StudyEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StudyEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload>
+        }
+        findFirst: {
+          args: Prisma.StudyEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StudyEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload>
+        }
+        findMany: {
+          args: Prisma.StudyEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload>[]
+        }
+        create: {
+          args: Prisma.StudyEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload>
+        }
+        createMany: {
+          args: Prisma.StudyEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StudyEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload>[]
+        }
+        delete: {
+          args: Prisma.StudyEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload>
+        }
+        update: {
+          args: Prisma.StudyEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.StudyEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StudyEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StudyEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.StudyEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StudyEventPayload>
+        }
+        aggregate: {
+          args: Prisma.StudyEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStudyEvent>
+        }
+        groupBy: {
+          args: Prisma.StudyEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudyEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StudyEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StudyEventCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -881,6 +956,19 @@ export const FlashcardScalarFieldEnum = {
 } as const
 
 export type FlashcardScalarFieldEnum = (typeof FlashcardScalarFieldEnum)[keyof typeof FlashcardScalarFieldEnum]
+
+
+export const StudyEventScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  answeredAt: 'answeredAt',
+  createdAt: 'createdAt',
+  flashcardId: 'flashcardId',
+  moduleId: 'moduleId',
+  userId: 'userId'
+} as const
+
+export type StudyEventScalarFieldEnum = (typeof StudyEventScalarFieldEnum)[keyof typeof StudyEventScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1075,6 +1163,7 @@ export type GlobalOmitConfig = {
   folder?: Prisma.FolderOmit
   module?: Prisma.ModuleOmit
   flashcard?: Prisma.FlashcardOmit
+  studyEvent?: Prisma.StudyEventOmit
 }
 
 /* Types for Logging */

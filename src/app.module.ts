@@ -7,12 +7,28 @@ import { FoldersModule } from './folders/folders.module';
 import { ModulesModule } from './modules/modules.module';
 import { FlashcardsModule } from './flashcards/flashcards.module';
 import { NotificationsModule } from './notifications/notifications.module';
-import { NotificationsController } from './notifications/notifications.controller';
-import { NotificationsService } from './notifications/notifications.service';
+import { BullModule } from '@nestjs/bullmq';
+import { StudyModule } from './study/study.module';
+
 
 @Module({
-  imports: [PrismaModule, AuthModule, FoldersModule, ModulesModule, FlashcardsModule, NotificationsModule],
-  controllers: [AppController, NotificationsController],
-  providers: [AppService, NotificationsService],
+  imports: [
+    PrismaModule,
+    AuthModule,
+    FoldersModule,
+    ModulesModule,
+    FlashcardsModule,
+    NotificationsModule,
+    StudyModule,
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST ?? 'localhost',
+        port: +(process.env.REDIS_PORT ?? 6379),
+      },
+    }),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {}
+
+export class AppModule { }

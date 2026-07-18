@@ -209,6 +209,7 @@ export type UserWhereInput = {
   folders?: Prisma.FolderListRelationFilter
   modules?: Prisma.ModuleListRelationFilter
   pushTokens?: Prisma.PushTokenListRelationFilter
+  studyEvents?: Prisma.StudyEventListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -223,6 +224,7 @@ export type UserOrderByWithRelationInput = {
   folders?: Prisma.FolderOrderByRelationAggregateInput
   modules?: Prisma.ModuleOrderByRelationAggregateInput
   pushTokens?: Prisma.PushTokenOrderByRelationAggregateInput
+  studyEvents?: Prisma.StudyEventOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -240,6 +242,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   folders?: Prisma.FolderListRelationFilter
   modules?: Prisma.ModuleListRelationFilter
   pushTokens?: Prisma.PushTokenListRelationFilter
+  studyEvents?: Prisma.StudyEventListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -282,6 +285,7 @@ export type UserCreateInput = {
   folders?: Prisma.FolderCreateNestedManyWithoutUserInput
   modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
   pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -296,6 +300,7 @@ export type UserUncheckedCreateInput = {
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
   pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -310,6 +315,7 @@ export type UserUpdateInput = {
   folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
   pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -324,6 +330,7 @@ export type UserUncheckedUpdateInput = {
   folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
   pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -455,6 +462,20 @@ export type UserUpdateOneRequiredWithoutModulesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutModulesInput, Prisma.UserUpdateWithoutModulesInput>, Prisma.UserUncheckedUpdateWithoutModulesInput>
 }
 
+export type UserCreateNestedOneWithoutStudyEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStudyEventsInput, Prisma.UserUncheckedCreateWithoutStudyEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStudyEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutStudyEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStudyEventsInput, Prisma.UserUncheckedCreateWithoutStudyEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStudyEventsInput
+  upsert?: Prisma.UserUpsertWithoutStudyEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStudyEventsInput, Prisma.UserUpdateWithoutStudyEventsInput>, Prisma.UserUncheckedUpdateWithoutStudyEventsInput>
+}
+
 export type UserCreateWithoutPushTokensInput = {
   id?: string
   email: string
@@ -466,6 +487,7 @@ export type UserCreateWithoutPushTokensInput = {
   pushNotificationsEnabled?: boolean
   folders?: Prisma.FolderCreateNestedManyWithoutUserInput
   modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPushTokensInput = {
@@ -479,6 +501,7 @@ export type UserUncheckedCreateWithoutPushTokensInput = {
   pushNotificationsEnabled?: boolean
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPushTokensInput = {
@@ -508,6 +531,7 @@ export type UserUpdateWithoutPushTokensInput = {
   pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
+  studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPushTokensInput = {
@@ -521,6 +545,7 @@ export type UserUncheckedUpdateWithoutPushTokensInput = {
   pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
+  studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFoldersInput = {
@@ -534,6 +559,7 @@ export type UserCreateWithoutFoldersInput = {
   pushNotificationsEnabled?: boolean
   modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
   pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFoldersInput = {
@@ -547,6 +573,7 @@ export type UserUncheckedCreateWithoutFoldersInput = {
   pushNotificationsEnabled?: boolean
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
   pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFoldersInput = {
@@ -576,6 +603,7 @@ export type UserUpdateWithoutFoldersInput = {
   pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
   pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFoldersInput = {
@@ -589,6 +617,7 @@ export type UserUncheckedUpdateWithoutFoldersInput = {
   pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
   pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutModulesInput = {
@@ -602,6 +631,7 @@ export type UserCreateWithoutModulesInput = {
   pushNotificationsEnabled?: boolean
   folders?: Prisma.FolderCreateNestedManyWithoutUserInput
   pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutModulesInput = {
@@ -615,6 +645,7 @@ export type UserUncheckedCreateWithoutModulesInput = {
   pushNotificationsEnabled?: boolean
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
   pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutModulesInput = {
@@ -644,6 +675,7 @@ export type UserUpdateWithoutModulesInput = {
   pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
   pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutModulesInput = {
@@ -657,6 +689,79 @@ export type UserUncheckedUpdateWithoutModulesInput = {
   pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
   pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutStudyEventsInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
+  folders?: Prisma.FolderCreateNestedManyWithoutUserInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutStudyEventsInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutStudyEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStudyEventsInput, Prisma.UserUncheckedCreateWithoutStudyEventsInput>
+}
+
+export type UserUpsertWithoutStudyEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStudyEventsInput, Prisma.UserUncheckedUpdateWithoutStudyEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStudyEventsInput, Prisma.UserUncheckedCreateWithoutStudyEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStudyEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStudyEventsInput, Prisma.UserUncheckedUpdateWithoutStudyEventsInput>
+}
+
+export type UserUpdateWithoutStudyEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStudyEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -668,12 +773,14 @@ export type UserCountOutputType = {
   folders: number
   modules: number
   pushTokens: number
+  studyEvents: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folders?: boolean | UserCountOutputTypeCountFoldersArgs
   modules?: boolean | UserCountOutputTypeCountModulesArgs
   pushTokens?: boolean | UserCountOutputTypeCountPushTokensArgs
+  studyEvents?: boolean | UserCountOutputTypeCountStudyEventsArgs
 }
 
 /**
@@ -707,6 +814,13 @@ export type UserCountOutputTypeCountPushTokensArgs<ExtArgs extends runtime.Types
   where?: Prisma.PushTokenWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStudyEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StudyEventWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -720,6 +834,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   folders?: boolean | Prisma.User$foldersArgs<ExtArgs>
   modules?: boolean | Prisma.User$modulesArgs<ExtArgs>
   pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
+  studyEvents?: boolean | Prisma.User$studyEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -761,6 +876,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   folders?: boolean | Prisma.User$foldersArgs<ExtArgs>
   modules?: boolean | Prisma.User$modulesArgs<ExtArgs>
   pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
+  studyEvents?: boolean | Prisma.User$studyEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -772,6 +888,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     folders: Prisma.$FolderPayload<ExtArgs>[]
     modules: Prisma.$ModulePayload<ExtArgs>[]
     pushTokens: Prisma.$PushTokenPayload<ExtArgs>[]
+    studyEvents: Prisma.$StudyEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1179,6 +1296,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   folders<T extends Prisma.User$foldersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$foldersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   modules<T extends Prisma.User$modulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$modulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pushTokens<T extends Prisma.User$pushTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pushTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  studyEvents<T extends Prisma.User$studyEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studyEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudyEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1678,6 +1796,30 @@ export type User$pushTokensArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.PushTokenScalarFieldEnum | Prisma.PushTokenScalarFieldEnum[]
+}
+
+/**
+ * User.studyEvents
+ */
+export type User$studyEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StudyEvent
+   */
+  select?: Prisma.StudyEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StudyEvent
+   */
+  omit?: Prisma.StudyEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudyEventInclude<ExtArgs> | null
+  where?: Prisma.StudyEventWhereInput
+  orderBy?: Prisma.StudyEventOrderByWithRelationInput | Prisma.StudyEventOrderByWithRelationInput[]
+  cursor?: Prisma.StudyEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StudyEventScalarFieldEnum | Prisma.StudyEventScalarFieldEnum[]
 }
 
 /**

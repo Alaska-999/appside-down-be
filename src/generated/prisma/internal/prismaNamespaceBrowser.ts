@@ -55,7 +55,8 @@ export const ModelName = {
   PushToken: 'PushToken',
   Folder: 'Folder',
   Module: 'Module',
-  Flashcard: 'Flashcard'
+  Flashcard: 'Flashcard',
+  StudyEvent: 'StudyEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -138,6 +139,19 @@ export const FlashcardScalarFieldEnum = {
 } as const
 
 export type FlashcardScalarFieldEnum = (typeof FlashcardScalarFieldEnum)[keyof typeof FlashcardScalarFieldEnum]
+
+
+export const StudyEventScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  answeredAt: 'answeredAt',
+  createdAt: 'createdAt',
+  flashcardId: 'flashcardId',
+  moduleId: 'moduleId',
+  userId: 'userId'
+} as const
+
+export type StudyEventScalarFieldEnum = (typeof StudyEventScalarFieldEnum)[keyof typeof StudyEventScalarFieldEnum]
 
 
 export const SortOrder = {

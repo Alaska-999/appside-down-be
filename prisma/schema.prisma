@@ -20,6 +20,7 @@ model User {
   modules   Module[]
   pushTokens PushToken[]
   pushNotificationsEnabled Boolean @default(false)
+  studyEvents StudyEvent[]
 }
 
 model PushToken {
@@ -86,4 +87,20 @@ model Flashcard {
   module   Module @relation(fields: [moduleId], references: [id])
 
   @@index([moduleId])
+}
+
+
+model StudyEvent {
+  id          String     @id @default(uuid())
+  status      CardStatus
+  answeredAt  DateTime
+  createdAt   DateTime   @default(now())
+
+  flashcardId String     
+  moduleId    String     
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([userId, answeredAt])
 }
