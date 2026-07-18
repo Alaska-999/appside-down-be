@@ -30,7 +30,7 @@ export class FlashcardsService {
 
   findAll(userId: string, moduleId: string) {
     return this.prisma.flashcard.findMany({
-      where: { module: { id: moduleId, userId } },
+      where: { module: { id: moduleId, OR: [{ userId }, { isPublic: true }] } },
     });
   }
 
@@ -61,3 +61,4 @@ export class FlashcardsService {
     });
   }
 }
+

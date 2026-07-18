@@ -119,7 +119,8 @@ export const ModuleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   isFavorite: 'isFavorite',
-  userId: 'userId'
+  userId: 'userId',
+  isPublic: 'isPublic'
 } as const
 
 export type ModuleScalarFieldEnum = (typeof ModuleScalarFieldEnum)[keyof typeof ModuleScalarFieldEnum]

@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query } from '@nestjs/common';
 import { ModulesService } from './modules.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
+
 
 @UseGuards(JwtAuthGuard)
 @Controller('modules')
@@ -15,10 +17,22 @@ export class ModulesController {
     return this.modulesService.create(userId, createModuleDto);
   }
 
+  @Post(':id/save')
+  saveToLibrary(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user.userId;
+    return this.modulesService.saveToLibrary(userId, id);
+  }
+
   @Get()
   findAll(@Req() req: any) {
     const userId = req.user.userId;
     return this.modulesService.findAll(userId);
+  }
+
+  @Get('public')
+  findPublic(@Query('search') search: string, @Req() req: any) {
+    const userId = req.user.userId;
+    return this.modulesService.findPublic(search);
   }
 
   @Get(':id')

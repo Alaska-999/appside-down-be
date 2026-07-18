@@ -62,6 +62,7 @@ model Module {
 
   folders    Folder[]
   flashcards Flashcard[]
+  isPublic Boolean @default(false)
 
   @@index([userId])
 }

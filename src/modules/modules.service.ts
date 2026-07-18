@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { FoldersService } from 'src/folders/folders.service';
@@ -39,6 +39,12 @@ export class ModulesService {
         folders: {
           select: { id: true },
         },
+        user: {
+          select: { id: true, username: true, avatarUrl: true },
+        },
+        flashcards: {
+          select: { status: true },
+        },
         _count: {
           select: { flashcards: true },
         },
@@ -48,7 +54,7 @@ export class ModulesService {
 
   findOne(userId: string, id: string) {
     return this.prisma.module.findFirst({
-      where: { id, userId },
+      where: { id, OR: [{ userId }, { isPublic: true }] },
       include: {
         user: {
           select: { id: true, username: true, avatarUrl: true },
@@ -92,6 +98,7 @@ export class ModulesService {
         data: {
           name: updateModuleDto.name,
           isFavorite: updateModuleDto.isFavorite,
+          isPublic: updateModuleDto.isPublic,
           folders: updateModuleDto.folderId ? {
             connect: { id: updateModuleDto.folderId },
           } : undefined,
@@ -119,4 +126,67 @@ export class ModulesService {
       where: { id },
     });
   }
+
+
+  async findPublic(search: string) {
+    return this.prisma.module.findMany({
+      where: {
+        isPublic: true,
+        name: {
+          contains: search,
+          mode: 'insensitive'
+        }
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true
+          }
+        },
+        _count: {
+          select: { flashcards: true }
+        }
+      },
+      orderBy: { updatedAt: 'desc' },
+      take: 20
+    });
+  }
+
+  async saveToLibrary(userId: string, id: string) {
+    const originalModule = await this.prisma.module.findFirst({
+      where: { id, isPublic: true },
+      include: { flashcards: true },
+    });
+
+    if (!originalModule) {
+      throw new NotFoundException('Public module not found');
+    }
+
+    if (originalModule.userId === userId) {
+      throw new BadRequestException('You cannot save your own module to your library');
+    }
+
+    return this.prisma.module.create({
+      data: {
+        name: originalModule.name,
+        userId: userId,
+        isPublic: false,
+        isFavorite: false,
+
+        flashcards: {
+          create: originalModule.flashcards.map((card) => ({
+            term: card.term,
+            definition: card.definition,
+          })),
+        },
+      },
+      include: { flashcards: true },
+    });
+  }
+
 }
+
+
+
