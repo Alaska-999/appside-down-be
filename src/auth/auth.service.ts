@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginDto, SignupDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
@@ -129,5 +129,42 @@ export class AuthService {
             where: { id: userId },
             data: { hashedRt: null },
         });
+    }
+
+    async changePassword(userId: string, oldPassword: string, newPassword: string) {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        const isOldPasswordValid = await bcrypt.compare(oldPassword, user.password);
+        if (!isOldPasswordValid) {
+            throw new ForbiddenException('Current password is incorrect');
+        }
+
+        const newHash = await bcrypt.hash(newPassword, 10);
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: { password: newHash },
+        });
+    }
+
+    async deleteAccount(userId: string, password: string) {
+        const user = await this.prisma.user.findUnique({ where: { id: userId } });
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            throw new ForbiddenException('Incorrect password');
+        }
+
+        await this.prisma.$transaction([
+            this.prisma.flashcard.deleteMany({ where: { module: { userId } } }),
+            this.prisma.module.deleteMany({ where: { userId } }),
+            this.prisma.folder.deleteMany({ where: { userId } }),
+            this.prisma.user.delete({ where: { id: userId } }),
+        ]);
     }
 }
