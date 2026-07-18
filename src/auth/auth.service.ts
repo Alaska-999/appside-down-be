@@ -164,6 +164,7 @@ export class AuthService {
             this.prisma.flashcard.deleteMany({ where: { module: { userId } } }),
             this.prisma.module.deleteMany({ where: { userId } }),
             this.prisma.folder.deleteMany({ where: { userId } }),
+            this.prisma.pushToken.deleteMany({ where: { userId } }),  // ← нове
             this.prisma.user.delete({ where: { id: userId } }),
         ]);
     }

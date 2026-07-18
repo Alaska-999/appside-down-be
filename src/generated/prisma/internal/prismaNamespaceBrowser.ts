@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  PushToken: 'PushToken',
   Folder: 'Folder',
   Module: 'Module',
   Flashcard: 'Flashcard'
@@ -80,10 +81,23 @@ export const UserScalarFieldEnum = {
   password: 'password',
   avatarUrl: 'avatarUrl',
   createdAt: 'createdAt',
-  hashedRt: 'hashedRt'
+  hashedRt: 'hashedRt',
+  pushNotificationsEnabled: 'pushNotificationsEnabled'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const PushTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  platform: 'platform',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type PushTokenScalarFieldEnum = (typeof PushTokenScalarFieldEnum)[keyof typeof PushTokenScalarFieldEnum]
 
 
 export const FolderScalarFieldEnum = {

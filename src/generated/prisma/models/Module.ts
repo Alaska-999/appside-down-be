@@ -438,10 +438,6 @@ export type ModuleUncheckedUpdateManyWithoutFoldersNestedInput = {
   deleteMany?: Prisma.ModuleScalarWhereInput | Prisma.ModuleScalarWhereInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type ModuleCreateNestedOneWithoutFlashcardsInput = {
   create?: Prisma.XOR<Prisma.ModuleCreateWithoutFlashcardsInput, Prisma.ModuleUncheckedCreateWithoutFlashcardsInput>
   connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutFlashcardsInput

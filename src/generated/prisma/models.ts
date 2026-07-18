@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.js'
+export type * from './models/PushToken.js'
 export type * from './models/Folder.js'
 export type * from './models/Module.js'
 export type * from './models/Flashcard.js'

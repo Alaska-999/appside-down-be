@@ -18,6 +18,20 @@ model User {
   hashedRt  String?
   folders   Folder[]
   modules   Module[]
+  pushTokens PushToken[]
+  pushNotificationsEnabled Boolean @default(false)
+}
+
+model PushToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  platform  String            // "ios" | "android"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  @@index([userId])
 }
 
 model Folder {
@@ -32,6 +46,8 @@ model Folder {
 
   modules Module[]
   tags    String[] @default([])
+
+  @@index([userId])
 }
 
 model Module {
@@ -46,6 +62,8 @@ model Module {
 
   folders    Folder[]
   flashcards Flashcard[]
+
+  @@index([userId])
 }
 
 enum CardStatus {
@@ -65,4 +83,6 @@ model Flashcard {
 
   moduleId String
   module   Module @relation(fields: [moduleId], references: [id])
+
+  @@index([moduleId])
 }

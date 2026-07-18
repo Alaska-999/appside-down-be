@@ -32,6 +32,7 @@ export type UserMinAggregateOutputType = {
   avatarUrl: string | null
   createdAt: Date | null
   hashedRt: string | null
+  pushNotificationsEnabled: boolean | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -42,6 +43,7 @@ export type UserMaxAggregateOutputType = {
   avatarUrl: string | null
   createdAt: Date | null
   hashedRt: string | null
+  pushNotificationsEnabled: boolean | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -52,6 +54,7 @@ export type UserCountAggregateOutputType = {
   avatarUrl: number
   createdAt: number
   hashedRt: number
+  pushNotificationsEnabled: number
   _all: number
 }
 
@@ -64,6 +67,7 @@ export type UserMinAggregateInputType = {
   avatarUrl?: true
   createdAt?: true
   hashedRt?: true
+  pushNotificationsEnabled?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -74,6 +78,7 @@ export type UserMaxAggregateInputType = {
   avatarUrl?: true
   createdAt?: true
   hashedRt?: true
+  pushNotificationsEnabled?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -84,6 +89,7 @@ export type UserCountAggregateInputType = {
   avatarUrl?: true
   createdAt?: true
   hashedRt?: true
+  pushNotificationsEnabled?: true
   _all?: true
 }
 
@@ -167,6 +173,7 @@ export type UserGroupByOutputType = {
   avatarUrl: string | null
   createdAt: Date
   hashedRt: string | null
+  pushNotificationsEnabled: boolean
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -198,8 +205,10 @@ export type UserWhereInput = {
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   hashedRt?: Prisma.StringNullableFilter<"User"> | string | null
+  pushNotificationsEnabled?: Prisma.BoolFilter<"User"> | boolean
   folders?: Prisma.FolderListRelationFilter
   modules?: Prisma.ModuleListRelationFilter
+  pushTokens?: Prisma.PushTokenListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -210,8 +219,10 @@ export type UserOrderByWithRelationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   hashedRt?: Prisma.SortOrderInput | Prisma.SortOrder
+  pushNotificationsEnabled?: Prisma.SortOrder
   folders?: Prisma.FolderOrderByRelationAggregateInput
   modules?: Prisma.ModuleOrderByRelationAggregateInput
+  pushTokens?: Prisma.PushTokenOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -225,8 +236,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   hashedRt?: Prisma.StringNullableFilter<"User"> | string | null
+  pushNotificationsEnabled?: Prisma.BoolFilter<"User"> | boolean
   folders?: Prisma.FolderListRelationFilter
   modules?: Prisma.ModuleListRelationFilter
+  pushTokens?: Prisma.PushTokenListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -237,6 +250,7 @@ export type UserOrderByWithAggregationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   hashedRt?: Prisma.SortOrderInput | Prisma.SortOrder
+  pushNotificationsEnabled?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -253,6 +267,7 @@ export type UserScalarWhereWithAggregatesInput = {
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   hashedRt?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  pushNotificationsEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
 }
 
 export type UserCreateInput = {
@@ -263,8 +278,10 @@ export type UserCreateInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
   folders?: Prisma.FolderCreateNestedManyWithoutUserInput
   modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -275,8 +292,10 @@ export type UserUncheckedCreateInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -287,8 +306,10 @@ export type UserUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -299,8 +320,10 @@ export type UserUncheckedUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -311,6 +334,7 @@ export type UserCreateManyInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
 }
 
 export type UserUpdateManyMutationInput = {
@@ -321,6 +345,7 @@ export type UserUpdateManyMutationInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -331,6 +356,7 @@ export type UserUncheckedUpdateManyInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -341,6 +367,7 @@ export type UserCountOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   hashedRt?: Prisma.SortOrder
+  pushNotificationsEnabled?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -351,6 +378,7 @@ export type UserMaxOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   hashedRt?: Prisma.SortOrder
+  pushNotificationsEnabled?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -361,6 +389,7 @@ export type UserMinOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   hashedRt?: Prisma.SortOrder
+  pushNotificationsEnabled?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -378,6 +407,24 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type UserCreateNestedOneWithoutPushTokensInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPushTokensInput, Prisma.UserUncheckedCreateWithoutPushTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPushTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPushTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPushTokensInput, Prisma.UserUncheckedCreateWithoutPushTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPushTokensInput
+  upsert?: Prisma.UserUpsertWithoutPushTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPushTokensInput, Prisma.UserUpdateWithoutPushTokensInput>, Prisma.UserUncheckedUpdateWithoutPushTokensInput>
 }
 
 export type UserCreateNestedOneWithoutFoldersInput = {
@@ -408,6 +455,74 @@ export type UserUpdateOneRequiredWithoutModulesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutModulesInput, Prisma.UserUpdateWithoutModulesInput>, Prisma.UserUncheckedUpdateWithoutModulesInput>
 }
 
+export type UserCreateWithoutPushTokensInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
+  folders?: Prisma.FolderCreateNestedManyWithoutUserInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPushTokensInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPushTokensInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPushTokensInput, Prisma.UserUncheckedCreateWithoutPushTokensInput>
+}
+
+export type UserUpsertWithoutPushTokensInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPushTokensInput, Prisma.UserUncheckedUpdateWithoutPushTokensInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPushTokensInput, Prisma.UserUncheckedCreateWithoutPushTokensInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPushTokensInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPushTokensInput, Prisma.UserUncheckedUpdateWithoutPushTokensInput>
+}
+
+export type UserUpdateWithoutPushTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPushTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutFoldersInput = {
   id?: string
   email: string
@@ -416,7 +531,9 @@ export type UserCreateWithoutFoldersInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
   modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFoldersInput = {
@@ -427,7 +544,9 @@ export type UserUncheckedCreateWithoutFoldersInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFoldersInput = {
@@ -454,7 +573,9 @@ export type UserUpdateWithoutFoldersInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFoldersInput = {
@@ -465,7 +586,9 @@ export type UserUncheckedUpdateWithoutFoldersInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutModulesInput = {
@@ -476,7 +599,9 @@ export type UserCreateWithoutModulesInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
   folders?: Prisma.FolderCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutModulesInput = {
@@ -487,7 +612,9 @@ export type UserUncheckedCreateWithoutModulesInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutModulesInput = {
@@ -514,7 +641,9 @@ export type UserUpdateWithoutModulesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutModulesInput = {
@@ -525,7 +654,9 @@ export type UserUncheckedUpdateWithoutModulesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -536,11 +667,13 @@ export type UserUncheckedUpdateWithoutModulesInput = {
 export type UserCountOutputType = {
   folders: number
   modules: number
+  pushTokens: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folders?: boolean | UserCountOutputTypeCountFoldersArgs
   modules?: boolean | UserCountOutputTypeCountModulesArgs
+  pushTokens?: boolean | UserCountOutputTypeCountPushTokensArgs
 }
 
 /**
@@ -567,6 +700,13 @@ export type UserCountOutputTypeCountModulesArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.ModuleWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPushTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PushTokenWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -576,8 +716,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   avatarUrl?: boolean
   createdAt?: boolean
   hashedRt?: boolean
+  pushNotificationsEnabled?: boolean
   folders?: boolean | Prisma.User$foldersArgs<ExtArgs>
   modules?: boolean | Prisma.User$modulesArgs<ExtArgs>
+  pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -589,6 +731,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarUrl?: boolean
   createdAt?: boolean
   hashedRt?: boolean
+  pushNotificationsEnabled?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -599,6 +742,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarUrl?: boolean
   createdAt?: boolean
   hashedRt?: boolean
+  pushNotificationsEnabled?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -609,12 +753,14 @@ export type UserSelectScalar = {
   avatarUrl?: boolean
   createdAt?: boolean
   hashedRt?: boolean
+  pushNotificationsEnabled?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "avatarUrl" | "createdAt" | "hashedRt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "avatarUrl" | "createdAt" | "hashedRt" | "pushNotificationsEnabled", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folders?: boolean | Prisma.User$foldersArgs<ExtArgs>
   modules?: boolean | Prisma.User$modulesArgs<ExtArgs>
+  pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -625,6 +771,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     folders: Prisma.$FolderPayload<ExtArgs>[]
     modules: Prisma.$ModulePayload<ExtArgs>[]
+    pushTokens: Prisma.$PushTokenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -634,6 +781,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     avatarUrl: string | null
     createdAt: Date
     hashedRt: string | null
+    pushNotificationsEnabled: boolean
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1030,6 +1178,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   folders<T extends Prisma.User$foldersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$foldersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   modules<T extends Prisma.User$modulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$modulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pushTokens<T extends Prisma.User$pushTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pushTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1066,6 +1215,7 @@ export interface UserFieldRefs {
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly hashedRt: Prisma.FieldRef<"User", 'String'>
+  readonly pushNotificationsEnabled: Prisma.FieldRef<"User", 'Boolean'>
 }
     
 
@@ -1504,6 +1654,30 @@ export type User$modulesArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.ModuleScalarFieldEnum | Prisma.ModuleScalarFieldEnum[]
+}
+
+/**
+ * User.pushTokens
+ */
+export type User$pushTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PushToken
+   */
+  select?: Prisma.PushTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PushToken
+   */
+  omit?: Prisma.PushTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PushTokenInclude<ExtArgs> | null
+  where?: Prisma.PushTokenWhereInput
+  orderBy?: Prisma.PushTokenOrderByWithRelationInput | Prisma.PushTokenOrderByWithRelationInput[]
+  cursor?: Prisma.PushTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PushTokenScalarFieldEnum | Prisma.PushTokenScalarFieldEnum[]
 }
 
 /**
