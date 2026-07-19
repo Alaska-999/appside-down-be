@@ -9,6 +9,7 @@ import { FlashcardsModule } from './flashcards/flashcards.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { BullModule } from '@nestjs/bullmq';
 import { StudyModule } from './study/study.module';
+import { UsersModule } from './users/users.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { StudyModule } from './study/study.module';
     FlashcardsModule,
     NotificationsModule,
     StudyModule,
+    UsersModule,
     BullModule.forRoot({
       connection: {
         host: process.env.REDIS_HOST ?? 'localhost',
