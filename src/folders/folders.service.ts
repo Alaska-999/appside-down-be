@@ -11,6 +11,9 @@ export class FoldersService {
     modules: {
       include: {
         _count: { select: { flashcards: true } },
+        author: {
+          select: { id: true, username: true, avatarUrl: true },
+        },
       },
     },
   };

@@ -28,6 +28,7 @@ export class ModulesService {
           })),
         } : undefined,
         userId,
+        authorId: userId,
       },
     });
   }
@@ -40,6 +41,9 @@ export class ModulesService {
           select: { id: true },
         },
         user: {
+          select: { id: true, username: true, avatarUrl: true },
+        },
+        author: {
           select: { id: true, username: true, avatarUrl: true },
         },
         flashcards: {
@@ -57,6 +61,9 @@ export class ModulesService {
       where: { id, OR: [{ userId }, { isPublic: true }] },
       include: {
         user: {
+          select: { id: true, username: true, avatarUrl: true },
+        },
+        author: {
           select: { id: true, username: true, avatarUrl: true },
         },
         folders: {
@@ -145,6 +152,13 @@ export class ModulesService {
             avatarUrl: true
           }
         },
+        author: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true
+          }
+        },
         _count: {
           select: { flashcards: true }
         }
@@ -172,6 +186,8 @@ export class ModulesService {
       data: {
         name: originalModule.name,
         userId: userId,
+        authorId: originalModule.authorId,
+        authorUsername: originalModule.authorUsername,
         isPublic: false,
         isFavorite: false,
 

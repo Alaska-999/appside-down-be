@@ -121,6 +121,8 @@ export const ModuleScalarFieldEnum = {
   updatedAt: 'updatedAt',
   isFavorite: 'isFavorite',
   userId: 'userId',
+  authorId: 'authorId',
+  authorUsername: 'authorUsername',
   isPublic: 'isPublic'
 } as const
 

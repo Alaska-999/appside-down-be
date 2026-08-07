@@ -17,7 +17,8 @@ model User {
   createdAt DateTime @default(now())
   hashedRt  String?
   folders   Folder[]
-  modules   Module[]
+  modules   Module[] @relation("OwnedModules")
+  authoredModules Module[] @relation("AuthoredModules")
   pushTokens PushToken[]
   pushNotificationsEnabled Boolean @default(false)
   studyEvents StudyEvent[]
@@ -59,7 +60,11 @@ model Module {
   isFavorite Boolean  @default(false)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation("OwnedModules", fields: [userId], references: [id])
+
+  authorId String?
+  author   User?   @relation("AuthoredModules", fields: [authorId], references: [id])
+  authorUsername String?
 
   folders    Folder[]
   flashcards Flashcard[]

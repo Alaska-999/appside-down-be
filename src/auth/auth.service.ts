@@ -163,6 +163,7 @@ export class AuthService {
         await this.prisma.$transaction([
             this.prisma.flashcard.deleteMany({ where: { module: { userId } } }),
             this.prisma.module.deleteMany({ where: { userId } }),
+            this.prisma.module.updateMany({ where: { authorId: userId }, data: { authorId: null, authorUsername: user.username } }),
             this.prisma.folder.deleteMany({ where: { userId } }),
             this.prisma.pushToken.deleteMany({ where: { userId } }),
             this.prisma.user.delete({ where: { id: userId } }),
