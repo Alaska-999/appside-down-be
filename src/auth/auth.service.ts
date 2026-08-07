@@ -3,11 +3,16 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginDto, SignupDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { LoginAttemptsService } from './login-attempts.service';
 
 @Injectable()
 export class AuthService {
 
-    constructor(private readonly prisma: PrismaService, private readonly jwtService: JwtService) { }
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly jwtService: JwtService,
+        private readonly loginAttempts: LoginAttemptsService,
+    ) { }
 
 
 
@@ -92,6 +97,8 @@ export class AuthService {
 
 
     async login(dto: LoginDto) {
+        this.loginAttempts.assertNotBlocked(dto.email);
+
         const user = await this.prisma.user.findUnique({
             where: {
                 email: dto.email,
@@ -99,14 +106,17 @@ export class AuthService {
         });
 
         if (!user) {
+            this.loginAttempts.recordFailure(dto.email);
             throw new NotFoundException('User not found');
         }
 
         const isPasswordValid = await bcrypt.compare(dto.password, user.password);
-        console.log(isPasswordValid);
         if (!isPasswordValid) {
+            this.loginAttempts.recordFailure(dto.email);
             throw new UnauthorizedException('Invalid password');
         }
+
+        this.loginAttempts.reset(dto.email);
 
         const token = await this.generateTokens(user.id, user.email);
         await this.updateRtHash(user.id, token.refresh_token);

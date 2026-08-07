@@ -4,10 +4,12 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { AppModule } from './app.module';
+import { TimeoutInterceptor } from './common/timeout.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
+  app.useGlobalInterceptors(new TimeoutInterceptor());
 
   const avatarsDir = join(process.cwd(), 'uploads', 'avatars');
   if (!existsSync(avatarsDir)) {

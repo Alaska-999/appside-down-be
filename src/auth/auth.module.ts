@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { LoginAttemptsService } from './login-attempts.service';
 
 @Module({
   imports: [PrismaModule, JwtModule.register({
@@ -11,6 +12,6 @@ import { JwtStrategy } from './jwt.strategy';
     signOptions: { expiresIn: '1h' },
   })],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, LoginAttemptsService],
 })
 export class AuthModule { }
