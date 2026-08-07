@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   PushToken: 'PushToken',
+  PasswordReset: 'PasswordReset',
   Folder: 'Folder',
   Module: 'Module',
   Flashcard: 'Flashcard',
@@ -99,6 +100,18 @@ export const PushTokenScalarFieldEnum = {
 } as const
 
 export type PushTokenScalarFieldEnum = (typeof PushTokenScalarFieldEnum)[keyof typeof PushTokenScalarFieldEnum]
+
+
+export const PasswordResetScalarFieldEnum = {
+  id: 'id',
+  codeHash: 'codeHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  createdAt: 'createdAt',
+  userId: 'userId'
+} as const
+
+export type PasswordResetScalarFieldEnum = (typeof PasswordResetScalarFieldEnum)[keyof typeof PasswordResetScalarFieldEnum]
 
 
 export const FolderScalarFieldEnum = {

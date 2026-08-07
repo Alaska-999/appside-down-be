@@ -9,31 +9,44 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  username  String
-  password  String
-  avatarUrl String?
-  createdAt DateTime @default(now())
-  hashedRt  String?
-  folders   Folder[]
-  modules   Module[] @relation("OwnedModules")
-  authoredModules Module[] @relation("AuthoredModules")
-  pushTokens PushToken[]
-  pushNotificationsEnabled Boolean @default(false)
-  studyEvents StudyEvent[]
+  id                       String         @id @default(uuid())
+  email                    String         @unique
+  username                 String
+  password                 String
+  avatarUrl                String?
+  createdAt                DateTime       @default(now())
+  hashedRt                 String?
+  folders                  Folder[]
+  modules                  Module[]       @relation("OwnedModules")
+  authoredModules          Module[]       @relation("AuthoredModules")
+  pushTokens               PushToken[]
+  pushNotificationsEnabled Boolean        @default(false)
+  studyEvents              StudyEvent[]
+  passwordReset            PasswordReset?
 }
 
 model PushToken {
   id        String   @id @default(uuid())
   token     String   @unique
-  platform  String            // "ios" | "android"
+  platform  String // "ios" | "android"
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
+
   @@index([userId])
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid())
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Folder {
@@ -62,13 +75,13 @@ model Module {
   userId String
   user   User   @relation("OwnedModules", fields: [userId], references: [id])
 
-  authorId String?
-  author   User?   @relation("AuthoredModules", fields: [authorId], references: [id])
+  authorId       String?
+  author         User?   @relation("AuthoredModules", fields: [authorId], references: [id])
   authorUsername String?
 
   folders    Folder[]
   flashcards Flashcard[]
-  isPublic Boolean @default(false)
+  isPublic   Boolean     @default(false)
 
   @@index([userId])
 }
@@ -94,15 +107,14 @@ model Flashcard {
   @@index([moduleId])
 }
 
-
 model StudyEvent {
-  id          String     @id @default(uuid())
-  status      CardStatus
-  answeredAt  DateTime
-  createdAt   DateTime   @default(now())
+  id         String     @id @default(uuid())
+  status     CardStatus
+  answeredAt DateTime
+  createdAt  DateTime   @default(now())
 
-  flashcardId String     
-  moduleId    String     
+  flashcardId String
+  moduleId    String
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

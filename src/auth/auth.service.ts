@@ -4,6 +4,11 @@ import { LoginDto, SignupDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginAttemptsService } from './login-attempts.service';
+import { Resend } from 'resend';
+import crypto from 'node:crypto';
+import { ResetPasswordDto } from './dto/account.dto';
+
+const resend = new Resend(process.env.RESEND_API_KEY_DEV);
 
 @Injectable()
 export class AuthService {
@@ -141,6 +146,16 @@ export class AuthService {
         });
     }
 
+    async hashAndUpdatePassword(userId: string, newPassword: string) {
+        const newHash = await bcrypt.hash(newPassword, 10);
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: { password: newHash },
+        });
+    }
+
+
+
     async changePassword(userId: string, oldPassword: string, newPassword: string) {
         const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) {
@@ -152,11 +167,7 @@ export class AuthService {
             throw new ForbiddenException('Current password is incorrect');
         }
 
-        const newHash = await bcrypt.hash(newPassword, 10);
-        await this.prisma.user.update({
-            where: { id: userId },
-            data: { password: newHash },
-        });
+        await this.hashAndUpdatePassword(userId, newPassword);
     }
 
     async deleteAccount(userId: string, password: string) {
@@ -179,5 +190,88 @@ export class AuthService {
             this.prisma.user.delete({ where: { id: userId } }),
             this.prisma.studyEvent.deleteMany({ where: { userId } })
         ]);
+    }
+
+
+    async forgotPassword(email: string) {
+
+        const user = await this.prisma.user.findUnique({ where: { email: email } });
+        if (!user) {
+            return { success: true, message: 'If this email exists, a reset code has been sent' };
+        }
+
+        const existing = await this.prisma.passwordReset.findUnique({ where: { userId: user.id } });
+        if (existing && existing.createdAt.getTime() > Date.now() - 60 * 1000) {
+            return { success: true, message: 'If this email exists, a reset code has been sent' };
+        }
+
+        const code = crypto.randomInt(100000, 999999).toString();
+        const codeHash = await bcrypt.hash(code, 10);
+        const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+        await this.prisma.passwordReset.upsert({
+            where: { userId: user.id },
+            update: {
+                codeHash: codeHash,
+                expiresAt: expiresAt,
+                attempts: 0,
+                createdAt: new Date(),
+            },
+            create: {
+                userId: user.id,
+                codeHash: codeHash,
+                expiresAt: expiresAt,
+            },
+        });
+
+        await resend.emails.send({
+            from: 'onboarding@resend.dev',
+            to: email,
+            subject: 'Password Reset Code',
+            html: `<p>Your password reset code is <strong>${code}</strong></p>`
+        });
+
+        return { success: true, message: 'If this email exists, a reset code has been sent' };
+    }
+
+
+    async resetPassword(dto: ResetPasswordDto) {
+        const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
+        if (!user) {
+            throw new ForbiddenException('Invalid or expired code');
+        }
+
+        const passwordReset = await this.prisma.passwordReset.findUnique({ where: { userId: user.id } });
+        if (!passwordReset) {
+            throw new ForbiddenException('Invalid or expired code');
+        }
+
+        if (passwordReset.expiresAt < new Date()) {
+            throw new ForbiddenException('Invalid or expired code');
+        }
+
+        if (passwordReset.attempts >= 5) {
+            await this.prisma.passwordReset.delete({ where: { userId: user.id } });
+            throw new ForbiddenException('Too many attempts. Request a new code');
+        }
+
+        const isCodeValid = await bcrypt.compare(dto.code, passwordReset.codeHash);
+        if (!isCodeValid) {
+            await this.prisma.passwordReset.update({
+                where: { userId: user.id },
+                data: { attempts: { increment: 1 } },
+            });
+            throw new ForbiddenException('Invalid code');
+        }
+
+        await this.hashAndUpdatePassword(user.id, dto.newPassword);
+        await this.prisma.passwordReset.delete({ where: { userId: user.id } });
+
+        await this.prisma.user.update({
+            where: { id: user.id },
+            data: { hashedRt: null },
+        });
+
+        return { success: true, message: 'Password updated' };
     }
 }

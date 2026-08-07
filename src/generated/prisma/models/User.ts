@@ -211,6 +211,7 @@ export type UserWhereInput = {
   authoredModules?: Prisma.ModuleListRelationFilter
   pushTokens?: Prisma.PushTokenListRelationFilter
   studyEvents?: Prisma.StudyEventListRelationFilter
+  passwordReset?: Prisma.XOR<Prisma.PasswordResetNullableScalarRelationFilter, Prisma.PasswordResetWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -227,6 +228,7 @@ export type UserOrderByWithRelationInput = {
   authoredModules?: Prisma.ModuleOrderByRelationAggregateInput
   pushTokens?: Prisma.PushTokenOrderByRelationAggregateInput
   studyEvents?: Prisma.StudyEventOrderByRelationAggregateInput
+  passwordReset?: Prisma.PasswordResetOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -246,6 +248,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   authoredModules?: Prisma.ModuleListRelationFilter
   pushTokens?: Prisma.PushTokenListRelationFilter
   studyEvents?: Prisma.StudyEventListRelationFilter
+  passwordReset?: Prisma.XOR<Prisma.PasswordResetNullableScalarRelationFilter, Prisma.PasswordResetWhereInput> | null
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -290,6 +293,7 @@ export type UserCreateInput = {
   authoredModules?: Prisma.ModuleCreateNestedManyWithoutAuthorInput
   pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
   studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -306,6 +310,7 @@ export type UserUncheckedCreateInput = {
   authoredModules?: Prisma.ModuleUncheckedCreateNestedManyWithoutAuthorInput
   pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
   studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -322,6 +327,7 @@ export type UserUpdateInput = {
   authoredModules?: Prisma.ModuleUpdateManyWithoutAuthorNestedInput
   pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
   studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -338,6 +344,7 @@ export type UserUncheckedUpdateInput = {
   authoredModules?: Prisma.ModuleUncheckedUpdateManyWithoutAuthorNestedInput
   pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
   studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -446,6 +453,20 @@ export type UserUpdateOneRequiredWithoutPushTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPushTokensInput, Prisma.UserUpdateWithoutPushTokensInput>, Prisma.UserUncheckedUpdateWithoutPushTokensInput>
 }
 
+export type UserCreateNestedOneWithoutPasswordResetInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetInput, Prisma.UserUncheckedCreateWithoutPasswordResetInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPasswordResetNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetInput, Prisma.UserUncheckedCreateWithoutPasswordResetInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetInput
+  upsert?: Prisma.UserUpsertWithoutPasswordResetInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetInput, Prisma.UserUpdateWithoutPasswordResetInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetInput>
+}
+
 export type UserCreateNestedOneWithoutFoldersInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutFoldersInput, Prisma.UserUncheckedCreateWithoutFoldersInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutFoldersInput
@@ -517,6 +538,7 @@ export type UserCreateWithoutPushTokensInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
   authoredModules?: Prisma.ModuleCreateNestedManyWithoutAuthorInput
   studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPushTokensInput = {
@@ -532,6 +554,7 @@ export type UserUncheckedCreateWithoutPushTokensInput = {
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
   authoredModules?: Prisma.ModuleUncheckedCreateNestedManyWithoutAuthorInput
   studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPushTokensInput = {
@@ -563,6 +586,7 @@ export type UserUpdateWithoutPushTokensInput = {
   modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
   authoredModules?: Prisma.ModuleUpdateManyWithoutAuthorNestedInput
   studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPushTokensInput = {
@@ -577,6 +601,87 @@ export type UserUncheckedUpdateWithoutPushTokensInput = {
   folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
   authoredModules?: Prisma.ModuleUncheckedUpdateManyWithoutAuthorNestedInput
+  studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPasswordResetInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
+  folders?: Prisma.FolderCreateNestedManyWithoutUserInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
+  authoredModules?: Prisma.ModuleCreateNestedManyWithoutAuthorInput
+  pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPasswordResetInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  hashedRt?: string | null
+  pushNotificationsEnabled?: boolean
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutUserInput
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
+  authoredModules?: Prisma.ModuleUncheckedCreateNestedManyWithoutAuthorInput
+  pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPasswordResetInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetInput, Prisma.UserUncheckedCreateWithoutPasswordResetInput>
+}
+
+export type UserUpsertWithoutPasswordResetInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetInput, Prisma.UserUncheckedUpdateWithoutPasswordResetInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetInput, Prisma.UserUncheckedCreateWithoutPasswordResetInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPasswordResetInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetInput, Prisma.UserUncheckedUpdateWithoutPasswordResetInput>
+}
+
+export type UserUpdateWithoutPasswordResetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folders?: Prisma.FolderUpdateManyWithoutUserNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
+  authoredModules?: Prisma.ModuleUpdateManyWithoutAuthorNestedInput
+  pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPasswordResetInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hashedRt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pushNotificationsEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutUserNestedInput
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
+  authoredModules?: Prisma.ModuleUncheckedUpdateManyWithoutAuthorNestedInput
+  pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
   studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -593,6 +698,7 @@ export type UserCreateWithoutFoldersInput = {
   authoredModules?: Prisma.ModuleCreateNestedManyWithoutAuthorInput
   pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
   studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFoldersInput = {
@@ -608,6 +714,7 @@ export type UserUncheckedCreateWithoutFoldersInput = {
   authoredModules?: Prisma.ModuleUncheckedCreateNestedManyWithoutAuthorInput
   pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
   studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFoldersInput = {
@@ -639,6 +746,7 @@ export type UserUpdateWithoutFoldersInput = {
   authoredModules?: Prisma.ModuleUpdateManyWithoutAuthorNestedInput
   pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
   studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFoldersInput = {
@@ -654,6 +762,7 @@ export type UserUncheckedUpdateWithoutFoldersInput = {
   authoredModules?: Prisma.ModuleUncheckedUpdateManyWithoutAuthorNestedInput
   pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
   studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutModulesInput = {
@@ -669,6 +778,7 @@ export type UserCreateWithoutModulesInput = {
   authoredModules?: Prisma.ModuleCreateNestedManyWithoutAuthorInput
   pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
   studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutModulesInput = {
@@ -684,6 +794,7 @@ export type UserUncheckedCreateWithoutModulesInput = {
   authoredModules?: Prisma.ModuleUncheckedCreateNestedManyWithoutAuthorInput
   pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
   studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutModulesInput = {
@@ -704,6 +815,7 @@ export type UserCreateWithoutAuthoredModulesInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
   pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
   studyEvents?: Prisma.StudyEventCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuthoredModulesInput = {
@@ -719,6 +831,7 @@ export type UserUncheckedCreateWithoutAuthoredModulesInput = {
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
   pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
   studyEvents?: Prisma.StudyEventUncheckedCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuthoredModulesInput = {
@@ -750,6 +863,7 @@ export type UserUpdateWithoutModulesInput = {
   authoredModules?: Prisma.ModuleUpdateManyWithoutAuthorNestedInput
   pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
   studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutModulesInput = {
@@ -765,6 +879,7 @@ export type UserUncheckedUpdateWithoutModulesInput = {
   authoredModules?: Prisma.ModuleUncheckedUpdateManyWithoutAuthorNestedInput
   pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
   studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutAuthoredModulesInput = {
@@ -791,6 +906,7 @@ export type UserUpdateWithoutAuthoredModulesInput = {
   modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
   pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
   studyEvents?: Prisma.StudyEventUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthoredModulesInput = {
@@ -806,6 +922,7 @@ export type UserUncheckedUpdateWithoutAuthoredModulesInput = {
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
   pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
   studyEvents?: Prisma.StudyEventUncheckedUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudyEventsInput = {
@@ -821,6 +938,7 @@ export type UserCreateWithoutStudyEventsInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutUserInput
   authoredModules?: Prisma.ModuleCreateNestedManyWithoutAuthorInput
   pushTokens?: Prisma.PushTokenCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudyEventsInput = {
@@ -836,6 +954,7 @@ export type UserUncheckedCreateWithoutStudyEventsInput = {
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutUserInput
   authoredModules?: Prisma.ModuleUncheckedCreateNestedManyWithoutAuthorInput
   pushTokens?: Prisma.PushTokenUncheckedCreateNestedManyWithoutUserInput
+  passwordReset?: Prisma.PasswordResetUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudyEventsInput = {
@@ -867,6 +986,7 @@ export type UserUpdateWithoutStudyEventsInput = {
   modules?: Prisma.ModuleUpdateManyWithoutUserNestedInput
   authoredModules?: Prisma.ModuleUpdateManyWithoutAuthorNestedInput
   pushTokens?: Prisma.PushTokenUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudyEventsInput = {
@@ -882,6 +1002,7 @@ export type UserUncheckedUpdateWithoutStudyEventsInput = {
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutUserNestedInput
   authoredModules?: Prisma.ModuleUncheckedUpdateManyWithoutAuthorNestedInput
   pushTokens?: Prisma.PushTokenUncheckedUpdateManyWithoutUserNestedInput
+  passwordReset?: Prisma.PasswordResetUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -965,6 +1086,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   authoredModules?: boolean | Prisma.User$authoredModulesArgs<ExtArgs>
   pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
   studyEvents?: boolean | Prisma.User$studyEventsArgs<ExtArgs>
+  passwordReset?: boolean | Prisma.User$passwordResetArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1008,6 +1130,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   authoredModules?: boolean | Prisma.User$authoredModulesArgs<ExtArgs>
   pushTokens?: boolean | Prisma.User$pushTokensArgs<ExtArgs>
   studyEvents?: boolean | Prisma.User$studyEventsArgs<ExtArgs>
+  passwordReset?: boolean | Prisma.User$passwordResetArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1021,6 +1144,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     authoredModules: Prisma.$ModulePayload<ExtArgs>[]
     pushTokens: Prisma.$PushTokenPayload<ExtArgs>[]
     studyEvents: Prisma.$StudyEventPayload<ExtArgs>[]
+    passwordReset: Prisma.$PasswordResetPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1430,6 +1554,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   authoredModules<T extends Prisma.User$authoredModulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authoredModulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pushTokens<T extends Prisma.User$pushTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pushTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studyEvents<T extends Prisma.User$studyEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studyEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudyEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  passwordReset<T extends Prisma.User$passwordResetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetArgs<ExtArgs>>): Prisma.Prisma__PasswordResetClient<runtime.Types.Result.GetResult<Prisma.$PasswordResetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1977,6 +2102,25 @@ export type User$studyEventsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.StudyEventScalarFieldEnum | Prisma.StudyEventScalarFieldEnum[]
+}
+
+/**
+ * User.passwordReset
+ */
+export type User$passwordResetArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PasswordReset
+   */
+  select?: Prisma.PasswordResetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PasswordReset
+   */
+  omit?: Prisma.PasswordResetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasswordResetInclude<ExtArgs> | null
+  where?: Prisma.PasswordResetWhereInput
 }
 
 /**

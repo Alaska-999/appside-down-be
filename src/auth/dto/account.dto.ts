@@ -6,3 +6,10 @@ export class ChangePasswordDto {
 export class DeleteAccountDto {
     password: string;
 }
+
+
+export class ResetPasswordDto {
+    email: string;
+    code: string;
+    newPassword: string;
+}
