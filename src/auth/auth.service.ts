@@ -91,7 +91,7 @@ export class AuthService {
                 access_token: token.access_token,
                 refresh_token: token.refresh_token,
             };
-        } catch (error) {
+        } catch (error: any) {
             console.error('Signup error:', error);
             if (error.code === 'P2002') {
                 throw new ConflictException('Email already exists')
@@ -197,12 +197,12 @@ export class AuthService {
 
         const user = await this.prisma.user.findUnique({ where: { email: email } });
         if (!user) {
-            return { success: true, message: 'If this email exists, a reset code has been sent' };
+            return;
         }
 
         const existing = await this.prisma.passwordReset.findUnique({ where: { userId: user.id } });
         if (existing && existing.createdAt.getTime() > Date.now() - 60 * 1000) {
-            return { success: true, message: 'If this email exists, a reset code has been sent' };
+            return;
         }
 
         const code = crypto.randomInt(100000, 999999).toString();
@@ -230,8 +230,6 @@ export class AuthService {
             subject: 'Password Reset Code',
             html: `<p>Your password reset code is <strong>${code}</strong></p>`
         });
-
-        return { success: true, message: 'If this email exists, a reset code has been sent' };
     }
 
 
@@ -271,7 +269,5 @@ export class AuthService {
             where: { id: user.id },
             data: { hashedRt: null },
         });
-
-        return { success: true, message: 'Password updated' };
     }
 }

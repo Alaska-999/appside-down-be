@@ -22,7 +22,6 @@ export class NotificationsService {
         await this.prisma.pushToken.deleteMany({
             where: { token, userId },
         });
-        return { success: true };
     }
 
     async updateSettings(userId: string, pushNotificationsEnabled: boolean) {

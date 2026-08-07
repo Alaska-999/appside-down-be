@@ -44,14 +44,12 @@ export class AuthController {
     @Patch('password')
     async changePassword(@Req() req: any, @Body() dto: ChangePasswordDto) {
         await this.authService.changePassword(req.user.userId, dto.oldPassword, dto.newPassword);
-        return { success: true };
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete('account')
     async deleteAccount(@Req() req: any, @Body() dto: DeleteAccountDto) {
         await this.authService.deleteAccount(req.user.userId, dto.password);
-        return { success: true };
     }
 
     @UseGuards(JwtAuthGuard) // Додали охоронця
