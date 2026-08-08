@@ -1,12 +1,21 @@
+import { IsBoolean, IsIn, IsString, MaxLength } from 'class-validator';
+
 export class RegisterTokenDto {
-    token: string;
-    platform: 'ios' | 'android';
+    @IsString()
+    @MaxLength(300)
+    token!: string;
+
+    @IsIn(['ios', 'android'])
+    platform!: 'ios' | 'android';
 }
 
 export class RemoveTokenDto {
-    token: string;
+    @IsString()
+    @MaxLength(300)
+    token!: string;
 }
 
 export class UpdateSettingsDto {
-    pushNotificationsEnabled: boolean;
+    @IsBoolean()
+    pushNotificationsEnabled!: boolean;
 }

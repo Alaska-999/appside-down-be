@@ -64,9 +64,6 @@ export class ModulesService {
           author: {
             select: { id: true, username: true, avatarUrl: true },
           },
-          flashcards: {
-            select: { status: true },
-          },
           _count: {
             select: { flashcards: true },
           },
@@ -177,37 +174,43 @@ export class ModulesService {
   }
 
   async getStats(userId: string) {
-    const [totalModules, modules] = await Promise.all([
+    const [totalModules, cardsLearned, candidates] = await Promise.all([
       this.prisma.module.count({ where: { userId } }),
+      this.prisma.flashcard.count({ where: { status: 'KNOWN', module: { userId } } }),
       this.prisma.module.findMany({
-        where: { userId },
-        select: { id: true, name: true, updatedAt: true, flashcards: { select: { status: true } } },
+        where: { userId, flashcards: { some: { status: { not: 'UNSTUDIED' } } } },
+        orderBy: { updatedAt: 'desc' },
+        take: 20,
+        select: { id: true, name: true, updatedAt: true },
       }),
     ]);
 
-    const cardsLearned = modules.reduce(
-      (sum, m) => sum + m.flashcards.filter((f) => f.status === 'KNOWN').length,
-      0,
-    );
+    const progress = candidates.length
+      ? await this.prisma.flashcard.groupBy({
+          by: ['moduleId', 'status'],
+          where: { moduleId: { in: candidates.map((m) => m.id) } },
+          _count: { _all: true },
+        })
+      : [];
 
-    const continueLearning = modules
+    const countsByModule = new Map<string, Record<string, number>>();
+    for (const row of progress) {
+      const entry = countsByModule.get(row.moduleId) ?? {};
+      entry[row.status] = row._count._all;
+      countsByModule.set(row.moduleId, entry);
+    }
+
+    const continueLearning = candidates
       .map((m) => {
-        const statuses = m.flashcards.map((f) => f.status);
-        const started = statuses.some((s) => s !== 'UNSTUDIED');
-        const unfinished = statuses.some((s) => s !== 'KNOWN');
-        return {
-          id: m.id,
-          name: m.name,
-          updatedAt: m.updatedAt,
-          known: statuses.filter((s) => s === 'KNOWN').length,
-          total: statuses.length,
-          inProgress: started && unfinished,
-        };
+        const counts = countsByModule.get(m.id) ?? {};
+        const known = counts.KNOWN ?? 0;
+        const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
+        const unfinished = total > known;
+        return { id: m.id, name: m.name, updatedAt: m.updatedAt, known, total, unfinished };
       })
-      .filter((m) => m.inProgress)
-      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+      .filter((m) => m.unfinished)
       .slice(0, 5)
-      .map(({ inProgress, ...rest }) => rest);
+      .map(({ unfinished, ...rest }) => rest);
 
     return { totalModules, cardsLearned, continueLearning };
   }

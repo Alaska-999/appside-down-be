@@ -1,8 +1,9 @@
-import { BadRequestException, ConflictException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginDto, SignupDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { LoginAttemptsService } from './login-attempts.service';
 import { Resend } from 'resend';
 import crypto from 'node:crypto';
@@ -10,12 +11,18 @@ import { ResetPasswordDto } from './dto/account.dto';
 
 const resend = new Resend(process.env.RESEND_API_KEY_DEV);
 
+const hashRt = (rt: string) => crypto.createHash('sha256').update(rt).digest('hex');
+const normalizeEmail = (email: string) => email.trim().toLowerCase();
+
+const logger = new Logger('AuthService');
+
 @Injectable()
 export class AuthService {
 
     constructor(
         private readonly prisma: PrismaService,
         private readonly jwtService: JwtService,
+        private readonly config: ConfigService,
         private readonly loginAttempts: LoginAttemptsService,
     ) { }
 
@@ -23,8 +30,8 @@ export class AuthService {
 
     async generateTokens(userId: string, email: string) {
         const [at, rt] = await Promise.all([
-            this.jwtService.signAsync({ userId, email, }, { secret: process.env.AT_SECRET, expiresIn: '30s' }),
-            this.jwtService.signAsync({ userId, email }, { secret: process.env.RT_SECRET, expiresIn: '7d' }),
+            this.jwtService.signAsync({ userId, email, typ: 'access' }, { secret: this.config.getOrThrow('AT_SECRET'), expiresIn: '30s' }),
+            this.jwtService.signAsync({ userId, email, typ: 'refresh' }, { secret: this.config.getOrThrow('RT_SECRET'), expiresIn: '7d' }),
         ]);
         return {
             access_token: at,
@@ -32,10 +39,9 @@ export class AuthService {
         };
     }
     async updateRtHash(userId: string, rt: string) {
-        const hashedRt = await bcrypt.hash(rt, 10);
         await this.prisma.user.update({
             where: { id: userId },
-            data: { hashedRt: hashedRt },
+            data: { hashedRt: hashRt(rt) },
         });
     }
 
@@ -49,14 +55,32 @@ export class AuthService {
         });
 
         if (!user || !user.hashedRt) {
+            logger.warn(`refresh rejected: user not found or no hashedRt (userId=${userId})`);
             throw new NotFoundException('User not found');
         }
 
-        const isRtValid = await bcrypt.compare(refreshToken, user.hashedRt);
-
-        if (!isRtValid) {
+        let payload: any;
+        try {
+            //jwtService.verifyAsync  is an asynchronous method in the @nestjs/jwt package used to validate JSON Web Tokens (JWT).
+            //  It returns a Promise resolving to the decoded payload, preventing event loop blocks during CPU-intensive cryptographic operations
+            payload = await this.jwtService.verifyAsync(refreshToken, { secret: this.config.getOrThrow('RT_SECRET') });
+        } catch (e: any) {
+            logger.warn(`refresh rejected: verify failed (${e?.message}) userId=${userId}`);
             throw new UnauthorizedException('Invalid refresh token');
         }
+
+        if (payload.typ !== 'refresh' || payload.userId !== userId) {
+            logger.warn(`refresh rejected: bad payload typ=${payload.typ} tokenUserId=${payload.userId} reqUserId=${userId}`);
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+
+        if (hashRt(refreshToken) !== user.hashedRt) {
+            logger.warn(`refresh rejected: hash mismatch, killing family (userId=${userId})`);
+            await this.prisma.user.update({ where: { id: userId }, data: { hashedRt: null } });
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+
+        logger.log(`refresh OK (userId=${userId})`);
 
         const tokens = await this.generateTokens(user.id, user.email);
         await this.updateRtHash(user.id, tokens.refresh_token);
@@ -74,7 +98,7 @@ export class AuthService {
             const passwordHash = await bcrypt.hash(dto.password, 10);
             const user = await this.prisma.user.create({
                 data: {
-                    email: dto.email,
+                    email: normalizeEmail(dto.email),
                     username: dto.username,
                     password: passwordHash,
                 },
@@ -102,26 +126,27 @@ export class AuthService {
 
 
     async login(dto: LoginDto) {
-        this.loginAttempts.assertNotBlocked(dto.email);
+        const email = normalizeEmail(dto.email);
+        this.loginAttempts.assertNotBlocked(email);
 
         const user = await this.prisma.user.findUnique({
             where: {
-                email: dto.email,
+                email,
             },
         });
 
         if (!user) {
-            this.loginAttempts.recordFailure(dto.email);
+            this.loginAttempts.recordFailure(email);
             throw new NotFoundException('User not found');
         }
 
         const isPasswordValid = await bcrypt.compare(dto.password, user.password);
         if (!isPasswordValid) {
-            this.loginAttempts.recordFailure(dto.email);
+            this.loginAttempts.recordFailure(email);
             throw new UnauthorizedException('Invalid password');
         }
 
-        this.loginAttempts.reset(dto.email);
+        this.loginAttempts.reset(email);
 
         const token = await this.generateTokens(user.id, user.email);
         await this.updateRtHash(user.id, token.refresh_token);
@@ -182,20 +207,16 @@ export class AuthService {
         }
 
         await this.prisma.$transaction([
-            this.prisma.flashcard.deleteMany({ where: { module: { userId } } }),
-            this.prisma.module.deleteMany({ where: { userId } }),
-            this.prisma.module.updateMany({ where: { authorId: userId }, data: { authorId: null, authorUsername: user.username } }),
-            this.prisma.folder.deleteMany({ where: { userId } }),
-            this.prisma.pushToken.deleteMany({ where: { userId } }),
+            this.prisma.module.updateMany({ where: { authorId: userId }, data: { authorUsername: user.username } }),
             this.prisma.user.delete({ where: { id: userId } }),
-            this.prisma.studyEvent.deleteMany({ where: { userId } })
         ]);
     }
 
 
-    async forgotPassword(email: string) {
+    async forgotPassword(rawEmail: string) {
+        const email = normalizeEmail(rawEmail);
 
-        const user = await this.prisma.user.findUnique({ where: { email: email } });
+        const user = await this.prisma.user.findUnique({ where: { email } });
         if (!user) {
             return;
         }
@@ -234,7 +255,7 @@ export class AuthService {
 
 
     async resetPassword(dto: ResetPasswordDto) {
-        const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
+        const user = await this.prisma.user.findUnique({ where: { email: normalizeEmail(dto.email) } });
         if (!user) {
             throw new ForbiddenException('Invalid or expired code');
         }

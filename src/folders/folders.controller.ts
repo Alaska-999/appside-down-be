@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, Quer
 import { FoldersService } from './folders.service';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
+import { ModuleIdsDto } from './dto/module-ids.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { parseCursorQuery } from 'src/common/pagination/pagination.util';
 
@@ -37,7 +38,7 @@ export class FoldersController {
   @Patch(':id/modules/remove')
   removeModulesFromFolder(
     @Param('id') folderId: string,
-    @Body() body: { moduleIds: string[] },
+    @Body() body: ModuleIdsDto,
     @Req() req: any
   ) {
     const userId = req.user.userId;
@@ -47,11 +48,10 @@ export class FoldersController {
   @Patch(':id/modules')
   addModulesToFolder(
     @Param('id') folderId: string,
-    @Body() body: { moduleIds: string[] },
+    @Body() body: ModuleIdsDto,
     @Req() req: any
   ) {
     const userId = req.user.userId;
-    console.log(`[BACKEND] Додаємо в папку ${folderId} модулі:`, body.moduleIds);
     return this.foldersService.addModules(userId, folderId, body.moduleIds);
   }
 

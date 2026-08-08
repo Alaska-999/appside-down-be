@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -41,7 +41,7 @@ export class FoldersService {
         orderBy: [{ createdAt: 'desc' as const }, { id: 'asc' as const }],
         take: limit + 1,
         ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
-        include: this.folderPayload,
+        include: { _count: { select: { modules: true } } },
       })
       .then((rows) => paginateResults(rows, limit));
   }
@@ -77,8 +77,18 @@ export class FoldersService {
     });
   }
 
+  private async checkModulesOwnership(userId: string, moduleIds: string[]) {
+    const ownedCount = await this.prisma.module.count({
+      where: { id: { in: moduleIds }, userId },
+    });
+    if (ownedCount !== moduleIds.length) {
+      throw new ForbiddenException('One or more modules do not belong to you');
+    }
+  }
+
   async addModules(userId: string, folderId: string, moduleIds: string[]) {
     await this.checkFolderOwnership(userId, folderId);
+    await this.checkModulesOwnership(userId, moduleIds);
 
     return this.prisma.folder.update({
       where: { id: folderId },
@@ -93,6 +103,7 @@ export class FoldersService {
 
   async removeModules(userId: string, folderId: string, moduleIds: string[]) {
     await this.checkFolderOwnership(userId, folderId);
+    await this.checkModulesOwnership(userId, moduleIds);
 
     return this.prisma.folder.update({
       where: { id: folderId },

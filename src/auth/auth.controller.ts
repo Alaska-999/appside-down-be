@@ -20,9 +20,10 @@ export class AuthController {
         return this.authService.login(dto);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post('logout')
-    logout(@Body('userId') userId: string) {
-        return this.authService.logout(userId);
+    logout(@Req() req: any) {
+        return this.authService.logout(req.user.userId);
     }
 
     @Post('refresh')

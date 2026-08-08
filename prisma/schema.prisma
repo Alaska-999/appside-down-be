@@ -33,7 +33,7 @@ model PushToken {
   updatedAt DateTime @updatedAt
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -57,12 +57,12 @@ model Folder {
   updatedAt DateTime @updatedAt
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   modules Module[]
   tags    String[] @default([])
 
-  @@index([userId])
+  @@index([userId, createdAt, id])
 }
 
 model Module {
@@ -73,17 +73,21 @@ model Module {
   isFavorite Boolean  @default(false)
 
   userId String
-  user   User   @relation("OwnedModules", fields: [userId], references: [id])
+  user   User   @relation("OwnedModules", fields: [userId], references: [id], onDelete: Cascade)
 
   authorId       String?
-  author         User?   @relation("AuthoredModules", fields: [authorId], references: [id])
+  author         User?   @relation("AuthoredModules", fields: [authorId], references: [id], onDelete: SetNull)
   authorUsername String?
 
   folders    Folder[]
   flashcards Flashcard[]
   isPublic   Boolean     @default(false)
 
-  @@index([userId])
+  @@index([userId, createdAt, id])
+  @@index([userId, name, id])
+  @@index([userId, updatedAt])
+  @@index([isPublic, updatedAt, id])
+  @@index([authorId])
 }
 
 enum CardStatus {
@@ -102,9 +106,9 @@ model Flashcard {
   status     CardStatus @default(UNSTUDIED)
 
   moduleId String
-  module   Module @relation(fields: [moduleId], references: [id])
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
-  @@index([moduleId])
+  @@index([moduleId, status])
 }
 
 model StudyEvent {
@@ -117,7 +121,9 @@ model StudyEvent {
   moduleId    String
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, answeredAt])
+  @@index([moduleId])
+  @@index([flashcardId])
 }
