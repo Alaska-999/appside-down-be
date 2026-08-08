@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, Query } from '@nestjs/common';
 import { FoldersService } from './folders.service';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { parseCursorQuery } from 'src/common/pagination/pagination.util';
 
 @UseGuards(JwtAuthGuard)
 @Controller('folders')
@@ -16,8 +17,11 @@ export class FoldersController {
   }
 
   @Get()
-  findAll(@Req() req: any) {
-    return this.foldersService.findAll(req.user.userId);
+  findAll(
+    @Query() query: { cursor?: string; limit?: string; search?: string },
+    @Req() req: any,
+  ) {
+    return this.foldersService.findAll(req.user.userId, parseCursorQuery(query));
   }
 
   @Get(':id')

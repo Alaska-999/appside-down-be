@@ -3,6 +3,9 @@ import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { FoldersService } from 'src/folders/folders.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ParsedCursorQuery, paginateResults } from 'src/common/pagination/pagination.util';
+
+type ModuleSort = 'date' | 'az' | 'favs';
 
 @Injectable()
 export class ModulesService {
@@ -33,27 +36,43 @@ export class ModulesService {
     });
   }
 
-  findAll(userId: string) {
-    return this.prisma.module.findMany({
-      where: { userId },
-      include: {
-        folders: {
-          select: { id: true },
+  findAll(userId: string, query: ParsedCursorQuery & { sort?: ModuleSort }) {
+    const { cursor, limit, search, sort = 'date' } = query;
+
+    const orderBy =
+      sort === 'az'
+        ? [{ name: 'asc' as const }, { id: 'asc' as const }]
+        : [{ createdAt: 'desc' as const }, { id: 'asc' as const }];
+
+    return this.prisma.module
+      .findMany({
+        where: {
+          userId,
+          ...(search ? { name: { contains: search, mode: 'insensitive' as const } } : {}),
+          ...(sort === 'favs' ? { isFavorite: true } : {}),
         },
-        user: {
-          select: { id: true, username: true, avatarUrl: true },
+        orderBy,
+        take: limit + 1,
+        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+        include: {
+          folders: {
+            select: { id: true },
+          },
+          user: {
+            select: { id: true, username: true, avatarUrl: true },
+          },
+          author: {
+            select: { id: true, username: true, avatarUrl: true },
+          },
+          flashcards: {
+            select: { status: true },
+          },
+          _count: {
+            select: { flashcards: true },
+          },
         },
-        author: {
-          select: { id: true, username: true, avatarUrl: true },
-        },
-        flashcards: {
-          select: { status: true },
-        },
-        _count: {
-          select: { flashcards: true },
-        },
-      },
-    });
+      })
+      .then((rows) => paginateResults(rows, limit));
   }
 
   findOne(userId: string, id: string) {
@@ -135,37 +154,62 @@ export class ModulesService {
   }
 
 
-  async findPublic(search: string) {
-    return this.prisma.module.findMany({
-      where: {
-        isPublic: true,
-        name: {
-          contains: search,
-          mode: 'insensitive'
-        }
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-            avatarUrl: true
-          }
+  findPublic(query: ParsedCursorQuery & { excludeUserId?: string }) {
+    const { cursor, limit, search, excludeUserId } = query;
+
+    return this.prisma.module
+      .findMany({
+        where: {
+          isPublic: true,
+          ...(search ? { name: { contains: search, mode: 'insensitive' as const } } : {}),
+          ...(excludeUserId ? { userId: { not: excludeUserId } } : {}),
         },
-        author: {
-          select: {
-            id: true,
-            username: true,
-            avatarUrl: true
-          }
+        orderBy: [{ updatedAt: 'desc' as const }, { id: 'asc' as const }],
+        take: limit + 1,
+        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+        include: {
+          user: { select: { id: true, username: true, avatarUrl: true } },
+          author: { select: { id: true, username: true, avatarUrl: true } },
+          _count: { select: { flashcards: true } },
         },
-        _count: {
-          select: { flashcards: true }
-        }
-      },
-      orderBy: { updatedAt: 'desc' },
-      take: 20
-    });
+      })
+      .then((rows) => paginateResults(rows, limit));
+  }
+
+  async getStats(userId: string) {
+    const [totalModules, modules] = await Promise.all([
+      this.prisma.module.count({ where: { userId } }),
+      this.prisma.module.findMany({
+        where: { userId },
+        select: { id: true, name: true, updatedAt: true, flashcards: { select: { status: true } } },
+      }),
+    ]);
+
+    const cardsLearned = modules.reduce(
+      (sum, m) => sum + m.flashcards.filter((f) => f.status === 'KNOWN').length,
+      0,
+    );
+
+    const continueLearning = modules
+      .map((m) => {
+        const statuses = m.flashcards.map((f) => f.status);
+        const started = statuses.some((s) => s !== 'UNSTUDIED');
+        const unfinished = statuses.some((s) => s !== 'KNOWN');
+        return {
+          id: m.id,
+          name: m.name,
+          updatedAt: m.updatedAt,
+          known: statuses.filter((s) => s === 'KNOWN').length,
+          total: statuses.length,
+          inProgress: started && unfinished,
+        };
+      })
+      .filter((m) => m.inProgress)
+      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+      .slice(0, 5)
+      .map(({ inProgress, ...rest }) => rest);
+
+    return { totalModules, cardsLearned, continueLearning };
   }
 
   async saveToLibrary(userId: string, id: string) {

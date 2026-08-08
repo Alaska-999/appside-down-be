@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ParsedCursorQuery, paginateResults } from 'src/common/pagination/pagination.util';
 
 @Injectable()
 export class FoldersService {
@@ -28,11 +29,21 @@ export class FoldersService {
     });
   }
 
-  findAll(userId: string) {
-    return this.prisma.folder.findMany({
-      where: { userId },
-      include: this.folderPayload,
-    });
+  findAll(userId: string, query: ParsedCursorQuery) {
+    const { cursor, limit, search } = query;
+
+    return this.prisma.folder
+      .findMany({
+        where: {
+          userId,
+          ...(search ? { name: { contains: search, mode: 'insensitive' as const } } : {}),
+        },
+        orderBy: [{ createdAt: 'desc' as const }, { id: 'asc' as const }],
+        take: limit + 1,
+        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+        include: this.folderPayload,
+      })
+      .then((rows) => paginateResults(rows, limit));
   }
 
   findOne(userId: string, id: string) {

@@ -3,6 +3,7 @@ import { ModulesService } from './modules.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { parseCursorQuery } from 'src/common/pagination/pagination.util';
 
 
 
@@ -24,15 +25,27 @@ export class ModulesController {
   }
 
   @Get()
-  findAll(@Req() req: any) {
+  findAll(
+    @Query() query: { cursor?: string; limit?: string; search?: string; sort?: string },
+    @Req() req: any,
+  ) {
     const userId = req.user.userId;
-    return this.modulesService.findAll(userId);
+    const sort = query.sort === 'az' || query.sort === 'favs' ? query.sort : 'date';
+    return this.modulesService.findAll(userId, { ...parseCursorQuery(query), sort });
   }
 
   @Get('public')
-  findPublic(@Query('search') search: string, @Req() req: any) {
-    const userId = req.user.userId;
-    return this.modulesService.findPublic(search);
+  findPublic(
+    @Query() query: { cursor?: string; limit?: string; search?: string; excludeOwn?: string },
+    @Req() req: any,
+  ) {
+    const excludeUserId = query.excludeOwn === 'true' ? req.user.userId : undefined;
+    return this.modulesService.findPublic({ ...parseCursorQuery(query), excludeUserId });
+  }
+
+  @Get('stats')
+  getStats(@Req() req: any) {
+    return this.modulesService.getStats(req.user.userId);
   }
 
   @Get(':id')
