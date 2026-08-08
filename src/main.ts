@@ -10,6 +10,7 @@ import { TimeoutInterceptor } from './common/timeout.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.set('etag', false);
+  app.set('trust proxy', 1);
   const logger = new Logger('HTTP');
   app.use((req: any, res: any, next: any) => {
     res.on('finish', () => {

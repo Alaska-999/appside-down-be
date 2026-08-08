@@ -5,7 +5,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
-import { LoginAttemptsService } from './login-attempts.service';
+import { AuthRateLimitService } from './auth-rate-limit.service';
 
 @Module({
   imports: [
@@ -19,6 +19,6 @@ import { LoginAttemptsService } from './login-attempts.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LoginAttemptsService],
+  providers: [AuthService, JwtStrategy, AuthRateLimitService],
 })
 export class AuthModule { }

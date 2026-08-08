@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Ip, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { LoginDto, SignupDto } from './dto/signup.dto';
 import { ChangePasswordDto, DeleteAccountDto, ResetPasswordDto } from './dto/account.dto';
 import { AuthService } from './auth.service';
@@ -16,8 +16,8 @@ export class AuthController {
     }
 
     @Post('login')
-    login(@Body() dto: LoginDto) {
-        return this.authService.login(dto);
+    login(@Body() dto: LoginDto, @Ip() ip: string) {
+        return this.authService.login(dto, ip);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -32,8 +32,8 @@ export class AuthController {
     }
 
     @Post('forgot-password')
-    forgotPassword(@Body('email') email: string) {
-        return this.authService.forgotPassword(email);
+    forgotPassword(@Body('email') email: string, @Ip() ip: string) {
+        return this.authService.forgotPassword(email, ip);
     }
 
     @Post('reset-password')

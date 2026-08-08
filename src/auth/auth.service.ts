@@ -4,7 +4,7 @@ import { LoginDto, SignupDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { LoginAttemptsService } from './login-attempts.service';
+import { AuthRateLimitService } from './auth-rate-limit.service';
 import { Resend } from 'resend';
 import crypto from 'node:crypto';
 import { ResetPasswordDto } from './dto/account.dto';
@@ -23,7 +23,7 @@ export class AuthService {
         private readonly prisma: PrismaService,
         private readonly jwtService: JwtService,
         private readonly config: ConfigService,
-        private readonly loginAttempts: LoginAttemptsService,
+        private readonly authRateLimit: AuthRateLimitService,
     ) { }
 
 
@@ -125,9 +125,9 @@ export class AuthService {
     }
 
 
-    async login(dto: LoginDto) {
+    async login(dto: LoginDto, ip: string) {
         const email = normalizeEmail(dto.email);
-        await this.loginAttempts.assertNotBlocked(email);
+        await this.authRateLimit.assertLoginAllowed(email, ip);
 
         const user = await this.prisma.user.findUnique({
             where: {
@@ -136,17 +136,17 @@ export class AuthService {
         });
 
         if (!user) {
-            await this.loginAttempts.recordFailure(email);
+            await this.authRateLimit.recordLoginFailure(email, ip);
             throw new NotFoundException('User not found');
         }
 
         const isPasswordValid = await bcrypt.compare(dto.password, user.password);
         if (!isPasswordValid) {
-            await this.loginAttempts.recordFailure(email);
+            await this.authRateLimit.recordLoginFailure(email, ip);
             throw new UnauthorizedException('Invalid password');
         }
 
-        await this.loginAttempts.reset(email);
+        await this.authRateLimit.resetLoginFailures(email, ip);
 
         const token = await this.generateTokens(user.id, user.email);
         await this.updateRtHash(user.id, token.refresh_token);
@@ -217,8 +217,9 @@ export class AuthService {
     }
 
 
-    async forgotPassword(rawEmail: string) {
+    async forgotPassword(rawEmail: string, ip: string) {
         const email = normalizeEmail(rawEmail);
+        await this.authRateLimit.assertForgotPasswordAllowed(email, ip);
 
         const user = await this.prisma.user.findUnique({ where: { email } });
         if (!user) {
