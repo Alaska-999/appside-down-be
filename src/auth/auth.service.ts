@@ -127,7 +127,7 @@ export class AuthService {
 
     async login(dto: LoginDto) {
         const email = normalizeEmail(dto.email);
-        this.loginAttempts.assertNotBlocked(email);
+        await this.loginAttempts.assertNotBlocked(email);
 
         const user = await this.prisma.user.findUnique({
             where: {
@@ -136,17 +136,17 @@ export class AuthService {
         });
 
         if (!user) {
-            this.loginAttempts.recordFailure(email);
+            await this.loginAttempts.recordFailure(email);
             throw new NotFoundException('User not found');
         }
 
         const isPasswordValid = await bcrypt.compare(dto.password, user.password);
         if (!isPasswordValid) {
-            this.loginAttempts.recordFailure(email);
+            await this.loginAttempts.recordFailure(email);
             throw new UnauthorizedException('Invalid password');
         }
 
-        this.loginAttempts.reset(email);
+        await this.loginAttempts.reset(email);
 
         const token = await this.generateTokens(user.id, user.email);
         await this.updateRtHash(user.id, token.refresh_token);
@@ -193,6 +193,10 @@ export class AuthService {
         }
 
         await this.hashAndUpdatePassword(userId, newPassword);
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: { hashedRt: null },
+        });
     }
 
     async deleteAccount(userId: string, password: string) {

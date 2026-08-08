@@ -1,18 +1,23 @@
 import { HttpException, HttpStatus, Injectable, OnModuleDestroy } from '@nestjs/common';
+import Redis from 'ioredis';
 
 const MAX_FAILURES = 5;
-const WINDOW_MS = 15 * 60_000;
+const WINDOW_SECONDS = 15 * 60;
 
 @Injectable()
 export class LoginAttemptsService implements OnModuleDestroy {
-    private readonly failuresByEmail = new Map<string, number[]>();
-    private readonly cleanupTimer = setInterval(() => this.removeExpired(), WINDOW_MS);
+    private readonly redis = new Redis({
+        host: process.env.REDIS_HOST ?? 'localhost',
+        port: +(process.env.REDIS_PORT ?? 6379),
+    });
 
-    assertNotBlocked(email: string) {
-        const failures = this.recentFailures(email);
-        if (failures.length >= MAX_FAILURES) {
-            const retryAfterMs = failures[0] + WINDOW_MS - Date.now();
-            const minutes = Math.ceil(retryAfterMs / 60_000);
+    async assertNotBlocked(email: string) {
+        const key = this.key(email);
+        const count = await this.redis.get(key);
+
+        if (Number(count) >= MAX_FAILURES) {
+            const ttl = await this.redis.ttl(key);
+            const minutes = Math.max(1, Math.ceil(ttl / 60));
             throw new HttpException(
                 `Too many failed login attempts. Try again in ${minutes} min.`,
                 HttpStatus.TOO_MANY_REQUESTS,
@@ -20,36 +25,23 @@ export class LoginAttemptsService implements OnModuleDestroy {
         }
     }
 
-    recordFailure(email: string) {
-        const failures = this.recentFailures(email);
-        failures.push(Date.now());
-        this.failuresByEmail.set(this.key(email), failures);
-    }
-
-    reset(email: string) {
-        this.failuresByEmail.delete(this.key(email));
-    }
-
-    private recentFailures(email: string) {
-        const cutoff = Date.now() - WINDOW_MS;
-        const failures = this.failuresByEmail.get(this.key(email)) ?? [];
-        return failures.filter((timestamp) => timestamp > cutoff);
-    }
-
-    private key(email: string) {
-        return email.toLowerCase();
-    }
-
-    private removeExpired() {
-        const cutoff = Date.now() - WINDOW_MS;
-        for (const [email, failures] of this.failuresByEmail) {
-            if (failures.every((timestamp) => timestamp <= cutoff)) {
-                this.failuresByEmail.delete(email);
-            }
+    async recordFailure(email: string) {
+        const key = this.key(email);
+        const count = await this.redis.incr(key);
+        if (count === 1) {
+            await this.redis.expire(key, WINDOW_SECONDS);
         }
     }
 
-    onModuleDestroy() {
-        clearInterval(this.cleanupTimer);
+    async reset(email: string) {
+        await this.redis.del(this.key(email));
+    }
+
+    private key(email: string) {
+        return `login-attempts:email:${email.toLowerCase()}`;
+    }
+
+    async onModuleDestroy() {
+        await this.redis.quit();
     }
 }
