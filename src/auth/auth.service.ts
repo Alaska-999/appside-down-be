@@ -46,8 +46,21 @@ export class AuthService {
     }
 
 
-    async refreshTokens(userId: string, refreshToken: string) {
+    async refreshTokens(refreshToken: string) {
+        let payload: any;
+        try {
+            payload = await this.jwtService.verifyAsync(refreshToken, { secret: this.config.getOrThrow('RT_SECRET') });
+        } catch (e: any) {
+            logger.warn(`refresh rejected: verify failed (${e?.message})`);
+            throw new UnauthorizedException('Invalid refresh token');
+        }
 
+        if (payload.typ !== 'refresh') {
+            logger.warn(`refresh rejected: bad payload typ=${payload.typ} userId=${payload.userId}`);
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+
+        const userId = payload.userId as string;
         const user = await this.prisma.user.findUnique({
             where: {
                 id: userId,
@@ -56,21 +69,6 @@ export class AuthService {
 
         if (!user || !user.hashedRt) {
             logger.warn(`refresh rejected: user not found or no hashedRt (userId=${userId})`);
-            throw new NotFoundException('User not found');
-        }
-
-        let payload: any;
-        try {
-            //jwtService.verifyAsync  is an asynchronous method in the @nestjs/jwt package used to validate JSON Web Tokens (JWT).
-            //  It returns a Promise resolving to the decoded payload, preventing event loop blocks during CPU-intensive cryptographic operations
-            payload = await this.jwtService.verifyAsync(refreshToken, { secret: this.config.getOrThrow('RT_SECRET') });
-        } catch (e: any) {
-            logger.warn(`refresh rejected: verify failed (${e?.message}) userId=${userId}`);
-            throw new UnauthorizedException('Invalid refresh token');
-        }
-
-        if (payload.typ !== 'refresh' || payload.userId !== userId) {
-            logger.warn(`refresh rejected: bad payload typ=${payload.typ} tokenUserId=${payload.userId} reqUserId=${userId}`);
             throw new UnauthorizedException('Invalid refresh token');
         }
 

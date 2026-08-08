@@ -130,6 +130,7 @@ export type FolderScalarFieldEnum = (typeof FolderScalarFieldEnum)[keyof typeof 
 export const ModuleScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   isFavorite: 'isFavorite',

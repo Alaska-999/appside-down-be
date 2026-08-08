@@ -66,8 +66,9 @@ model Folder {
 }
 
 model Module {
-  id         String   @id @default(uuid())
-  name       String
+  id          String  @id @default(uuid())
+  name        String
+  description String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   isFavorite Boolean  @default(false)
@@ -86,7 +87,7 @@ model Module {
   @@index([userId, createdAt, id])
   @@index([userId, name, id])
   @@index([userId, updatedAt])
-  @@index([isPublic, updatedAt, id])
+  @@index([isPublic, createdAt, id])
   @@index([authorId])
 }
 

@@ -16,6 +16,11 @@ export class DeleteAccountDto {
     password!: string;
 }
 
+export class RefreshDto {
+    @IsString()
+    refreshToken!: string;
+}
+
 
 export class ResetPasswordDto {
     @IsEmail()

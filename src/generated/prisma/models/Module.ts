@@ -27,6 +27,7 @@ export type AggregateModule = {
 export type ModuleMinAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
   createdAt: Date | null
   updatedAt: Date | null
   isFavorite: boolean | null
@@ -39,6 +40,7 @@ export type ModuleMinAggregateOutputType = {
 export type ModuleMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
   createdAt: Date | null
   updatedAt: Date | null
   isFavorite: boolean | null
@@ -51,6 +53,7 @@ export type ModuleMaxAggregateOutputType = {
 export type ModuleCountAggregateOutputType = {
   id: number
   name: number
+  description: number
   createdAt: number
   updatedAt: number
   isFavorite: number
@@ -65,6 +68,7 @@ export type ModuleCountAggregateOutputType = {
 export type ModuleMinAggregateInputType = {
   id?: true
   name?: true
+  description?: true
   createdAt?: true
   updatedAt?: true
   isFavorite?: true
@@ -77,6 +81,7 @@ export type ModuleMinAggregateInputType = {
 export type ModuleMaxAggregateInputType = {
   id?: true
   name?: true
+  description?: true
   createdAt?: true
   updatedAt?: true
   isFavorite?: true
@@ -89,6 +94,7 @@ export type ModuleMaxAggregateInputType = {
 export type ModuleCountAggregateInputType = {
   id?: true
   name?: true
+  description?: true
   createdAt?: true
   updatedAt?: true
   isFavorite?: true
@@ -174,6 +180,7 @@ export type ModuleGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type ModuleGroupByOutputType = {
   id: string
   name: string
+  description: string | null
   createdAt: Date
   updatedAt: Date
   isFavorite: boolean
@@ -207,6 +214,7 @@ export type ModuleWhereInput = {
   NOT?: Prisma.ModuleWhereInput | Prisma.ModuleWhereInput[]
   id?: Prisma.StringFilter<"Module"> | string
   name?: Prisma.StringFilter<"Module"> | string
+  description?: Prisma.StringNullableFilter<"Module"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   isFavorite?: Prisma.BoolFilter<"Module"> | boolean
@@ -223,6 +231,7 @@ export type ModuleWhereInput = {
 export type ModuleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
@@ -242,6 +251,7 @@ export type ModuleWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ModuleWhereInput[]
   NOT?: Prisma.ModuleWhereInput | Prisma.ModuleWhereInput[]
   name?: Prisma.StringFilter<"Module"> | string
+  description?: Prisma.StringNullableFilter<"Module"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   isFavorite?: Prisma.BoolFilter<"Module"> | boolean
@@ -258,6 +268,7 @@ export type ModuleWhereUniqueInput = Prisma.AtLeast<{
 export type ModuleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
@@ -276,6 +287,7 @@ export type ModuleScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ModuleScalarWhereWithAggregatesInput | Prisma.ModuleScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Module"> | string
   name?: Prisma.StringWithAggregatesFilter<"Module"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Module"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Module"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Module"> | Date | string
   isFavorite?: Prisma.BoolWithAggregatesFilter<"Module"> | boolean
@@ -288,6 +300,7 @@ export type ModuleScalarWhereWithAggregatesInput = {
 export type ModuleCreateInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -302,6 +315,7 @@ export type ModuleCreateInput = {
 export type ModuleUncheckedCreateInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -316,6 +330,7 @@ export type ModuleUncheckedCreateInput = {
 export type ModuleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -330,6 +345,7 @@ export type ModuleUpdateInput = {
 export type ModuleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -344,6 +360,7 @@ export type ModuleUncheckedUpdateInput = {
 export type ModuleCreateManyInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -356,6 +373,7 @@ export type ModuleCreateManyInput = {
 export type ModuleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -366,6 +384,7 @@ export type ModuleUpdateManyMutationInput = {
 export type ModuleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -388,6 +407,7 @@ export type ModuleOrderByRelationAggregateInput = {
 export type ModuleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
@@ -400,6 +420,7 @@ export type ModuleCountOrderByAggregateInput = {
 export type ModuleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
@@ -412,6 +433,7 @@ export type ModuleMaxOrderByAggregateInput = {
 export type ModuleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   isFavorite?: Prisma.SortOrder
@@ -565,6 +587,7 @@ export type ModuleUpdateOneRequiredWithoutFlashcardsNestedInput = {
 export type ModuleCreateWithoutUserInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -578,6 +601,7 @@ export type ModuleCreateWithoutUserInput = {
 export type ModuleUncheckedCreateWithoutUserInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -601,6 +625,7 @@ export type ModuleCreateManyUserInputEnvelope = {
 export type ModuleCreateWithoutAuthorInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -614,6 +639,7 @@ export type ModuleCreateWithoutAuthorInput = {
 export type ModuleUncheckedCreateWithoutAuthorInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -656,6 +682,7 @@ export type ModuleScalarWhereInput = {
   NOT?: Prisma.ModuleScalarWhereInput | Prisma.ModuleScalarWhereInput[]
   id?: Prisma.StringFilter<"Module"> | string
   name?: Prisma.StringFilter<"Module"> | string
+  description?: Prisma.StringNullableFilter<"Module"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Module"> | Date | string
   isFavorite?: Prisma.BoolFilter<"Module"> | boolean
@@ -684,6 +711,7 @@ export type ModuleUpdateManyWithWhereWithoutAuthorInput = {
 export type ModuleCreateWithoutFoldersInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -697,6 +725,7 @@ export type ModuleCreateWithoutFoldersInput = {
 export type ModuleUncheckedCreateWithoutFoldersInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -731,6 +760,7 @@ export type ModuleUpdateManyWithWhereWithoutFoldersInput = {
 export type ModuleCreateWithoutFlashcardsInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -744,6 +774,7 @@ export type ModuleCreateWithoutFlashcardsInput = {
 export type ModuleUncheckedCreateWithoutFlashcardsInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -773,6 +804,7 @@ export type ModuleUpdateToOneWithWhereWithoutFlashcardsInput = {
 export type ModuleUpdateWithoutFlashcardsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -786,6 +818,7 @@ export type ModuleUpdateWithoutFlashcardsInput = {
 export type ModuleUncheckedUpdateWithoutFlashcardsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -799,6 +832,7 @@ export type ModuleUncheckedUpdateWithoutFlashcardsInput = {
 export type ModuleCreateManyUserInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -810,6 +844,7 @@ export type ModuleCreateManyUserInput = {
 export type ModuleCreateManyAuthorInput = {
   id?: string
   name: string
+  description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   isFavorite?: boolean
@@ -821,6 +856,7 @@ export type ModuleCreateManyAuthorInput = {
 export type ModuleUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -834,6 +870,7 @@ export type ModuleUpdateWithoutUserInput = {
 export type ModuleUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -847,6 +884,7 @@ export type ModuleUncheckedUpdateWithoutUserInput = {
 export type ModuleUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -858,6 +896,7 @@ export type ModuleUncheckedUpdateManyWithoutUserInput = {
 export type ModuleUpdateWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -871,6 +910,7 @@ export type ModuleUpdateWithoutAuthorInput = {
 export type ModuleUncheckedUpdateWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -884,6 +924,7 @@ export type ModuleUncheckedUpdateWithoutAuthorInput = {
 export type ModuleUncheckedUpdateManyWithoutAuthorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -895,6 +936,7 @@ export type ModuleUncheckedUpdateManyWithoutAuthorInput = {
 export type ModuleUpdateWithoutFoldersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -908,6 +950,7 @@ export type ModuleUpdateWithoutFoldersInput = {
 export type ModuleUncheckedUpdateWithoutFoldersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -921,6 +964,7 @@ export type ModuleUncheckedUpdateWithoutFoldersInput = {
 export type ModuleUncheckedUpdateManyWithoutFoldersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -973,6 +1017,7 @@ export type ModuleCountOutputTypeCountFlashcardsArgs<ExtArgs extends runtime.Typ
 export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   isFavorite?: boolean
@@ -990,6 +1035,7 @@ export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type ModuleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   isFavorite?: boolean
@@ -1004,6 +1050,7 @@ export type ModuleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type ModuleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   isFavorite?: boolean
@@ -1018,6 +1065,7 @@ export type ModuleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type ModuleSelectScalar = {
   id?: boolean
   name?: boolean
+  description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   isFavorite?: boolean
@@ -1027,7 +1075,7 @@ export type ModuleSelectScalar = {
   isPublic?: boolean
 }
 
-export type ModuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "isFavorite" | "userId" | "authorId" | "authorUsername" | "isPublic", ExtArgs["result"]["module"]>
+export type ModuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt" | "isFavorite" | "userId" | "authorId" | "authorUsername" | "isPublic", ExtArgs["result"]["module"]>
 export type ModuleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   author?: boolean | Prisma.Module$authorArgs<ExtArgs>
@@ -1055,6 +1103,7 @@ export type $ModulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    description: string | null
     createdAt: Date
     updatedAt: Date
     isFavorite: boolean
@@ -1491,6 +1540,7 @@ export interface Prisma__ModuleClient<T, Null = never, ExtArgs extends runtime.T
 export interface ModuleFieldRefs {
   readonly id: Prisma.FieldRef<"Module", 'String'>
   readonly name: Prisma.FieldRef<"Module", 'String'>
+  readonly description: Prisma.FieldRef<"Module", 'String'>
   readonly createdAt: Prisma.FieldRef<"Module", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Module", 'DateTime'>
   readonly isFavorite: Prisma.FieldRef<"Module", 'Boolean'>

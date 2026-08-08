@@ -20,6 +20,7 @@ export class ModulesService {
     return this.prisma.module.create({
       data: {
         name: createModuleDto.name,
+        description: createModuleDto.description,
         isFavorite: createModuleDto.isFavorite ?? false,
         folders: createModuleDto.folderId ? {
           connect: { id: createModuleDto.folderId },
@@ -110,26 +111,52 @@ export class ModulesService {
     }
 
     return this.prisma.$transaction(async (tx) => {
-      if (updateModuleDto.flashcards) {
-        await tx.flashcard.deleteMany({
+      const incoming = updateModuleDto.flashcards;
+      if (incoming) {
+        const existing = await tx.flashcard.findMany({
           where: { moduleId: id },
+          select: { id: true, term: true, definition: true },
         });
+        const existingById = new Map(existing.map((card) => [card.id, card]));
+
+        const toUpdate = incoming.filter((card) => card.id && existingById.has(card.id));
+        const toCreate = incoming.filter((card) => !card.id || !existingById.has(card.id));
+        const keptIds = new Set(toUpdate.map((card) => card.id));
+        const toDeleteIds = existing.map((card) => card.id).filter((cardId) => !keptIds.has(cardId));
+
+        for (const card of toUpdate) {
+          const current = existingById.get(card.id!)!;
+          if (current.term === card.term && current.definition === card.definition) continue;
+          await tx.flashcard.update({
+            where: { id: card.id },
+            data: { term: card.term, definition: card.definition },
+          });
+        }
+        if (toCreate.length) {
+          await tx.flashcard.createMany({
+            data: toCreate.map((card) => ({
+              moduleId: id,
+              term: card.term,
+              definition: card.definition,
+            })),
+          });
+        }
+        if (toDeleteIds.length) {
+          await tx.flashcard.deleteMany({
+            where: { id: { in: toDeleteIds }, moduleId: id },
+          });
+        }
       }
 
       return tx.module.update({
         where: { id },
         data: {
           name: updateModuleDto.name,
+          description: updateModuleDto.description,
           isFavorite: updateModuleDto.isFavorite,
           isPublic: updateModuleDto.isPublic,
           folders: updateModuleDto.folderId ? {
             connect: { id: updateModuleDto.folderId },
-          } : undefined,
-          flashcards: updateModuleDto.flashcards ? {
-            create: updateModuleDto.flashcards.map(card => ({
-              term: card.term,
-              definition: card.definition,
-            })),
           } : undefined,
         },
         include: { flashcards: true },
@@ -161,7 +188,7 @@ export class ModulesService {
           ...(search ? { name: { contains: search, mode: 'insensitive' as const } } : {}),
           ...(excludeUserId ? { userId: { not: excludeUserId } } : {}),
         },
-        orderBy: [{ updatedAt: 'desc' as const }, { id: 'asc' as const }],
+        orderBy: [{ createdAt: 'desc' as const }, { id: 'asc' as const }],
         take: limit + 1,
         ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
         include: {
