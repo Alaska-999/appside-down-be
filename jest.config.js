@@ -8,5 +8,6 @@ module.exports = {
   coverageDirectory: '../coverage',
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
 };

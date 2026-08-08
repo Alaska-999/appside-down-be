@@ -12,22 +12,8 @@ async function bootstrap() {
   app.set('etag', false);
   const logger = new Logger('HTTP');
   app.use((req: any, res: any, next: any) => {
-    const auth = req.headers.authorization;
-    logger.log(`${req.method} ${req.originalUrl} auth=${auth ? auth.slice(0, 20) + '...' : 'none'}`);
-
-    let jsonLogged = false;
-    const originalJson = res.json.bind(res);
-    res.json = (body: any) => {
-      jsonLogged = true;
-      const str = JSON.stringify(body);
-      logger.log(`${req.method} ${req.originalUrl} -> ${res.statusCode} body=${str.slice(0, 500)}`);
-      return originalJson(body);
-    };
-
     res.on('finish', () => {
-      if (!jsonLogged) {
-        logger.log(`${req.method} ${req.originalUrl} -> ${res.statusCode} (no json body)`);
-      }
+      logger.log(`${req.method} ${req.originalUrl} -> ${res.statusCode}`);
     });
     next();
   });

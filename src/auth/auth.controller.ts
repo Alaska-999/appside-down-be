@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { LoginDto, SignupDto } from './dto/signup.dto';
 import { ChangePasswordDto, DeleteAccountDto, ResetPasswordDto } from './dto/account.dto';
 import { AuthService } from './auth.service';
@@ -51,12 +51,5 @@ export class AuthController {
     @Delete('account')
     async deleteAccount(@Req() req: any, @Body() dto: DeleteAccountDto) {
         await this.authService.deleteAccount(req.user.userId, dto.password);
-    }
-
-    @UseGuards(JwtAuthGuard) // Додали охоронця
-    @Get('test-protected')
-    test() {
-        console.log('test');
-        return { message: 'Ти всередині! Токен спрацював.' };
     }
 }
