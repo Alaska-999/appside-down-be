@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { StudyController } from './study.controller';
 import { StudyService } from './study.service';
-import { StudyProcessor } from './study.processor';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { BullModule } from '@nestjs/bullmq';
 
@@ -14,11 +13,11 @@ import { BullModule } from '@nestjs/bullmq';
         attempts: 3,
         backoff: { type: 'exponential', delay: 5000 },
         removeOnComplete: true,
-        removeOnFail: false,
+        removeOnFail: { age: 24 * 60 * 60, count: 1000 },
       },
     }),
   ],
   controllers: [StudyController],
-  providers: [StudyService, StudyProcessor],
+  providers: [StudyService],
 })
 export class StudyModule {}

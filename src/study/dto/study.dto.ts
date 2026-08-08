@@ -17,7 +17,7 @@ export class StudyEventInputDto {
 
 export class SubmitStudyEventsDto {
   @IsArray()
-  @ArrayMaxSize(200)
+  @ArrayMaxSize(100)
   @ValidateNested({ each: true })
   @Type(() => StudyEventInputDto)
   events!: StudyEventInputDto[];

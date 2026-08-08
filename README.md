@@ -44,6 +44,22 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Study worker (separate process)
+
+Study events (flashcard progress) are processed by a BullMQ worker that used to run inside the same process as the HTTP API, sharing its DB connection pool — under load, the worker could starve normal HTTP requests of connections. It now boots from its own entry point (`src/worker.main.ts` / `src/worker.module.ts`), with no HTTP server and no controllers, and must be run as a separate process/deploy:
+
+```bash
+# development (watch mode)
+$ npm run start:worker:dev
+
+# production
+$ npm run start:worker:prod
+```
+
+The worker uses a longer Postgres `statement_timeout` (`DB_STATEMENT_TIMEOUT_MS=10000`, set in the `start:worker:*` scripts) than the HTTP process (2s default), since its batched study-event transaction can legitimately take longer than a single API request.
+
+Failed jobs are auto-pruned (`removeOnFail: { age: 24h, count: 1000 }`) so Redis doesn't grow unbounded.
+
 ## Run tests
 
 ```bash

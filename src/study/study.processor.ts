@@ -1,24 +1,57 @@
+import { Logger } from '@nestjs/common';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Job } from 'bullmq';
+import { Job, UnrecoverableError } from 'bullmq';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { StudyEventInputDto } from './dto/study.dto';
 
 @Processor('study')
 export class StudyProcessor extends WorkerHost {
+  private readonly logger = new Logger(StudyProcessor.name);
+
   constructor(private readonly prisma: PrismaService) {
     super();
   }
-  /**
-     * Processes background jobs for user study events in a single database transaction:
-     * 1. Logs all incoming study events to the history.
-     * 2. Deduplicates events to find the latest status per flashcard.
-     * 3. Updates the current status (`KNOWN` / `STILL_LEARNING`) of the modified flashcards.
-     * 4. Refreshes the `updatedAt` timestamp for all affected study modules.
-     */
-  async process(job: Job<{ userId: string; events: StudyEventInputDto[] }>) {
-    const { userId, events } = job.data;
 
-    const latest = Array.from(new Map(events.map(e => [e.flashcardId, e])).values());
+  async process(job: Job<{ userId: string; events: unknown[] }>) {
+    const { userId, events: rawEvents } = job.data;
+
+    const events = plainToInstance(StudyEventInputDto, rawEvents);
+    for (const event of events) {
+      const errors = await validate(event);
+      if (errors.length) {
+        const details = errors
+          .map((e) => Object.values(e.constraints ?? {}).join(', '))
+          .join('; ');
+        throw new UnrecoverableError(
+          `invalid study event payload for user ${userId}: ${details}`,
+        );
+      }
+    }
+
+    const flashcardIds = [...new Set(events.map((e) => e.flashcardId))];
+    const ownedFlashcards = await this.prisma.flashcard.findMany({
+      where: { id: { in: flashcardIds }, module: { userId } },
+      select: { id: true, moduleId: true },
+    });
+    const ownedModuleByFlashcard = new Map(
+      ownedFlashcards.map((f) => [f.id, f.moduleId]),
+    );
+
+    const owned = events.filter(
+      (e) => ownedModuleByFlashcard.get(e.flashcardId) === e.moduleId,
+    );
+    if (owned.length < events.length) {
+      this.logger.warn(
+        `dropped ${events.length - owned.length} study event(s) with unowned/mismatched flashcardId-moduleId for user ${userId}`,
+      );
+    }
+    if (!owned.length) return;
+
+    const latest = Array.from(
+      new Map(owned.map((e) => [e.flashcardId, e])).values(),
+    );
 
     const knownIds = latest
       .filter((e) => e.status === 'KNOWN')
@@ -30,7 +63,7 @@ export class StudyProcessor extends WorkerHost {
 
     await this.prisma.$transaction([
       this.prisma.studyEvent.createMany({
-        data: events.map((e) => ({
+        data: owned.map((e) => ({
           userId,
           flashcardId: e.flashcardId,
           moduleId: e.moduleId,
