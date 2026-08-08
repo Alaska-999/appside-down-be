@@ -3,6 +3,9 @@ import { ArrayMaxSize, IsArray, IsEnum, IsISO8601, IsUUID, ValidateNested } from
 
 export class StudyEventInputDto {
   @IsUUID()
+  id!: string;
+
+  @IsUUID()
   flashcardId!: string;
 
   @IsUUID()

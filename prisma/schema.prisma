@@ -112,10 +112,11 @@ model Flashcard {
 }
 
 model StudyEvent {
-  id         String     @id @default(uuid())
-  status     CardStatus
-  answeredAt DateTime
-  createdAt  DateTime   @default(now())
+  id            String     @id @default(uuid())
+  clientEventId String
+  status        CardStatus
+  answeredAt    DateTime
+  createdAt     DateTime   @default(now())
 
   flashcardId String
   moduleId    String
@@ -123,6 +124,7 @@ model StudyEvent {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, clientEventId])
   @@index([userId, answeredAt])
   @@index([moduleId])
   @@index([flashcardId])

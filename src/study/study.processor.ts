@@ -64,12 +64,14 @@ export class StudyProcessor extends WorkerHost {
     await this.prisma.$transaction([
       this.prisma.studyEvent.createMany({
         data: owned.map((e) => ({
+          clientEventId: e.id,
           userId,
           flashcardId: e.flashcardId,
           moduleId: e.moduleId,
           status: e.status,
           answeredAt: new Date(e.answeredAt),
         })),
+        skipDuplicates: true,
       }),
       this.prisma.flashcard.updateMany({
         where: { id: { in: knownIds }, module: { userId } },

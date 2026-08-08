@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { InjectQueue } from '@nestjs/bullmq';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
@@ -15,7 +16,16 @@ export class StudyService {
             throw new BadRequestException('too many events, max 100');
         }
 
-        await this.queue.add('process-events', { userId, events: dto.events });
+        const batchHash = createHash('sha256')
+            .update(dto.events.map((e) => e.id).sort().join(','))
+            .digest('hex')
+            .slice(0, 32);
+
+        await this.queue.add(
+            'process-events',
+            { userId, events: dto.events },
+            { jobId: `study:${userId}:${batchHash}` },
+        );
         return { queued: true, count: dto.events.length };
     }
 }

@@ -1049,6 +1049,7 @@ export type FlashcardScalarFieldEnum = (typeof FlashcardScalarFieldEnum)[keyof t
 
 export const StudyEventScalarFieldEnum = {
   id: 'id',
+  clientEventId: 'clientEventId',
   status: 'status',
   answeredAt: 'answeredAt',
   createdAt: 'createdAt',
