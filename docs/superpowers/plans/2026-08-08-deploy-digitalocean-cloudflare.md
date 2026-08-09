@@ -126,7 +126,7 @@ Run (локальні Postgres/Redis з дев-compose мають працюва
 ```bash
 docker run --rm -d --name appside-smoke \
   --env-file .env \
-  -e DATABASE_URL="postgresql://user:password@host.docker.internal:5435/appside_down_db" \
+  -e DATABASE_URL="postgresql://user:password@host.docker.internal:5435/brnrv_db" \
   -e REDIS_HOST=host.docker.internal \
   -p 5112:5111 appside-be:test
 sleep 5 && curl -s http://localhost:5112/ && docker logs appside-smoke --tail 20
@@ -262,8 +262,8 @@ volumes:
 DOMAIN=api.example.xyz
 POSTGRES_USER=appside
 POSTGRES_PASSWORD=change-me
-POSTGRES_DB=appside_down_db
-DATABASE_URL=postgresql://appside:change-me@db:5432/appside_down_db
+POSTGRES_DB=brnrv_db
+DATABASE_URL=postgresql://brnrv:change-me@db:5432/brnrv_db
 AT_SECRET=change-me
 RT_SECRET=change-me
 JWT_SECRET=change-me
@@ -326,7 +326,7 @@ Expected: `connected` + версія Ubuntu.
 **Files:** — (все на сервері)
 
 **Interfaces:**
-- Produces: docker + compose plugin, файрвол 22/80/443, тека `/opt/appside`.
+- Produces: docker + compose plugin, файрвол 22/80/443, тека `/opt/brnrv`.
 
 - [ ] **Step 1: Оновлення системи і Docker**
 
@@ -348,14 +348,14 @@ ufw status
 ```
 Expected: `Status: active`, у списку лише OpenSSH/80/443. (`allow OpenSSH` — обов'язково ПЕРЕД `enable`, інакше сесія заблокує сама себе.)
 
-- [ ] **Step 3:** `mkdir -p /opt/appside`
+- [ ] **Step 3:** `mkdir -p /opt/brnrv`
 
 ### Task 7: Доставити код на сервер
 
 **Files:** — (на сервері)
 
 **Interfaces:**
-- Produces: `/opt/appside/appside-down-be` — клон репо з файлами Фази 1.
+- Produces: `/opt/brnrv/appside-down-be` — клон репо з файлами Фази 1.
 
 - [ ] **Step 1: Deploy key (якщо репо приватне)**
 
@@ -369,7 +369,7 @@ GitHub → репо → Settings → Deploy keys → Add (read-only, без writ
 - [ ] **Step 2: Клонування**
 
 ```bash
-cd /opt/appside && git clone git@github.com:<owner>/appside-down-be.git
+cd /opt/brnrv && git clone git@github.com:<owner>/appside-down-be.git
 ls appside-down-be/Dockerfile appside-down-be/docker-compose.prod.yml
 ```
 Expected: обидва файли на місці.
@@ -377,7 +377,7 @@ Expected: обидва файли на місці.
 ### Task 8: Прод-.env з новими секретами
 
 **Files:**
-- Create (на сервері): `/opt/appside/appside-down-be/.env`
+- Create (на сервері): `/opt/brnrv/appside-down-be/.env`
 
 **Interfaces:**
 - Consumes: `<домен>` із Task 4; шаблон `.env.production.example`.
@@ -392,14 +392,14 @@ openssl rand -base64 48   # RT_SECRET
 openssl rand -base64 48   # JWT_SECRET
 ```
 
-- [ ] **Step 2: Створити `.env`** за шаблоном `.env.production.example`: `DOMAIN=api.<домен>`, згенеровані значення, `DATABASE_URL=postgresql://appside:<POSTGRES_PASSWORD>@db:5432/appside_down_db`, реальний `RESEND_API_KEY_DEV` (єдине дев-значення, що переноситься — Resend-ключ той самий). `chmod 600 .env`.
+- [ ] **Step 2: Створити `.env`** за шаблоном `.env.production.example`: `DOMAIN=api.<домен>`, згенеровані значення, `DATABASE_URL=postgresql://brnrv:<POSTGRES_PASSWORD>@db:5432/brnrv_db`, реальний `RESEND_API_KEY_DEV` (єдине дев-значення, що переноситься — Resend-ключ той самий). `chmod 600 .env`.
 
 Expected: `grep -c change-me .env` → `0`.
 
 ### Task 9: Cloudflare Origin Certificate
 
 **Files:**
-- Create (на сервері): `/opt/appside/appside-down-be/certs/origin.pem`, `certs/origin.key`
+- Create (на сервері): `/opt/brnrv/appside-down-be/certs/origin.pem`, `certs/origin.key`
 
 **Interfaces:**
 - Produces: сертифікат, який `caddy` монтує як `/etc/caddy/certs/*` (шляхи з Caddyfile, Task 3).
