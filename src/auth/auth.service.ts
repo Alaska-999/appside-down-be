@@ -104,6 +104,7 @@ export class AuthService {
             const token = await this.generateTokens(user.id, user.email);
 
             await this.updateRtHash(user.id, token.refresh_token);
+            logger.log(`signup OK (userId=${user.id})`);
             return {
                 user: {
                     email: user.email,
@@ -114,10 +115,11 @@ export class AuthService {
                 refresh_token: token.refresh_token,
             };
         } catch (error: any) {
-            console.error('Signup error:', error);
             if (error.code === 'P2002') {
+                logger.warn(`signup rejected: email already exists`);
                 throw new ConflictException('Email already exists')
             }
+            logger.error(`signup failed: ${error?.message}`, error?.stack);
             throw new InternalServerErrorException('Failed to signup');
         }
     }
@@ -135,12 +137,14 @@ export class AuthService {
 
         if (!user) {
             await this.authRateLimit.recordLoginFailure(email, ip);
+            logger.warn(`login rejected: user not found (ip=${ip})`);
             throw new NotFoundException('User not found');
         }
 
         const isPasswordValid = await bcrypt.compare(dto.password, user.password);
         if (!isPasswordValid) {
             await this.authRateLimit.recordLoginFailure(email, ip);
+            logger.warn(`login rejected: invalid password (userId=${user.id})`);
             throw new UnauthorizedException('Invalid password');
         }
 
@@ -149,7 +153,7 @@ export class AuthService {
         const token = await this.generateTokens(user.id, user.email);
         await this.updateRtHash(user.id, token.refresh_token);
 
-
+        logger.log(`login OK (userId=${user.id})`);
         return {
             user: {
                 email: user.email,
@@ -167,6 +171,7 @@ export class AuthService {
             where: { id: userId },
             data: { hashedRt: null },
         });
+        logger.log(`logout OK (userId=${userId})`);
     }
 
     async hashAndUpdatePassword(userId: string, newPassword: string) {
@@ -187,6 +192,7 @@ export class AuthService {
 
         const isOldPasswordValid = await bcrypt.compare(oldPassword, user.password);
         if (!isOldPasswordValid) {
+            logger.warn(`change password rejected: current password incorrect (userId=${userId})`);
             throw new ForbiddenException('Current password is incorrect');
         }
 
@@ -195,6 +201,7 @@ export class AuthService {
             where: { id: userId },
             data: { hashedRt: null },
         });
+        logger.log(`password changed (userId=${userId})`);
     }
 
     async deleteAccount(userId: string, password: string) {
@@ -205,6 +212,7 @@ export class AuthService {
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
+            logger.warn(`account deletion rejected: incorrect password (userId=${userId})`);
             throw new ForbiddenException('Incorrect password');
         }
 
@@ -212,6 +220,7 @@ export class AuthService {
             this.prisma.module.updateMany({ where: { authorId: userId }, data: { authorUsername: user.username } }),
             this.prisma.user.delete({ where: { id: userId } }),
         ]);
+        logger.log(`account deleted (userId=${userId})`);
     }
 
 
@@ -248,12 +257,18 @@ export class AuthService {
             },
         });
 
-        await resend.emails.send({
-            from: 'onboarding@resend.dev',
-            to: email,
-            subject: 'Password Reset Code',
-            html: `<p>Your password reset code is <strong>${code}</strong></p>`
-        });
+        try {
+            await resend.emails.send({
+                from: 'onboarding@resend.dev',
+                to: email,
+                subject: 'Password Reset Code',
+                html: `<p>Your password reset code is <strong>${code}</strong></p>`
+            });
+            logger.log(`password reset email sent (userId=${user.id})`);
+        } catch (error: any) {
+            logger.error(`password reset email failed (userId=${user.id}): ${error?.message}`, error?.stack);
+            throw new InternalServerErrorException('Failed to send reset email');
+        }
     }
 
 
@@ -269,11 +284,13 @@ export class AuthService {
         }
 
         if (passwordReset.expiresAt < new Date()) {
+            logger.warn(`reset password rejected: code expired (userId=${user.id})`);
             throw new ForbiddenException('Invalid or expired code');
         }
 
         if (passwordReset.attempts >= 5) {
             await this.prisma.passwordReset.delete({ where: { userId: user.id } });
+            logger.warn(`reset password rejected: too many attempts (userId=${user.id})`);
             throw new ForbiddenException('Too many attempts. Request a new code');
         }
 
@@ -283,6 +300,7 @@ export class AuthService {
                 where: { userId: user.id },
                 data: { attempts: { increment: 1 } },
             });
+            logger.warn(`reset password rejected: invalid code (userId=${user.id}, attempts=${passwordReset.attempts + 1})`);
             throw new ForbiddenException('Invalid code');
         }
 
@@ -293,5 +311,6 @@ export class AuthService {
             where: { id: user.id },
             data: { hashedRt: null },
         });
+        logger.log(`password reset OK (userId=${user.id})`);
     }
 }

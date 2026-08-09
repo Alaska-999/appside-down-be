@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job, UnrecoverableError } from 'bullmq';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
@@ -24,6 +24,7 @@ export class StudyProcessor extends WorkerHost {
         const details = errors
           .map((e) => Object.values(e.constraints ?? {}).join(', '))
           .join('; ');
+        this.logger.warn(`invalid study event payload for user ${userId}: ${details}`);
         throw new UnrecoverableError(
           `invalid study event payload for user ${userId}: ${details}`,
         );
@@ -86,5 +87,11 @@ export class StudyProcessor extends WorkerHost {
         data: { updatedAt: new Date() },
       }),
     ]);
+    this.logger.log(`Processed ${owned.length} study event(s) for user ${userId}`);
+  }
+
+  @OnWorkerEvent('failed')
+  onFailed(job: Job, error: Error) {
+    this.logger.error(`Study job failed (jobId=${job.id}): ${error.message}`, error.stack);
   }
 }

@@ -1,9 +1,11 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '../generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
+    private readonly logger = new Logger(PrismaService.name);
+
     constructor() {
         const statementTimeoutMs = +(process.env.DB_STATEMENT_TIMEOUT_MS ?? 2_000);
         const adapter = new PrismaPg({
@@ -17,5 +19,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
     async onModuleInit() {
         await this.$connect();
+        this.logger.debug('Database connected');
     }
 }

@@ -5,16 +5,21 @@ import 'dotenv/config';
 import { existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { AppModule } from './app.module';
+import { createAppLogger, statusColor } from './common/logger';
 import { TimeoutInterceptor } from './common/timeout.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: createAppLogger('brnrv-api'),
+  });
   app.set('etag', false);
   app.set('trust proxy', 1);
   const logger = new Logger('HTTP');
   app.use((req: any, res: any, next: any) => {
+    const startedAt = Date.now();
     res.on('finish', () => {
-      logger.log(`${req.method} ${req.originalUrl} -> ${res.statusCode}`);
+      const duration = Date.now() - startedAt;
+      logger.log(`${req.method} ${req.originalUrl} ${statusColor(res.statusCode)} ${duration}ms`);
     });
     next();
   });

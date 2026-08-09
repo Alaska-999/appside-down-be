@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { FoldersService } from 'src/folders/folders.service';
@@ -9,15 +9,20 @@ type ModuleSort = 'date' | 'az' | 'favs';
 
 @Injectable()
 export class ModulesService {
+  private readonly logger = new Logger(ModulesService.name);
+
   constructor(private readonly prisma: PrismaService,
     private readonly foldersService: FoldersService
   ) { }
   async create(userId: string, createModuleDto: CreateModuleDto) {
     if (createModuleDto.folderId) {
       const folder = await this.foldersService.findOne(userId, createModuleDto.folderId);
-      if (!folder) throw new NotFoundException('Folder not found or not belongs to you');
+      if (!folder) {
+        this.logger.warn(`Module create rejected: folder not found (folderId=${createModuleDto.folderId}, userId=${userId})`);
+        throw new NotFoundException('Folder not found or not belongs to you');
+      }
     }
-    return this.prisma.module.create({
+    const module = await this.prisma.module.create({
       data: {
         name: createModuleDto.name,
         description: createModuleDto.description,
@@ -35,6 +40,8 @@ export class ModulesService {
         authorId: userId,
       },
     });
+    this.logger.log(`Module created (id=${module.id}, userId=${userId})`);
+    return module;
   }
 
   findAll(userId: string, query: ParsedCursorQuery & { sort?: ModuleSort }) {
@@ -98,7 +105,10 @@ export class ModulesService {
     const module = await this.prisma.module.findFirst({
       where: { id, userId },
     });
-    if (!module) throw new NotFoundException('Module not found or not belongs to you');
+    if (!module) {
+      this.logger.warn(`Module update rejected: not found (id=${id}, userId=${userId})`);
+      throw new NotFoundException('Module not found or not belongs to you');
+    }
 
     if (updateModuleDto.folderId) {
       const folder = await this.prisma.folder.findFirst({
@@ -106,11 +116,12 @@ export class ModulesService {
       });
 
       if (!folder) {
+        this.logger.warn(`Module update rejected: new folder not found (folderId=${updateModuleDto.folderId}, userId=${userId})`);
         throw new NotFoundException('New folder is not found or not belongs to you');
       }
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    const updated = await this.prisma.$transaction(async (tx) => {
       const incoming = updateModuleDto.flashcards;
       if (incoming) {
         const existing = await tx.flashcard.findMany({
@@ -162,19 +173,26 @@ export class ModulesService {
         include: { flashcards: true },
       });
     });
+    this.logger.log(`Module updated (id=${id})`);
+    return updated;
   }
 
   async remove(userId: string, id: string) {
     const module = await this.prisma.module.findFirst({
       where: { id, userId },
     });
-    if (!module) throw new NotFoundException('Module not found or not belongs to you');
+    if (!module) {
+      this.logger.warn(`Module delete rejected: not found (id=${id}, userId=${userId})`);
+      throw new NotFoundException('Module not found or not belongs to you');
+    }
 
     await this.prisma.flashcard.deleteMany({ where: { moduleId: id } });
 
-    return this.prisma.module.delete({
+    const deleted = await this.prisma.module.delete({
       where: { id },
     });
+    this.logger.log(`Module deleted (id=${id})`);
+    return deleted;
   }
 
 
@@ -249,14 +267,16 @@ export class ModulesService {
     });
 
     if (!originalModule) {
+      this.logger.warn(`Save to library rejected: public module not found (id=${id}, userId=${userId})`);
       throw new NotFoundException('Public module not found');
     }
 
     if (originalModule.userId === userId) {
+      this.logger.warn(`Save to library rejected: own module (id=${id}, userId=${userId})`);
       throw new BadRequestException('You cannot save your own module to your library');
     }
 
-    return this.prisma.module.create({
+    const saved = await this.prisma.module.create({
       data: {
         name: originalModule.name,
         userId: userId,
@@ -274,6 +294,8 @@ export class ModulesService {
       },
       include: { flashcards: true },
     });
+    this.logger.log(`Module saved to library (originalId=${id}, newId=${saved.id}, userId=${userId})`);
+    return saved;
   }
 
 }
