@@ -27,6 +27,7 @@ export class ModulesService {
         name: createModuleDto.name,
         description: createModuleDto.description,
         isFavorite: createModuleDto.isFavorite ?? false,
+        isPublic: createModuleDto.isPublic ?? false,
         folders: createModuleDto.folderId ? {
           connect: { id: createModuleDto.folderId },
         } : undefined,

@@ -27,6 +27,10 @@ export class CreateModuleDto {
     isFavorite?: boolean;
 
     @IsOptional()
+    @IsBoolean()
+    isPublic?: boolean;
+
+    @IsOptional()
     @IsUUID()
     folderId?: string;
 
