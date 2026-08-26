@@ -44,7 +44,39 @@ export class ModulesService {
     return module;
   }
 
-  findAll(userId: string, query: ParsedCursorQuery & { sort?: ModuleSort }) {
+  private async attachProgress<T extends { id: string }>(modules: T[]) {
+    if (!modules.length) return modules.map((m) => ({ ...m, progress: this.emptyProgress() }));
+
+    const rows = await this.prisma.flashcard.groupBy({
+      by: ['moduleId', 'status'],
+      where: { moduleId: { in: modules.map((m) => m.id) } },
+      _count: { _all: true },
+    });
+
+    const byModule = new Map<string, Record<string, number>>();
+    for (const row of rows) {
+      const entry = byModule.get(row.moduleId) ?? {};
+      entry[row.status] = row._count._all;
+      byModule.set(row.moduleId, entry);
+    }
+
+    return modules.map((m) => {
+      const counts = byModule.get(m.id) ?? {};
+      const known = counts.KNOWN ?? 0;
+      const learning = counts.STILL_LEARNING ?? 0;
+      const unstudied = counts.UNSTUDIED ?? 0;
+      return {
+        ...m,
+        progress: { known, learning, unstudied, total: known + learning + unstudied },
+      };
+    });
+  }
+
+  private emptyProgress() {
+    return { known: 0, learning: 0, unstudied: 0, total: 0 };
+  }
+
+  async findAll(userId: string, query: ParsedCursorQuery & { sort?: ModuleSort }) {
     const { cursor, limit, search, sort = 'date' } = query;
 
     const orderBy =
@@ -52,7 +84,7 @@ export class ModulesService {
         ? [{ name: 'asc' as const }, { id: 'asc' as const }]
         : [{ createdAt: 'desc' as const }, { id: 'asc' as const }];
 
-    return this.prisma.module
+    const page = await this.prisma.module
       .findMany({
         where: {
           userId,
@@ -78,10 +110,12 @@ export class ModulesService {
         },
       })
       .then((rows) => paginateResults(rows, limit));
+
+    return { ...page, data: await this.attachProgress(page.data) };
   }
 
-  findOne(userId: string, id: string) {
-    return this.prisma.module.findFirst({
+  async findOne(userId: string, id: string) {
+    const module = await this.prisma.module.findFirst({
       where: { id, OR: [{ userId }, { isPublic: true }] },
       include: {
         user: {
@@ -98,6 +132,11 @@ export class ModulesService {
         },
       },
     });
+
+    if (!module) return module;
+
+    const [withProgress] = await this.attachProgress([module]);
+    return withProgress;
   }
 
   async update(userId: string, id: string, updateModuleDto: UpdateModuleDto) {

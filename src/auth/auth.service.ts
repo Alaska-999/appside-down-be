@@ -259,7 +259,7 @@ export class AuthService {
 
         try {
             await resend.emails.send({
-                from: 'onboarding@resend.dev',
+                from: 'noreply@brnrv.org',
                 to: email,
                 subject: 'Password Reset Code',
                 html: `<p>Your password reset code is <strong>${code}</strong></p>`
