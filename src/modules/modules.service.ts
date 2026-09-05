@@ -4,6 +4,7 @@ import { UpdateModuleDto } from './dto/update-module.dto';
 import { FoldersService } from 'src/folders/folders.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ParsedCursorQuery, paginateResults } from 'src/common/pagination/pagination.util';
+import { attachModuleProgress } from 'src/common/progress/module-progress';
 
 type ModuleSort = 'date' | 'az' | 'favs';
 
@@ -45,36 +46,8 @@ export class ModulesService {
     return module;
   }
 
-  private async attachProgress<T extends { id: string }>(modules: T[]) {
-    if (!modules.length) return modules.map((m) => ({ ...m, progress: this.emptyProgress() }));
-
-    const rows = await this.prisma.flashcard.groupBy({
-      by: ['moduleId', 'status'],
-      where: { moduleId: { in: modules.map((m) => m.id) } },
-      _count: { _all: true },
-    });
-
-    const byModule = new Map<string, Record<string, number>>();
-    for (const row of rows) {
-      const entry = byModule.get(row.moduleId) ?? {};
-      entry[row.status] = row._count._all;
-      byModule.set(row.moduleId, entry);
-    }
-
-    return modules.map((m) => {
-      const counts = byModule.get(m.id) ?? {};
-      const known = counts.KNOWN ?? 0;
-      const learning = counts.STILL_LEARNING ?? 0;
-      const unstudied = counts.UNSTUDIED ?? 0;
-      return {
-        ...m,
-        progress: { known, learning, unstudied, total: known + learning + unstudied },
-      };
-    });
-  }
-
-  private emptyProgress() {
-    return { known: 0, learning: 0, unstudied: 0, total: 0 };
+  private attachProgress<T extends { id: string }>(modules: T[]) {
+    return attachModuleProgress(this.prisma, modules);
   }
 
   async findAll(userId: string, query: ParsedCursorQuery & { sort?: ModuleSort }) {
@@ -206,9 +179,9 @@ export class ModulesService {
           description: updateModuleDto.description,
           isFavorite: updateModuleDto.isFavorite,
           isPublic: updateModuleDto.isPublic,
-          folders: updateModuleDto.folderId ? {
-            connect: { id: updateModuleDto.folderId },
-          } : undefined,
+          folders: updateModuleDto.folderId === undefined ? undefined : {
+            set: updateModuleDto.folderId ? [{ id: updateModuleDto.folderId }] : [],
+          },
         },
         include: { flashcards: true },
       });

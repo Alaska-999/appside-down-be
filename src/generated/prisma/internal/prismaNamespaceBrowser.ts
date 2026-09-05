@@ -56,6 +56,7 @@ export const ModelName = {
   PasswordReset: 'PasswordReset',
   Folder: 'Folder',
   Module: 'Module',
+  Tag: 'Tag',
   Flashcard: 'Flashcard',
   StudyEvent: 'StudyEvent'
 } as const
@@ -120,8 +121,7 @@ export const FolderScalarFieldEnum = {
   icon: 'icon',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId',
-  tags: 'tags'
+  userId: 'userId'
 } as const
 
 export type FolderScalarFieldEnum = (typeof FolderScalarFieldEnum)[keyof typeof FolderScalarFieldEnum]
@@ -141,6 +141,16 @@ export const ModuleScalarFieldEnum = {
 } as const
 
 export type ModuleScalarFieldEnum = (typeof ModuleScalarFieldEnum)[keyof typeof ModuleScalarFieldEnum]
+
+
+export const TagScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  folderId: 'folderId'
+} as const
+
+export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
 
 
 export const FlashcardScalarFieldEnum = {

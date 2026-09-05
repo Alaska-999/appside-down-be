@@ -17,7 +17,11 @@ class UpdateModuleFlashcardDto {
     definition!: string;
 }
 
-export class UpdateModuleDto extends PartialType(OmitType(CreateModuleDto, ['flashcards'] as const)) {
+export class UpdateModuleDto extends PartialType(OmitType(CreateModuleDto, ['flashcards', 'folderId'] as const)) {
+    @IsOptional()
+    @IsUUID()
+    folderId?: string | null;
+
     @IsOptional()
     @IsBoolean()
     isPublic?: boolean

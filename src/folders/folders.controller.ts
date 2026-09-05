@@ -3,6 +3,7 @@ import { FoldersService } from './folders.service';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { ModuleIdsDto } from './dto/module-ids.dto';
+import { ModuleTagIdsDto, TagNameDto } from './dto/tag.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { parseCursorQuery } from 'src/common/pagination/pagination.util';
 
@@ -53,6 +54,36 @@ export class FoldersController {
   ) {
     const userId = req.user.userId;
     return this.foldersService.addModules(userId, folderId, body.moduleIds);
+  }
+
+  @Post(':id/tags')
+  createTag(@Param('id') folderId: string, @Body() body: TagNameDto, @Req() req: any) {
+    return this.foldersService.createTag(req.user.userId, folderId, body.name);
+  }
+
+  @Patch(':id/tags/:tagId')
+  renameTag(
+    @Param('id') folderId: string,
+    @Param('tagId') tagId: string,
+    @Body() body: TagNameDto,
+    @Req() req: any,
+  ) {
+    return this.foldersService.renameTag(req.user.userId, folderId, tagId, body.name);
+  }
+
+  @Delete(':id/tags/:tagId')
+  deleteTag(@Param('id') folderId: string, @Param('tagId') tagId: string, @Req() req: any) {
+    return this.foldersService.deleteTag(req.user.userId, folderId, tagId);
+  }
+
+  @Patch(':id/modules/:moduleId/tags')
+  setModuleTags(
+    @Param('id') folderId: string,
+    @Param('moduleId') moduleId: string,
+    @Body() body: ModuleTagIdsDto,
+    @Req() req: any,
+  ) {
+    return this.foldersService.setModuleTags(req.user.userId, folderId, moduleId, body.tagIds);
   }
 
   @Delete(':id')

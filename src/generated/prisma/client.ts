@@ -65,6 +65,11 @@ export type Folder = Prisma.FolderModel
  */
 export type Module = Prisma.ModuleModel
 /**
+ * Model Tag
+ * 
+ */
+export type Tag = Prisma.TagModel
+/**
  * Model Flashcard
  * 
  */

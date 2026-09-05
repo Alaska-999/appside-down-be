@@ -60,7 +60,7 @@ model Folder {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   modules Module[]
-  tags    String[] @default([])
+  tags    Tag[]
 
   @@index([userId, createdAt, id])
 }
@@ -82,6 +82,7 @@ model Module {
 
   folders    Folder[]
   flashcards Flashcard[]
+  tags       Tag[]
   isPublic   Boolean     @default(false)
 
   @@index([userId, createdAt, id])
@@ -89,6 +90,20 @@ model Module {
   @@index([userId, updatedAt])
   @@index([isPublic, createdAt, id])
   @@index([authorId])
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  folderId String
+  folder   Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  modules Module[]
+
+  @@unique([folderId, name])
+  @@index([folderId])
 }
 
 enum CardStatus {

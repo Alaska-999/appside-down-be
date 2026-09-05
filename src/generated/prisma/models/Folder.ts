@@ -49,7 +49,6 @@ export type FolderCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   userId: number
-  tags: number
   _all: number
 }
 
@@ -79,7 +78,6 @@ export type FolderCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
-  tags?: true
   _all?: true
 }
 
@@ -162,7 +160,6 @@ export type FolderGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   userId: string
-  tags: string[]
   _count: FolderCountAggregateOutputType | null
   _min: FolderMinAggregateOutputType | null
   _max: FolderMaxAggregateOutputType | null
@@ -193,9 +190,9 @@ export type FolderWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   userId?: Prisma.StringFilter<"Folder"> | string
-  tags?: Prisma.StringNullableListFilter<"Folder">
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   modules?: Prisma.ModuleListRelationFilter
+  tags?: Prisma.TagListRelationFilter
 }
 
 export type FolderOrderByWithRelationInput = {
@@ -205,9 +202,9 @@ export type FolderOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  tags?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   modules?: Prisma.ModuleOrderByRelationAggregateInput
+  tags?: Prisma.TagOrderByRelationAggregateInput
 }
 
 export type FolderWhereUniqueInput = Prisma.AtLeast<{
@@ -220,9 +217,9 @@ export type FolderWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   userId?: Prisma.StringFilter<"Folder"> | string
-  tags?: Prisma.StringNullableListFilter<"Folder">
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   modules?: Prisma.ModuleListRelationFilter
+  tags?: Prisma.TagListRelationFilter
 }, "id">
 
 export type FolderOrderByWithAggregationInput = {
@@ -232,7 +229,6 @@ export type FolderOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  tags?: Prisma.SortOrder
   _count?: Prisma.FolderCountOrderByAggregateInput
   _max?: Prisma.FolderMaxOrderByAggregateInput
   _min?: Prisma.FolderMinOrderByAggregateInput
@@ -248,7 +244,6 @@ export type FolderScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Folder"> | Date | string
   userId?: Prisma.StringWithAggregatesFilter<"Folder"> | string
-  tags?: Prisma.StringNullableListFilter<"Folder">
 }
 
 export type FolderCreateInput = {
@@ -257,9 +252,9 @@ export type FolderCreateInput = {
   icon: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  tags?: Prisma.FolderCreatetagsInput | string[]
   user: Prisma.UserCreateNestedOneWithoutFoldersInput
   modules?: Prisma.ModuleCreateNestedManyWithoutFoldersInput
+  tags?: Prisma.TagCreateNestedManyWithoutFolderInput
 }
 
 export type FolderUncheckedCreateInput = {
@@ -269,8 +264,8 @@ export type FolderUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
-  tags?: Prisma.FolderCreatetagsInput | string[]
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutFoldersInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type FolderUpdateInput = {
@@ -279,9 +274,9 @@ export type FolderUpdateInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
   user?: Prisma.UserUpdateOneRequiredWithoutFoldersNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutFoldersNestedInput
+  tags?: Prisma.TagUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateInput = {
@@ -291,8 +286,8 @@ export type FolderUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutFoldersNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderCreateManyInput = {
@@ -302,7 +297,6 @@ export type FolderCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
-  tags?: Prisma.FolderCreatetagsInput | string[]
 }
 
 export type FolderUpdateManyMutationInput = {
@@ -311,7 +305,6 @@ export type FolderUpdateManyMutationInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
 }
 
 export type FolderUncheckedUpdateManyInput = {
@@ -321,7 +314,6 @@ export type FolderUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
 }
 
 export type FolderListRelationFilter = {
@@ -334,14 +326,6 @@ export type FolderOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
-}
-
 export type FolderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -349,7 +333,6 @@ export type FolderCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  tags?: Prisma.SortOrder
 }
 
 export type FolderMaxOrderByAggregateInput = {
@@ -368,6 +351,11 @@ export type FolderMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+}
+
+export type FolderScalarRelationFilter = {
+  is?: Prisma.FolderWhereInput
+  isNot?: Prisma.FolderWhereInput
 }
 
 export type FolderCreateNestedManyWithoutUserInput = {
@@ -412,15 +400,6 @@ export type FolderUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.FolderScalarWhereInput | Prisma.FolderScalarWhereInput[]
 }
 
-export type FolderCreatetagsInput = {
-  set: string[]
-}
-
-export type FolderUpdatetagsInput = {
-  set?: string[]
-  push?: string | string[]
-}
-
 export type FolderCreateNestedManyWithoutModulesInput = {
   create?: Prisma.XOR<Prisma.FolderCreateWithoutModulesInput, Prisma.FolderUncheckedCreateWithoutModulesInput> | Prisma.FolderCreateWithoutModulesInput[] | Prisma.FolderUncheckedCreateWithoutModulesInput[]
   connectOrCreate?: Prisma.FolderCreateOrConnectWithoutModulesInput | Prisma.FolderCreateOrConnectWithoutModulesInput[]
@@ -459,14 +438,28 @@ export type FolderUncheckedUpdateManyWithoutModulesNestedInput = {
   deleteMany?: Prisma.FolderScalarWhereInput | Prisma.FolderScalarWhereInput[]
 }
 
+export type FolderCreateNestedOneWithoutTagsInput = {
+  create?: Prisma.XOR<Prisma.FolderCreateWithoutTagsInput, Prisma.FolderUncheckedCreateWithoutTagsInput>
+  connectOrCreate?: Prisma.FolderCreateOrConnectWithoutTagsInput
+  connect?: Prisma.FolderWhereUniqueInput
+}
+
+export type FolderUpdateOneRequiredWithoutTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.FolderCreateWithoutTagsInput, Prisma.FolderUncheckedCreateWithoutTagsInput>
+  connectOrCreate?: Prisma.FolderCreateOrConnectWithoutTagsInput
+  upsert?: Prisma.FolderUpsertWithoutTagsInput
+  connect?: Prisma.FolderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FolderUpdateToOneWithWhereWithoutTagsInput, Prisma.FolderUpdateWithoutTagsInput>, Prisma.FolderUncheckedUpdateWithoutTagsInput>
+}
+
 export type FolderCreateWithoutUserInput = {
   id?: string
   name: string
   icon: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  tags?: Prisma.FolderCreatetagsInput | string[]
   modules?: Prisma.ModuleCreateNestedManyWithoutFoldersInput
+  tags?: Prisma.TagCreateNestedManyWithoutFolderInput
 }
 
 export type FolderUncheckedCreateWithoutUserInput = {
@@ -475,8 +468,8 @@ export type FolderUncheckedCreateWithoutUserInput = {
   icon: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  tags?: Prisma.FolderCreatetagsInput | string[]
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutFoldersInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type FolderCreateOrConnectWithoutUserInput = {
@@ -515,7 +508,6 @@ export type FolderScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Folder"> | Date | string
   userId?: Prisma.StringFilter<"Folder"> | string
-  tags?: Prisma.StringNullableListFilter<"Folder">
 }
 
 export type FolderCreateWithoutModulesInput = {
@@ -524,8 +516,8 @@ export type FolderCreateWithoutModulesInput = {
   icon: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  tags?: Prisma.FolderCreatetagsInput | string[]
   user: Prisma.UserCreateNestedOneWithoutFoldersInput
+  tags?: Prisma.TagCreateNestedManyWithoutFolderInput
 }
 
 export type FolderUncheckedCreateWithoutModulesInput = {
@@ -535,7 +527,7 @@ export type FolderUncheckedCreateWithoutModulesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
-  tags?: Prisma.FolderCreatetagsInput | string[]
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutFolderInput
 }
 
 export type FolderCreateOrConnectWithoutModulesInput = {
@@ -559,13 +551,68 @@ export type FolderUpdateManyWithWhereWithoutModulesInput = {
   data: Prisma.XOR<Prisma.FolderUpdateManyMutationInput, Prisma.FolderUncheckedUpdateManyWithoutModulesInput>
 }
 
+export type FolderCreateWithoutTagsInput = {
+  id?: string
+  name: string
+  icon: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutFoldersInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutFoldersInput
+}
+
+export type FolderUncheckedCreateWithoutTagsInput = {
+  id?: string
+  name: string
+  icon: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userId: string
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutFoldersInput
+}
+
+export type FolderCreateOrConnectWithoutTagsInput = {
+  where: Prisma.FolderWhereUniqueInput
+  create: Prisma.XOR<Prisma.FolderCreateWithoutTagsInput, Prisma.FolderUncheckedCreateWithoutTagsInput>
+}
+
+export type FolderUpsertWithoutTagsInput = {
+  update: Prisma.XOR<Prisma.FolderUpdateWithoutTagsInput, Prisma.FolderUncheckedUpdateWithoutTagsInput>
+  create: Prisma.XOR<Prisma.FolderCreateWithoutTagsInput, Prisma.FolderUncheckedCreateWithoutTagsInput>
+  where?: Prisma.FolderWhereInput
+}
+
+export type FolderUpdateToOneWithWhereWithoutTagsInput = {
+  where?: Prisma.FolderWhereInput
+  data: Prisma.XOR<Prisma.FolderUpdateWithoutTagsInput, Prisma.FolderUncheckedUpdateWithoutTagsInput>
+}
+
+export type FolderUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  icon?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutFoldersNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutFoldersNestedInput
+}
+
+export type FolderUncheckedUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  icon?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutFoldersNestedInput
+}
+
 export type FolderCreateManyUserInput = {
   id?: string
   name: string
   icon: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  tags?: Prisma.FolderCreatetagsInput | string[]
 }
 
 export type FolderUpdateWithoutUserInput = {
@@ -574,8 +621,8 @@ export type FolderUpdateWithoutUserInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
   modules?: Prisma.ModuleUpdateManyWithoutFoldersNestedInput
+  tags?: Prisma.TagUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateWithoutUserInput = {
@@ -584,8 +631,8 @@ export type FolderUncheckedUpdateWithoutUserInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutFoldersNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateManyWithoutUserInput = {
@@ -594,7 +641,6 @@ export type FolderUncheckedUpdateManyWithoutUserInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
 }
 
 export type FolderUpdateWithoutModulesInput = {
@@ -603,8 +649,8 @@ export type FolderUpdateWithoutModulesInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
   user?: Prisma.UserUpdateOneRequiredWithoutFoldersNestedInput
+  tags?: Prisma.TagUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateWithoutModulesInput = {
@@ -614,7 +660,7 @@ export type FolderUncheckedUpdateWithoutModulesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
+  tags?: Prisma.TagUncheckedUpdateManyWithoutFolderNestedInput
 }
 
 export type FolderUncheckedUpdateManyWithoutModulesInput = {
@@ -624,7 +670,6 @@ export type FolderUncheckedUpdateManyWithoutModulesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  tags?: Prisma.FolderUpdatetagsInput | string[]
 }
 
 
@@ -634,10 +679,12 @@ export type FolderUncheckedUpdateManyWithoutModulesInput = {
 
 export type FolderCountOutputType = {
   modules: number
+  tags: number
 }
 
 export type FolderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   modules?: boolean | FolderCountOutputTypeCountModulesArgs
+  tags?: boolean | FolderCountOutputTypeCountTagsArgs
 }
 
 /**
@@ -657,6 +704,13 @@ export type FolderCountOutputTypeCountModulesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.ModuleWhereInput
 }
 
+/**
+ * FolderCountOutputType without action
+ */
+export type FolderCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TagWhereInput
+}
+
 
 export type FolderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -665,9 +719,9 @@ export type FolderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
-  tags?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   modules?: boolean | Prisma.Folder$modulesArgs<ExtArgs>
+  tags?: boolean | Prisma.Folder$tagsArgs<ExtArgs>
   _count?: boolean | Prisma.FolderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["folder"]>
 
@@ -678,7 +732,6 @@ export type FolderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
-  tags?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["folder"]>
 
@@ -689,7 +742,6 @@ export type FolderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
-  tags?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["folder"]>
 
@@ -700,13 +752,13 @@ export type FolderSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
-  tags?: boolean
 }
 
-export type FolderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "icon" | "createdAt" | "updatedAt" | "userId" | "tags", ExtArgs["result"]["folder"]>
+export type FolderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "icon" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["folder"]>
 export type FolderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   modules?: boolean | Prisma.Folder$modulesArgs<ExtArgs>
+  tags?: boolean | Prisma.Folder$tagsArgs<ExtArgs>
   _count?: boolean | Prisma.FolderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FolderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -721,6 +773,7 @@ export type $FolderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     modules: Prisma.$ModulePayload<ExtArgs>[]
+    tags: Prisma.$TagPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -729,7 +782,6 @@ export type $FolderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     createdAt: Date
     updatedAt: Date
     userId: string
-    tags: string[]
   }, ExtArgs["result"]["folder"]>
   composites: {}
 }
@@ -1126,6 +1178,7 @@ export interface Prisma__FolderClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   modules<T extends Prisma.Folder$modulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Folder$modulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tags<T extends Prisma.Folder$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Folder$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1161,7 +1214,6 @@ export interface FolderFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Folder", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Folder", 'DateTime'>
   readonly userId: Prisma.FieldRef<"Folder", 'String'>
-  readonly tags: Prisma.FieldRef<"Folder", 'String[]'>
 }
     
 
@@ -1584,6 +1636,30 @@ export type Folder$modulesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.ModuleScalarFieldEnum | Prisma.ModuleScalarFieldEnum[]
+}
+
+/**
+ * Folder.tags
+ */
+export type Folder$tagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Tag
+   */
+  select?: Prisma.TagSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Tag
+   */
+  omit?: Prisma.TagOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TagInclude<ExtArgs> | null
+  where?: Prisma.TagWhereInput
+  orderBy?: Prisma.TagOrderByWithRelationInput | Prisma.TagOrderByWithRelationInput[]
+  cursor?: Prisma.TagWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TagScalarFieldEnum | Prisma.TagScalarFieldEnum[]
 }
 
 /**

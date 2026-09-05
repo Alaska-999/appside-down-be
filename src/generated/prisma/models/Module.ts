@@ -226,6 +226,7 @@ export type ModuleWhereInput = {
   author?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   folders?: Prisma.FolderListRelationFilter
   flashcards?: Prisma.FlashcardListRelationFilter
+  tags?: Prisma.TagListRelationFilter
 }
 
 export type ModuleOrderByWithRelationInput = {
@@ -243,6 +244,7 @@ export type ModuleOrderByWithRelationInput = {
   author?: Prisma.UserOrderByWithRelationInput
   folders?: Prisma.FolderOrderByRelationAggregateInput
   flashcards?: Prisma.FlashcardOrderByRelationAggregateInput
+  tags?: Prisma.TagOrderByRelationAggregateInput
 }
 
 export type ModuleWhereUniqueInput = Prisma.AtLeast<{
@@ -263,6 +265,7 @@ export type ModuleWhereUniqueInput = Prisma.AtLeast<{
   author?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   folders?: Prisma.FolderListRelationFilter
   flashcards?: Prisma.FlashcardListRelationFilter
+  tags?: Prisma.TagListRelationFilter
 }, "id">
 
 export type ModuleOrderByWithAggregationInput = {
@@ -310,6 +313,7 @@ export type ModuleCreateInput = {
   author?: Prisma.UserCreateNestedOneWithoutAuthoredModulesInput
   folders?: Prisma.FolderCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardCreateNestedManyWithoutModuleInput
+  tags?: Prisma.TagCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleUncheckedCreateInput = {
@@ -325,6 +329,7 @@ export type ModuleUncheckedCreateInput = {
   isPublic?: boolean
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutModuleInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleUpdateInput = {
@@ -340,6 +345,7 @@ export type ModuleUpdateInput = {
   author?: Prisma.UserUpdateOneWithoutAuthoredModulesNestedInput
   folders?: Prisma.FolderUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUpdateManyWithoutModuleNestedInput
+  tags?: Prisma.TagUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleUncheckedUpdateInput = {
@@ -355,6 +361,7 @@ export type ModuleUncheckedUpdateInput = {
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUncheckedUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutModuleNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleCreateManyInput = {
@@ -570,6 +577,44 @@ export type ModuleUncheckedUpdateManyWithoutFoldersNestedInput = {
   deleteMany?: Prisma.ModuleScalarWhereInput | Prisma.ModuleScalarWhereInput[]
 }
 
+export type ModuleCreateNestedManyWithoutTagsInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutTagsInput, Prisma.ModuleUncheckedCreateWithoutTagsInput> | Prisma.ModuleCreateWithoutTagsInput[] | Prisma.ModuleUncheckedCreateWithoutTagsInput[]
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutTagsInput | Prisma.ModuleCreateOrConnectWithoutTagsInput[]
+  connect?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+}
+
+export type ModuleUncheckedCreateNestedManyWithoutTagsInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutTagsInput, Prisma.ModuleUncheckedCreateWithoutTagsInput> | Prisma.ModuleCreateWithoutTagsInput[] | Prisma.ModuleUncheckedCreateWithoutTagsInput[]
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutTagsInput | Prisma.ModuleCreateOrConnectWithoutTagsInput[]
+  connect?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+}
+
+export type ModuleUpdateManyWithoutTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutTagsInput, Prisma.ModuleUncheckedCreateWithoutTagsInput> | Prisma.ModuleCreateWithoutTagsInput[] | Prisma.ModuleUncheckedCreateWithoutTagsInput[]
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutTagsInput | Prisma.ModuleCreateOrConnectWithoutTagsInput[]
+  upsert?: Prisma.ModuleUpsertWithWhereUniqueWithoutTagsInput | Prisma.ModuleUpsertWithWhereUniqueWithoutTagsInput[]
+  set?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+  disconnect?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+  delete?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+  connect?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+  update?: Prisma.ModuleUpdateWithWhereUniqueWithoutTagsInput | Prisma.ModuleUpdateWithWhereUniqueWithoutTagsInput[]
+  updateMany?: Prisma.ModuleUpdateManyWithWhereWithoutTagsInput | Prisma.ModuleUpdateManyWithWhereWithoutTagsInput[]
+  deleteMany?: Prisma.ModuleScalarWhereInput | Prisma.ModuleScalarWhereInput[]
+}
+
+export type ModuleUncheckedUpdateManyWithoutTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.ModuleCreateWithoutTagsInput, Prisma.ModuleUncheckedCreateWithoutTagsInput> | Prisma.ModuleCreateWithoutTagsInput[] | Prisma.ModuleUncheckedCreateWithoutTagsInput[]
+  connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutTagsInput | Prisma.ModuleCreateOrConnectWithoutTagsInput[]
+  upsert?: Prisma.ModuleUpsertWithWhereUniqueWithoutTagsInput | Prisma.ModuleUpsertWithWhereUniqueWithoutTagsInput[]
+  set?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+  disconnect?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+  delete?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+  connect?: Prisma.ModuleWhereUniqueInput | Prisma.ModuleWhereUniqueInput[]
+  update?: Prisma.ModuleUpdateWithWhereUniqueWithoutTagsInput | Prisma.ModuleUpdateWithWhereUniqueWithoutTagsInput[]
+  updateMany?: Prisma.ModuleUpdateManyWithWhereWithoutTagsInput | Prisma.ModuleUpdateManyWithWhereWithoutTagsInput[]
+  deleteMany?: Prisma.ModuleScalarWhereInput | Prisma.ModuleScalarWhereInput[]
+}
+
 export type ModuleCreateNestedOneWithoutFlashcardsInput = {
   create?: Prisma.XOR<Prisma.ModuleCreateWithoutFlashcardsInput, Prisma.ModuleUncheckedCreateWithoutFlashcardsInput>
   connectOrCreate?: Prisma.ModuleCreateOrConnectWithoutFlashcardsInput
@@ -596,6 +641,7 @@ export type ModuleCreateWithoutUserInput = {
   author?: Prisma.UserCreateNestedOneWithoutAuthoredModulesInput
   folders?: Prisma.FolderCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardCreateNestedManyWithoutModuleInput
+  tags?: Prisma.TagCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleUncheckedCreateWithoutUserInput = {
@@ -610,6 +656,7 @@ export type ModuleUncheckedCreateWithoutUserInput = {
   isPublic?: boolean
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutModuleInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleCreateOrConnectWithoutUserInput = {
@@ -634,6 +681,7 @@ export type ModuleCreateWithoutAuthorInput = {
   user: Prisma.UserCreateNestedOneWithoutModulesInput
   folders?: Prisma.FolderCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardCreateNestedManyWithoutModuleInput
+  tags?: Prisma.TagCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleUncheckedCreateWithoutAuthorInput = {
@@ -648,6 +696,7 @@ export type ModuleUncheckedCreateWithoutAuthorInput = {
   isPublic?: boolean
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutModulesInput
   flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutModuleInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleCreateOrConnectWithoutAuthorInput = {
@@ -720,6 +769,7 @@ export type ModuleCreateWithoutFoldersInput = {
   user: Prisma.UserCreateNestedOneWithoutModulesInput
   author?: Prisma.UserCreateNestedOneWithoutAuthoredModulesInput
   flashcards?: Prisma.FlashcardCreateNestedManyWithoutModuleInput
+  tags?: Prisma.TagCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleUncheckedCreateWithoutFoldersInput = {
@@ -734,6 +784,7 @@ export type ModuleUncheckedCreateWithoutFoldersInput = {
   authorUsername?: string | null
   isPublic?: boolean
   flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutModuleInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleCreateOrConnectWithoutFoldersInput = {
@@ -757,6 +808,57 @@ export type ModuleUpdateManyWithWhereWithoutFoldersInput = {
   data: Prisma.XOR<Prisma.ModuleUpdateManyMutationInput, Prisma.ModuleUncheckedUpdateManyWithoutFoldersInput>
 }
 
+export type ModuleCreateWithoutTagsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isFavorite?: boolean
+  authorUsername?: string | null
+  isPublic?: boolean
+  user: Prisma.UserCreateNestedOneWithoutModulesInput
+  author?: Prisma.UserCreateNestedOneWithoutAuthoredModulesInput
+  folders?: Prisma.FolderCreateNestedManyWithoutModulesInput
+  flashcards?: Prisma.FlashcardCreateNestedManyWithoutModuleInput
+}
+
+export type ModuleUncheckedCreateWithoutTagsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  isFavorite?: boolean
+  userId: string
+  authorId?: string | null
+  authorUsername?: string | null
+  isPublic?: boolean
+  folders?: Prisma.FolderUncheckedCreateNestedManyWithoutModulesInput
+  flashcards?: Prisma.FlashcardUncheckedCreateNestedManyWithoutModuleInput
+}
+
+export type ModuleCreateOrConnectWithoutTagsInput = {
+  where: Prisma.ModuleWhereUniqueInput
+  create: Prisma.XOR<Prisma.ModuleCreateWithoutTagsInput, Prisma.ModuleUncheckedCreateWithoutTagsInput>
+}
+
+export type ModuleUpsertWithWhereUniqueWithoutTagsInput = {
+  where: Prisma.ModuleWhereUniqueInput
+  update: Prisma.XOR<Prisma.ModuleUpdateWithoutTagsInput, Prisma.ModuleUncheckedUpdateWithoutTagsInput>
+  create: Prisma.XOR<Prisma.ModuleCreateWithoutTagsInput, Prisma.ModuleUncheckedCreateWithoutTagsInput>
+}
+
+export type ModuleUpdateWithWhereUniqueWithoutTagsInput = {
+  where: Prisma.ModuleWhereUniqueInput
+  data: Prisma.XOR<Prisma.ModuleUpdateWithoutTagsInput, Prisma.ModuleUncheckedUpdateWithoutTagsInput>
+}
+
+export type ModuleUpdateManyWithWhereWithoutTagsInput = {
+  where: Prisma.ModuleScalarWhereInput
+  data: Prisma.XOR<Prisma.ModuleUpdateManyMutationInput, Prisma.ModuleUncheckedUpdateManyWithoutTagsInput>
+}
+
 export type ModuleCreateWithoutFlashcardsInput = {
   id?: string
   name: string
@@ -769,6 +871,7 @@ export type ModuleCreateWithoutFlashcardsInput = {
   user: Prisma.UserCreateNestedOneWithoutModulesInput
   author?: Prisma.UserCreateNestedOneWithoutAuthoredModulesInput
   folders?: Prisma.FolderCreateNestedManyWithoutModulesInput
+  tags?: Prisma.TagCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleUncheckedCreateWithoutFlashcardsInput = {
@@ -783,6 +886,7 @@ export type ModuleUncheckedCreateWithoutFlashcardsInput = {
   authorUsername?: string | null
   isPublic?: boolean
   folders?: Prisma.FolderUncheckedCreateNestedManyWithoutModulesInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutModulesInput
 }
 
 export type ModuleCreateOrConnectWithoutFlashcardsInput = {
@@ -813,6 +917,7 @@ export type ModuleUpdateWithoutFlashcardsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutModulesNestedInput
   author?: Prisma.UserUpdateOneWithoutAuthoredModulesNestedInput
   folders?: Prisma.FolderUpdateManyWithoutModulesNestedInput
+  tags?: Prisma.TagUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutFlashcardsInput = {
@@ -827,6 +932,7 @@ export type ModuleUncheckedUpdateWithoutFlashcardsInput = {
   authorUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUncheckedUpdateManyWithoutModulesNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleCreateManyUserInput = {
@@ -865,6 +971,7 @@ export type ModuleUpdateWithoutUserInput = {
   author?: Prisma.UserUpdateOneWithoutAuthoredModulesNestedInput
   folders?: Prisma.FolderUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUpdateManyWithoutModuleNestedInput
+  tags?: Prisma.TagUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutUserInput = {
@@ -879,6 +986,7 @@ export type ModuleUncheckedUpdateWithoutUserInput = {
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUncheckedUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutModuleNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleUncheckedUpdateManyWithoutUserInput = {
@@ -905,6 +1013,7 @@ export type ModuleUpdateWithoutAuthorInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutModulesNestedInput
   folders?: Prisma.FolderUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUpdateManyWithoutModuleNestedInput
+  tags?: Prisma.TagUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutAuthorInput = {
@@ -919,6 +1028,7 @@ export type ModuleUncheckedUpdateWithoutAuthorInput = {
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   folders?: Prisma.FolderUncheckedUpdateManyWithoutModulesNestedInput
   flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutModuleNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleUncheckedUpdateManyWithoutAuthorInput = {
@@ -945,6 +1055,7 @@ export type ModuleUpdateWithoutFoldersInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutModulesNestedInput
   author?: Prisma.UserUpdateOneWithoutAuthoredModulesNestedInput
   flashcards?: Prisma.FlashcardUpdateManyWithoutModuleNestedInput
+  tags?: Prisma.TagUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleUncheckedUpdateWithoutFoldersInput = {
@@ -959,9 +1070,53 @@ export type ModuleUncheckedUpdateWithoutFoldersInput = {
   authorUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutModuleNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutModulesNestedInput
 }
 
 export type ModuleUncheckedUpdateManyWithoutFoldersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+}
+
+export type ModuleUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  authorUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  user?: Prisma.UserUpdateOneRequiredWithoutModulesNestedInput
+  author?: Prisma.UserUpdateOneWithoutAuthoredModulesNestedInput
+  folders?: Prisma.FolderUpdateManyWithoutModulesNestedInput
+  flashcards?: Prisma.FlashcardUpdateManyWithoutModuleNestedInput
+}
+
+export type ModuleUncheckedUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorUsername?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  folders?: Prisma.FolderUncheckedUpdateManyWithoutModulesNestedInput
+  flashcards?: Prisma.FlashcardUncheckedUpdateManyWithoutModuleNestedInput
+}
+
+export type ModuleUncheckedUpdateManyWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -982,11 +1137,13 @@ export type ModuleUncheckedUpdateManyWithoutFoldersInput = {
 export type ModuleCountOutputType = {
   folders: number
   flashcards: number
+  tags: number
 }
 
 export type ModuleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folders?: boolean | ModuleCountOutputTypeCountFoldersArgs
   flashcards?: boolean | ModuleCountOutputTypeCountFlashcardsArgs
+  tags?: boolean | ModuleCountOutputTypeCountTagsArgs
 }
 
 /**
@@ -1013,6 +1170,13 @@ export type ModuleCountOutputTypeCountFlashcardsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.FlashcardWhereInput
 }
 
+/**
+ * ModuleCountOutputType without action
+ */
+export type ModuleCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TagWhereInput
+}
+
 
 export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1029,6 +1193,7 @@ export type ModuleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   author?: boolean | Prisma.Module$authorArgs<ExtArgs>
   folders?: boolean | Prisma.Module$foldersArgs<ExtArgs>
   flashcards?: boolean | Prisma.Module$flashcardsArgs<ExtArgs>
+  tags?: boolean | Prisma.Module$tagsArgs<ExtArgs>
   _count?: boolean | Prisma.ModuleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["module"]>
 
@@ -1081,6 +1246,7 @@ export type ModuleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   author?: boolean | Prisma.Module$authorArgs<ExtArgs>
   folders?: boolean | Prisma.Module$foldersArgs<ExtArgs>
   flashcards?: boolean | Prisma.Module$flashcardsArgs<ExtArgs>
+  tags?: boolean | Prisma.Module$tagsArgs<ExtArgs>
   _count?: boolean | Prisma.ModuleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ModuleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1099,6 +1265,7 @@ export type $ModulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     author: Prisma.$UserPayload<ExtArgs> | null
     folders: Prisma.$FolderPayload<ExtArgs>[]
     flashcards: Prisma.$FlashcardPayload<ExtArgs>[]
+    tags: Prisma.$TagPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1509,6 +1676,7 @@ export interface Prisma__ModuleClient<T, Null = never, ExtArgs extends runtime.T
   author<T extends Prisma.Module$authorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$authorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   folders<T extends Prisma.Module$foldersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$foldersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FolderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   flashcards<T extends Prisma.Module$flashcardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$flashcardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FlashcardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tags<T extends Prisma.Module$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Module$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2013,6 +2181,30 @@ export type Module$flashcardsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.FlashcardScalarFieldEnum | Prisma.FlashcardScalarFieldEnum[]
+}
+
+/**
+ * Module.tags
+ */
+export type Module$tagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Tag
+   */
+  select?: Prisma.TagSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Tag
+   */
+  omit?: Prisma.TagOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TagInclude<ExtArgs> | null
+  where?: Prisma.TagWhereInput
+  orderBy?: Prisma.TagOrderByWithRelationInput | Prisma.TagOrderByWithRelationInput[]
+  cursor?: Prisma.TagWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TagScalarFieldEnum | Prisma.TagScalarFieldEnum[]
 }
 
 /**
