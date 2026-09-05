@@ -40,7 +40,7 @@ export class ModulesController {
     @Req() req: any,
   ) {
     const excludeUserId = query.excludeOwn === 'true' ? req.user.userId : undefined;
-    return this.modulesService.findPublic({ ...parseCursorQuery(query), excludeUserId });
+    return this.modulesService.findPublic({ ...parseCursorQuery(query), excludeUserId, viewerId: req.user.userId });
   }
 
   @Get('stats')

@@ -137,7 +137,9 @@ export const ModuleScalarFieldEnum = {
   userId: 'userId',
   authorId: 'authorId',
   authorUsername: 'authorUsername',
-  isPublic: 'isPublic'
+  isPublic: 'isPublic',
+  sourceModuleId: 'sourceModuleId',
+  divergedAt: 'divergedAt'
 } as const
 
 export type ModuleScalarFieldEnum = (typeof ModuleScalarFieldEnum)[keyof typeof ModuleScalarFieldEnum]

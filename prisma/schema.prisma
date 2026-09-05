@@ -85,11 +85,18 @@ model Module {
   tags       Tag[]
   isPublic   Boolean     @default(false)
 
+  sourceModuleId String?
+  source         Module?  @relation("ModuleCopies", fields: [sourceModuleId], references: [id], onDelete: SetNull)
+  copies         Module[] @relation("ModuleCopies")
+  divergedAt     DateTime?
+
   @@index([userId, createdAt, id])
   @@index([userId, name, id])
   @@index([userId, updatedAt])
   @@index([isPublic, createdAt, id])
   @@index([authorId])
+  @@index([userId, sourceModuleId])
+  @@index([sourceModuleId])
 }
 
 model Tag {

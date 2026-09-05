@@ -110,7 +110,12 @@ export class ModulesService {
     if (!module) return module;
 
     const [withProgress] = await this.attachProgress([module]);
-    return withProgress;
+    if (module.userId === userId) return { ...withProgress, savedCopyId: null };
+    const copy = await this.prisma.module.findFirst({
+      where: { userId, sourceModuleId: id },
+      select: { id: true },
+    });
+    return { ...withProgress, savedCopyId: copy?.id ?? null };
   }
 
   async update(userId: string, id: string, updateModuleDto: UpdateModuleDto) {
@@ -172,6 +177,12 @@ export class ModulesService {
         }
       }
 
+      const contentChanged =
+        (updateModuleDto.name !== undefined && updateModuleDto.name !== module.name) ||
+        (updateModuleDto.description !== undefined && updateModuleDto.description !== module.description) ||
+        incoming !== undefined;
+      const diverges = !!module.sourceModuleId && !module.divergedAt && contentChanged;
+
       return tx.module.update({
         where: { id },
         data: {
@@ -179,6 +190,7 @@ export class ModulesService {
           description: updateModuleDto.description,
           isFavorite: updateModuleDto.isFavorite,
           isPublic: updateModuleDto.isPublic,
+          divergedAt: diverges ? new Date() : undefined,
           folders: updateModuleDto.folderId === undefined ? undefined : {
             set: updateModuleDto.folderId ? [{ id: updateModuleDto.folderId }] : [],
           },
@@ -209,13 +221,18 @@ export class ModulesService {
   }
 
 
-  findPublic(query: ParsedCursorQuery & { excludeUserId?: string }) {
-    const { cursor, limit, search, excludeUserId } = query;
+  async findPublic(query: ParsedCursorQuery & { excludeUserId?: string; viewerId?: string }) {
+    const { cursor, limit, search, excludeUserId, viewerId } = query;
 
-    return this.prisma.module
+    const page = await this.prisma.module
       .findMany({
         where: {
           isPublic: true,
+          OR: [
+            { sourceModuleId: null },
+            { divergedAt: { not: null } },
+            { source: { isPublic: false } },
+          ],
           ...(search ? { name: { contains: search, mode: 'insensitive' as const } } : {}),
           ...(excludeUserId ? { userId: { not: excludeUserId } } : {}),
         },
@@ -225,10 +242,22 @@ export class ModulesService {
         include: {
           user: { select: { id: true, username: true, avatarUrl: true } },
           author: { select: { id: true, username: true, avatarUrl: true } },
-          _count: { select: { flashcards: true } },
+          _count: { select: { flashcards: true, copies: true } },
         },
       })
       .then((rows) => paginateResults(rows, limit));
+
+    if (!viewerId || !page.data.length) return page;
+
+    const savedCopies = await this.prisma.module.findMany({
+      where: { userId: viewerId, sourceModuleId: { in: page.data.map((m) => m.id) } },
+      select: { id: true, sourceModuleId: true },
+    });
+    const copyBySource = new Map(savedCopies.map((c) => [c.sourceModuleId, c.id]));
+    return {
+      ...page,
+      data: page.data.map((m) => ({ ...m, savedCopyId: copyBySource.get(m.id) ?? null })),
+    };
   }
 
   async getStats(userId: string) {
@@ -289,12 +318,23 @@ export class ModulesService {
       throw new BadRequestException('You cannot save your own module to your library');
     }
 
+    const existing = await this.prisma.module.findFirst({
+      where: { userId, sourceModuleId: id },
+      include: { flashcards: true },
+    });
+    if (existing) {
+      this.logger.log(`Save to library reused existing copy (originalId=${id}, copyId=${existing.id}, userId=${userId})`);
+      return existing;
+    }
+
     const saved = await this.prisma.module.create({
       data: {
         name: originalModule.name,
+        description: originalModule.description,
         userId: userId,
         authorId: originalModule.authorId,
         authorUsername: originalModule.authorUsername,
+        sourceModuleId: originalModule.id,
         isPublic: false,
         isFavorite: false,
 
