@@ -11,32 +11,37 @@ export class FoldersService {
 
   constructor(private readonly prisma: PrismaService) { }
 
-  private readonly folderPayload = {
-    tags: {
-      orderBy: { createdAt: 'asc' as const },
-      include: { _count: { select: { modules: true } } },
-    },
-    modules: {
-      include: {
-        _count: { select: { flashcards: true } },
-        author: {
-          select: { id: true, username: true, avatarUrl: true },
-        },
-        tags: { select: { id: true, name: true } },
+  private folderPayload(folderId: string) {
+    return {
+      tags: {
+        orderBy: { createdAt: 'asc' as const },
+        include: { _count: { select: { modules: true } } },
       },
-    },
-  };
+      modules: {
+        include: {
+          _count: { select: { flashcards: true } },
+          author: {
+            select: { id: true, username: true, avatarUrl: true },
+          },
+          tags: { where: { folderId }, select: { id: true, name: true } },
+        },
+      },
+    };
+  }
 
   async create(userId: string, createFolderDto: CreateFolderDto) {
     const { tags, ...data } = createFolderDto;
     const tagNames = [...new Set((tags ?? []).map((t) => t.trim()).filter(Boolean))];
-    const folder = await this.prisma.folder.create({
+    const created = await this.prisma.folder.create({
       data: {
         ...data,
         userId,
         tags: { create: tagNames.map((name) => ({ name })) },
       },
-      include: this.folderPayload,
+    });
+    const folder = await this.prisma.folder.findUniqueOrThrow({
+      where: { id: created.id },
+      include: this.folderPayload(created.id),
     });
     this.logger.log(`Folder created (id=${folder.id}, userId=${userId})`);
     return folder;
@@ -62,7 +67,7 @@ export class FoldersService {
   async findOne(userId: string, id: string) {
     const folder = await this.prisma.folder.findFirst({
       where: { id, userId },
-      include: this.folderPayload,
+      include: this.folderPayload(id),
     });
     if (!folder) return folder;
     return { ...folder, modules: await attachModuleProgress(this.prisma, folder.modules) };
@@ -83,7 +88,7 @@ export class FoldersService {
     const folder = await this.prisma.folder.update({
       where: { id },
       data: updateFolderDto,
-      include: this.folderPayload,
+      include: this.folderPayload(id),
     });
     this.logger.log(`Folder updated (id=${id})`);
     return folder;
@@ -120,7 +125,7 @@ export class FoldersService {
           connect: moduleIds.map((id) => ({ id })),
         },
       },
-      include: this.folderPayload,
+      include: this.folderPayload(folderId),
     });
     this.logger.log(`Modules added to folder (folderId=${folderId}, count=${moduleIds.length})`);
     return folder;
@@ -137,7 +142,7 @@ export class FoldersService {
           disconnect: moduleIds.map((id) => ({ id })),
         },
       },
-      include: this.folderPayload,
+      include: this.folderPayload(folderId),
     });
     this.logger.log(`Modules removed from folder (folderId=${folderId}, count=${moduleIds.length})`);
     return folder;
