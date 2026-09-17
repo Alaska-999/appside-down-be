@@ -1,6 +1,7 @@
 import {
     Controller,
     Delete,
+    Get,
     Patch,
     Req,
     UploadedFile,
@@ -18,6 +19,11 @@ import { UsersService } from './users.service';
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) { }
+
+    @Get('me')
+    getProfile(@Req() req: any) {
+        return this.usersService.getProfile(req.user.userId);
+    }
 
     @Patch('me/avatar')
     @Throttle({ default: { limit: AVATAR_UPLOAD_THROTTLE_LIMIT, ttl: THROTTLE_WINDOW_MS } })

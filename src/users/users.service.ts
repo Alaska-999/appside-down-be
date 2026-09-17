@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -8,6 +8,26 @@ export class UsersService {
     private readonly logger = new Logger(UsersService.name);
 
     constructor(private readonly prisma: PrismaService) { }
+
+    async getProfile(userId: string) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                email: true,
+                username: true,
+                avatarUrl: true,
+                createdAt: true,
+                pushNotificationsEnabled: true,
+            },
+        });
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        return user;
+    }
 
     async updateAvatar(userId: string, file: Express.Multer.File | undefined, host: string) {
         if (!file) {
