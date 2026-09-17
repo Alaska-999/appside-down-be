@@ -25,6 +25,12 @@ export class ModulesController {
     return this.modulesService.saveToLibrary(userId, id);
   }
 
+  @Post(':id/reset-progress')
+  resetProgress(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user.userId;
+    return this.modulesService.resetProgress(userId, id);
+  }
+
   @Get()
   findAll(
     @Query() query: { cursor?: string; limit?: string; search?: string; sort?: string; folderId?: string },

@@ -119,6 +119,13 @@ enum CardStatus {
   KNOWN
 }
 
+enum StudyMode {
+  FLASHCARDS
+  MATCH
+  TEST
+  LEARN
+}
+
 model Flashcard {
   id         String     @id @default(uuid())
   term       String
@@ -128,6 +135,11 @@ model Flashcard {
   isStarred  Boolean    @default(false)
   status     CardStatus @default(UNSTUDIED)
 
+  strengthLevel Int       @default(0)
+  baselineLevel Int       @default(0)
+  lastCorrectAt DateTime?
+  lastWrongAt   DateTime?
+
   moduleId String
   module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
@@ -135,11 +147,16 @@ model Flashcard {
 }
 
 model StudyEvent {
-  id            String     @id @default(uuid())
+  id            String      @id @default(uuid())
   clientEventId String
-  status        CardStatus
+  status        CardStatus?
   answeredAt    DateTime
-  createdAt     DateTime   @default(now())
+  createdAt     DateTime    @default(now())
+
+  mode       StudyMode?
+  correct    Boolean?
+  firstTry   Boolean?
+  responseMs Int?
 
   flashcardId String
   moduleId    String
@@ -151,4 +168,5 @@ model StudyEvent {
   @@index([userId, answeredAt])
   @@index([moduleId])
   @@index([flashcardId])
+  @@index([flashcardId, answeredAt])
 }

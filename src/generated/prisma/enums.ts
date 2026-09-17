@@ -16,3 +16,13 @@ export const CardStatus = {
 } as const
 
 export type CardStatus = (typeof CardStatus)[keyof typeof CardStatus]
+
+
+export const StudyMode = {
+  FLASHCARDS: 'FLASHCARDS',
+  MATCH: 'MATCH',
+  TEST: 'TEST',
+  LEARN: 'LEARN'
+} as const
+
+export type StudyMode = (typeof StudyMode)[keyof typeof StudyMode]

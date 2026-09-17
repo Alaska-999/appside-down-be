@@ -221,6 +221,23 @@ export class ModulesService {
     return deleted;
   }
 
+  async resetProgress(userId: string, id: string) {
+    const module = await this.prisma.module.findFirst({
+      where: { id, userId },
+    });
+    if (!module) {
+      this.logger.warn(`Module progress reset rejected: not found (id=${id}, userId=${userId})`);
+      throw new NotFoundException('Module not found or not belongs to you');
+    }
+
+    const { count } = await this.prisma.flashcard.updateMany({
+      where: { moduleId: id, status: { not: 'UNSTUDIED' } },
+      data: { status: 'UNSTUDIED' },
+    });
+    this.logger.log(`Module progress reset (id=${id}, cards=${count})`);
+    return { reset: count };
+  }
+
 
   async findPublic(query: ParsedCursorQuery & { excludeUserId?: string; viewerId?: string }) {
     const { cursor, limit, search, excludeUserId, viewerId } = query;

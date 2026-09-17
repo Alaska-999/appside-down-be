@@ -163,6 +163,10 @@ export const FlashcardScalarFieldEnum = {
   updatedAt: 'updatedAt',
   isStarred: 'isStarred',
   status: 'status',
+  strengthLevel: 'strengthLevel',
+  baselineLevel: 'baselineLevel',
+  lastCorrectAt: 'lastCorrectAt',
+  lastWrongAt: 'lastWrongAt',
   moduleId: 'moduleId'
 } as const
 
@@ -175,6 +179,10 @@ export const StudyEventScalarFieldEnum = {
   status: 'status',
   answeredAt: 'answeredAt',
   createdAt: 'createdAt',
+  mode: 'mode',
+  correct: 'correct',
+  firstTry: 'firstTry',
+  responseMs: 'responseMs',
   flashcardId: 'flashcardId',
   moduleId: 'moduleId',
   userId: 'userId'
