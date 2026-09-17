@@ -12,6 +12,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { BullModule } from '@nestjs/bullmq';
 import { StudyModule } from './study/study.module';
 import { UsersModule } from './users/users.module';
+import { AppThrottlerModule } from './common/throttler/throttler.module';
 
 
 @Module({
@@ -32,6 +33,7 @@ import { UsersModule } from './users/users.module';
         'any.invalid': 'AT_SECRET and RT_SECRET must not be the same value',
       }),
     }),
+    AppThrottlerModule,
     PrismaModule,
     AuthModule,
     FoldersModule,

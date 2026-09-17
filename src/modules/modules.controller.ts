@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query } from '@nestjs/common';
 import { ModulesService } from './modules.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { parseCursorQuery } from 'src/common/pagination/pagination.util';
+import { isUUID } from 'class-validator';
 
 
 
@@ -26,12 +27,16 @@ export class ModulesController {
 
   @Get()
   findAll(
-    @Query() query: { cursor?: string; limit?: string; search?: string; sort?: string },
+    @Query() query: { cursor?: string; limit?: string; search?: string; sort?: string; folderId?: string },
     @Req() req: any,
   ) {
     const userId = req.user.userId;
     const sort = query.sort === 'az' || query.sort === 'favs' ? query.sort : 'date';
-    return this.modulesService.findAll(userId, { ...parseCursorQuery(query), sort });
+    const folderId = query.folderId?.trim() || undefined;
+    if (folderId && !isUUID(folderId)) {
+      throw new BadRequestException('folderId must be a UUID');
+    }
+    return this.modulesService.findAll(userId, { ...parseCursorQuery(query), sort, folderId });
   }
 
   @Get('public')

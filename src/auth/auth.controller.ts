@@ -1,9 +1,12 @@
 import { Body, Controller, Delete, Ip, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { LoginDto, SignupDto } from './dto/signup.dto';
 import { ChangePasswordDto, DeleteAccountDto, RefreshDto, ResetPasswordDto } from './dto/account.dto';
+import { Throttle } from '@nestjs/throttler';
+import { AUTH_THROTTLE_LIMIT, THROTTLE_WINDOW_MS } from 'src/common/throttler/throttler.constants';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
+@Throttle({ default: { limit: AUTH_THROTTLE_LIMIT, ttl: THROTTLE_WINDOW_MS } })
 @Controller('auth')
 export class AuthController {
 

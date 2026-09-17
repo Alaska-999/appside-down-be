@@ -8,6 +8,8 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Throttle } from '@nestjs/throttler';
+import { AVATAR_UPLOAD_THROTTLE_LIMIT, THROTTLE_WINDOW_MS } from 'src/common/throttler/throttler.constants';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { avatarUploadOptions } from './avatar-upload.config';
 import { UsersService } from './users.service';
@@ -18,6 +20,7 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
     @Patch('me/avatar')
+    @Throttle({ default: { limit: AVATAR_UPLOAD_THROTTLE_LIMIT, ttl: THROTTLE_WINDOW_MS } })
     @UseInterceptors(FileInterceptor('avatar', avatarUploadOptions))
     uploadAvatar(
         @UploadedFile() file: Express.Multer.File | undefined,

@@ -1,9 +1,12 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
+import { FLASHCARDS_THROTTLE_LIMIT, THROTTLE_WINDOW_MS } from 'src/common/throttler/throttler.constants';
 import { FlashcardsService } from './flashcards.service';
 import { CreateFlashcardDto } from './dto/create-flashcard.dto';
 import { UpdateFlashcardDto } from './dto/update-flashcard.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@Throttle({ default: { limit: FLASHCARDS_THROTTLE_LIMIT, ttl: THROTTLE_WINDOW_MS } })
 @UseGuards(JwtAuthGuard)
 @Controller('flashcards')
 export class FlashcardsController {

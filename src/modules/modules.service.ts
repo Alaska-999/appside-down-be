@@ -50,8 +50,8 @@ export class ModulesService {
     return attachModuleProgress(this.prisma, modules);
   }
 
-  async findAll(userId: string, query: ParsedCursorQuery & { sort?: ModuleSort }) {
-    const { cursor, limit, search, sort = 'date' } = query;
+  async findAll(userId: string, query: ParsedCursorQuery & { sort?: ModuleSort; folderId?: string }) {
+    const { cursor, limit, search, sort = 'date', folderId } = query;
 
     const orderBy =
       sort === 'az'
@@ -64,6 +64,7 @@ export class ModulesService {
           userId,
           ...(search ? { name: { contains: search, mode: 'insensitive' as const } } : {}),
           ...(sort === 'favs' ? { isFavorite: true } : {}),
+          ...(folderId ? { folders: { some: { id: folderId, userId } } } : {}),
         },
         orderBy,
         take: limit + 1,

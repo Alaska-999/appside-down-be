@@ -5,6 +5,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { ParsedCursorQuery, paginateResults } from 'src/common/pagination/pagination.util';
 import { attachModuleProgress } from 'src/common/progress/module-progress';
 
+const FOLDER_MODULES_LIMIT = 200;
+
 @Injectable()
 export class FoldersService {
   private readonly logger = new Logger(FoldersService.name);
@@ -13,11 +15,14 @@ export class FoldersService {
 
   private folderPayload(folderId: string) {
     return {
+      _count: { select: { modules: true } },
       tags: {
         orderBy: { createdAt: 'asc' as const },
         include: { _count: { select: { modules: true } } },
       },
       modules: {
+        orderBy: [{ createdAt: 'desc' as const }, { id: 'asc' as const }],
+        take: FOLDER_MODULES_LIMIT + 1,
         include: {
           _count: { select: { flashcards: true } },
           author: {
@@ -27,6 +32,12 @@ export class FoldersService {
         },
       },
     };
+  }
+
+  private capFolderModules<M, F extends { modules: M[] }>(folder: F) {
+    const modulesTruncated = folder.modules.length > FOLDER_MODULES_LIMIT;
+    const modules = modulesTruncated ? folder.modules.slice(0, FOLDER_MODULES_LIMIT) : folder.modules;
+    return { ...folder, modules, modulesTruncated };
   }
 
   async create(userId: string, createFolderDto: CreateFolderDto) {
@@ -44,7 +55,7 @@ export class FoldersService {
       include: this.folderPayload(created.id),
     });
     this.logger.log(`Folder created (id=${folder.id}, userId=${userId})`);
-    return folder;
+    return this.capFolderModules(folder);
   }
 
   findAll(userId: string, query: ParsedCursorQuery) {
@@ -70,7 +81,8 @@ export class FoldersService {
       include: this.folderPayload(id),
     });
     if (!folder) return folder;
-    return { ...folder, modules: await attachModuleProgress(this.prisma, folder.modules) };
+    const capped = this.capFolderModules(folder);
+    return { ...capped, modules: await attachModuleProgress(this.prisma, capped.modules) };
   }
 
   private async checkFolderOwnership(userId: string, id: string) {
@@ -91,7 +103,7 @@ export class FoldersService {
       include: this.folderPayload(id),
     });
     this.logger.log(`Folder updated (id=${id})`);
-    return folder;
+    return this.capFolderModules(folder);
   }
 
   async remove(userId: string, id: string) {
@@ -128,7 +140,7 @@ export class FoldersService {
       include: this.folderPayload(folderId),
     });
     this.logger.log(`Modules added to folder (folderId=${folderId}, count=${moduleIds.length})`);
-    return folder;
+    return this.capFolderModules(folder);
   }
 
   async removeModules(userId: string, folderId: string, moduleIds: string[]) {
@@ -145,7 +157,7 @@ export class FoldersService {
       include: this.folderPayload(folderId),
     });
     this.logger.log(`Modules removed from folder (folderId=${folderId}, count=${moduleIds.length})`);
-    return folder;
+    return this.capFolderModules(folder);
   }
 
   async createTag(userId: string, folderId: string, name: string) {
