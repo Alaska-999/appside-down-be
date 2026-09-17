@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, Logger, NotFoundException } from '@nes
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { saveAvatarFile } from './avatar-upload.config';
 
 @Injectable()
 export class UsersService {
@@ -34,10 +35,12 @@ export class UsersService {
             throw new BadRequestException('No file uploaded');
         }
 
+        const filename = await saveAvatarFile(file);
+
         const user = await this.prisma.user.findUnique({ where: { id: userId } });
         this.deleteLocalAvatarFile(user?.avatarUrl);
 
-        const avatarUrl = `${host}/uploads/avatars/${file.filename}`;
+        const avatarUrl = `${host}/uploads/avatars/${filename}`;
         const updated = await this.prisma.user.update({
             where: { id: userId },
             data: { avatarUrl },
