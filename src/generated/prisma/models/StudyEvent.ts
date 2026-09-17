@@ -20,8 +20,18 @@ export type StudyEventModel = runtime.Types.Result.DefaultSelection<Prisma.$Stud
 
 export type AggregateStudyEvent = {
   _count: StudyEventCountAggregateOutputType | null
+  _avg: StudyEventAvgAggregateOutputType | null
+  _sum: StudyEventSumAggregateOutputType | null
   _min: StudyEventMinAggregateOutputType | null
   _max: StudyEventMaxAggregateOutputType | null
+}
+
+export type StudyEventAvgAggregateOutputType = {
+  responseMs: number | null
+}
+
+export type StudyEventSumAggregateOutputType = {
+  responseMs: number | null
 }
 
 export type StudyEventMinAggregateOutputType = {
@@ -30,6 +40,10 @@ export type StudyEventMinAggregateOutputType = {
   status: $Enums.CardStatus | null
   answeredAt: Date | null
   createdAt: Date | null
+  mode: $Enums.StudyMode | null
+  correct: boolean | null
+  firstTry: boolean | null
+  responseMs: number | null
   flashcardId: string | null
   moduleId: string | null
   userId: string | null
@@ -41,6 +55,10 @@ export type StudyEventMaxAggregateOutputType = {
   status: $Enums.CardStatus | null
   answeredAt: Date | null
   createdAt: Date | null
+  mode: $Enums.StudyMode | null
+  correct: boolean | null
+  firstTry: boolean | null
+  responseMs: number | null
   flashcardId: string | null
   moduleId: string | null
   userId: string | null
@@ -52,6 +70,10 @@ export type StudyEventCountAggregateOutputType = {
   status: number
   answeredAt: number
   createdAt: number
+  mode: number
+  correct: number
+  firstTry: number
+  responseMs: number
   flashcardId: number
   moduleId: number
   userId: number
@@ -59,12 +81,24 @@ export type StudyEventCountAggregateOutputType = {
 }
 
 
+export type StudyEventAvgAggregateInputType = {
+  responseMs?: true
+}
+
+export type StudyEventSumAggregateInputType = {
+  responseMs?: true
+}
+
 export type StudyEventMinAggregateInputType = {
   id?: true
   clientEventId?: true
   status?: true
   answeredAt?: true
   createdAt?: true
+  mode?: true
+  correct?: true
+  firstTry?: true
+  responseMs?: true
   flashcardId?: true
   moduleId?: true
   userId?: true
@@ -76,6 +110,10 @@ export type StudyEventMaxAggregateInputType = {
   status?: true
   answeredAt?: true
   createdAt?: true
+  mode?: true
+  correct?: true
+  firstTry?: true
+  responseMs?: true
   flashcardId?: true
   moduleId?: true
   userId?: true
@@ -87,6 +125,10 @@ export type StudyEventCountAggregateInputType = {
   status?: true
   answeredAt?: true
   createdAt?: true
+  mode?: true
+  correct?: true
+  firstTry?: true
+  responseMs?: true
   flashcardId?: true
   moduleId?: true
   userId?: true
@@ -131,6 +173,18 @@ export type StudyEventAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: StudyEventAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: StudyEventSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: StudyEventMinAggregateInputType
@@ -161,6 +215,8 @@ export type StudyEventGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: StudyEventCountAggregateInputType | true
+  _avg?: StudyEventAvgAggregateInputType
+  _sum?: StudyEventSumAggregateInputType
   _min?: StudyEventMinAggregateInputType
   _max?: StudyEventMaxAggregateInputType
 }
@@ -168,13 +224,19 @@ export type StudyEventGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type StudyEventGroupByOutputType = {
   id: string
   clientEventId: string
-  status: $Enums.CardStatus
+  status: $Enums.CardStatus | null
   answeredAt: Date
   createdAt: Date
+  mode: $Enums.StudyMode | null
+  correct: boolean | null
+  firstTry: boolean | null
+  responseMs: number | null
   flashcardId: string
   moduleId: string
   userId: string
   _count: StudyEventCountAggregateOutputType | null
+  _avg: StudyEventAvgAggregateOutputType | null
+  _sum: StudyEventSumAggregateOutputType | null
   _min: StudyEventMinAggregateOutputType | null
   _max: StudyEventMaxAggregateOutputType | null
 }
@@ -200,9 +262,13 @@ export type StudyEventWhereInput = {
   NOT?: Prisma.StudyEventWhereInput | Prisma.StudyEventWhereInput[]
   id?: Prisma.StringFilter<"StudyEvent"> | string
   clientEventId?: Prisma.StringFilter<"StudyEvent"> | string
-  status?: Prisma.EnumCardStatusFilter<"StudyEvent"> | $Enums.CardStatus
+  status?: Prisma.EnumCardStatusNullableFilter<"StudyEvent"> | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFilter<"StudyEvent"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StudyEvent"> | Date | string
+  mode?: Prisma.EnumStudyModeNullableFilter<"StudyEvent"> | $Enums.StudyMode | null
+  correct?: Prisma.BoolNullableFilter<"StudyEvent"> | boolean | null
+  firstTry?: Prisma.BoolNullableFilter<"StudyEvent"> | boolean | null
+  responseMs?: Prisma.IntNullableFilter<"StudyEvent"> | number | null
   flashcardId?: Prisma.StringFilter<"StudyEvent"> | string
   moduleId?: Prisma.StringFilter<"StudyEvent"> | string
   userId?: Prisma.StringFilter<"StudyEvent"> | string
@@ -212,9 +278,13 @@ export type StudyEventWhereInput = {
 export type StudyEventOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   clientEventId?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  status?: Prisma.SortOrderInput | Prisma.SortOrder
   answeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  mode?: Prisma.SortOrderInput | Prisma.SortOrder
+  correct?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstTry?: Prisma.SortOrderInput | Prisma.SortOrder
+  responseMs?: Prisma.SortOrderInput | Prisma.SortOrder
   flashcardId?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -228,9 +298,13 @@ export type StudyEventWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.StudyEventWhereInput[]
   NOT?: Prisma.StudyEventWhereInput | Prisma.StudyEventWhereInput[]
   clientEventId?: Prisma.StringFilter<"StudyEvent"> | string
-  status?: Prisma.EnumCardStatusFilter<"StudyEvent"> | $Enums.CardStatus
+  status?: Prisma.EnumCardStatusNullableFilter<"StudyEvent"> | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFilter<"StudyEvent"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StudyEvent"> | Date | string
+  mode?: Prisma.EnumStudyModeNullableFilter<"StudyEvent"> | $Enums.StudyMode | null
+  correct?: Prisma.BoolNullableFilter<"StudyEvent"> | boolean | null
+  firstTry?: Prisma.BoolNullableFilter<"StudyEvent"> | boolean | null
+  responseMs?: Prisma.IntNullableFilter<"StudyEvent"> | number | null
   flashcardId?: Prisma.StringFilter<"StudyEvent"> | string
   moduleId?: Prisma.StringFilter<"StudyEvent"> | string
   userId?: Prisma.StringFilter<"StudyEvent"> | string
@@ -240,15 +314,21 @@ export type StudyEventWhereUniqueInput = Prisma.AtLeast<{
 export type StudyEventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   clientEventId?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  status?: Prisma.SortOrderInput | Prisma.SortOrder
   answeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  mode?: Prisma.SortOrderInput | Prisma.SortOrder
+  correct?: Prisma.SortOrderInput | Prisma.SortOrder
+  firstTry?: Prisma.SortOrderInput | Prisma.SortOrder
+  responseMs?: Prisma.SortOrderInput | Prisma.SortOrder
   flashcardId?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   _count?: Prisma.StudyEventCountOrderByAggregateInput
+  _avg?: Prisma.StudyEventAvgOrderByAggregateInput
   _max?: Prisma.StudyEventMaxOrderByAggregateInput
   _min?: Prisma.StudyEventMinOrderByAggregateInput
+  _sum?: Prisma.StudyEventSumOrderByAggregateInput
 }
 
 export type StudyEventScalarWhereWithAggregatesInput = {
@@ -257,9 +337,13 @@ export type StudyEventScalarWhereWithAggregatesInput = {
   NOT?: Prisma.StudyEventScalarWhereWithAggregatesInput | Prisma.StudyEventScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"StudyEvent"> | string
   clientEventId?: Prisma.StringWithAggregatesFilter<"StudyEvent"> | string
-  status?: Prisma.EnumCardStatusWithAggregatesFilter<"StudyEvent"> | $Enums.CardStatus
+  status?: Prisma.EnumCardStatusNullableWithAggregatesFilter<"StudyEvent"> | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeWithAggregatesFilter<"StudyEvent"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"StudyEvent"> | Date | string
+  mode?: Prisma.EnumStudyModeNullableWithAggregatesFilter<"StudyEvent"> | $Enums.StudyMode | null
+  correct?: Prisma.BoolNullableWithAggregatesFilter<"StudyEvent"> | boolean | null
+  firstTry?: Prisma.BoolNullableWithAggregatesFilter<"StudyEvent"> | boolean | null
+  responseMs?: Prisma.IntNullableWithAggregatesFilter<"StudyEvent"> | number | null
   flashcardId?: Prisma.StringWithAggregatesFilter<"StudyEvent"> | string
   moduleId?: Prisma.StringWithAggregatesFilter<"StudyEvent"> | string
   userId?: Prisma.StringWithAggregatesFilter<"StudyEvent"> | string
@@ -268,9 +352,13 @@ export type StudyEventScalarWhereWithAggregatesInput = {
 export type StudyEventCreateInput = {
   id?: string
   clientEventId: string
-  status: $Enums.CardStatus
+  status?: $Enums.CardStatus | null
   answeredAt: Date | string
   createdAt?: Date | string
+  mode?: $Enums.StudyMode | null
+  correct?: boolean | null
+  firstTry?: boolean | null
+  responseMs?: number | null
   flashcardId: string
   moduleId: string
   user: Prisma.UserCreateNestedOneWithoutStudyEventsInput
@@ -279,9 +367,13 @@ export type StudyEventCreateInput = {
 export type StudyEventUncheckedCreateInput = {
   id?: string
   clientEventId: string
-  status: $Enums.CardStatus
+  status?: $Enums.CardStatus | null
   answeredAt: Date | string
   createdAt?: Date | string
+  mode?: $Enums.StudyMode | null
+  correct?: boolean | null
+  firstTry?: boolean | null
+  responseMs?: number | null
   flashcardId: string
   moduleId: string
   userId: string
@@ -290,9 +382,13 @@ export type StudyEventUncheckedCreateInput = {
 export type StudyEventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientEventId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  status?: Prisma.NullableEnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mode?: Prisma.NullableEnumStudyModeFieldUpdateOperationsInput | $Enums.StudyMode | null
+  correct?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  firstTry?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   flashcardId?: Prisma.StringFieldUpdateOperationsInput | string
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.UserUpdateOneRequiredWithoutStudyEventsNestedInput
@@ -301,9 +397,13 @@ export type StudyEventUpdateInput = {
 export type StudyEventUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientEventId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  status?: Prisma.NullableEnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mode?: Prisma.NullableEnumStudyModeFieldUpdateOperationsInput | $Enums.StudyMode | null
+  correct?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  firstTry?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   flashcardId?: Prisma.StringFieldUpdateOperationsInput | string
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -312,9 +412,13 @@ export type StudyEventUncheckedUpdateInput = {
 export type StudyEventCreateManyInput = {
   id?: string
   clientEventId: string
-  status: $Enums.CardStatus
+  status?: $Enums.CardStatus | null
   answeredAt: Date | string
   createdAt?: Date | string
+  mode?: $Enums.StudyMode | null
+  correct?: boolean | null
+  firstTry?: boolean | null
+  responseMs?: number | null
   flashcardId: string
   moduleId: string
   userId: string
@@ -323,9 +427,13 @@ export type StudyEventCreateManyInput = {
 export type StudyEventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientEventId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  status?: Prisma.NullableEnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mode?: Prisma.NullableEnumStudyModeFieldUpdateOperationsInput | $Enums.StudyMode | null
+  correct?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  firstTry?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   flashcardId?: Prisma.StringFieldUpdateOperationsInput | string
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -333,9 +441,13 @@ export type StudyEventUpdateManyMutationInput = {
 export type StudyEventUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientEventId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  status?: Prisma.NullableEnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mode?: Prisma.NullableEnumStudyModeFieldUpdateOperationsInput | $Enums.StudyMode | null
+  correct?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  firstTry?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   flashcardId?: Prisma.StringFieldUpdateOperationsInput | string
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -362,9 +474,17 @@ export type StudyEventCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   answeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
+  correct?: Prisma.SortOrder
+  firstTry?: Prisma.SortOrder
+  responseMs?: Prisma.SortOrder
   flashcardId?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+}
+
+export type StudyEventAvgOrderByAggregateInput = {
+  responseMs?: Prisma.SortOrder
 }
 
 export type StudyEventMaxOrderByAggregateInput = {
@@ -373,6 +493,10 @@ export type StudyEventMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   answeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
+  correct?: Prisma.SortOrder
+  firstTry?: Prisma.SortOrder
+  responseMs?: Prisma.SortOrder
   flashcardId?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -384,9 +508,17 @@ export type StudyEventMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   answeredAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  mode?: Prisma.SortOrder
+  correct?: Prisma.SortOrder
+  firstTry?: Prisma.SortOrder
+  responseMs?: Prisma.SortOrder
   flashcardId?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+}
+
+export type StudyEventSumOrderByAggregateInput = {
+  responseMs?: Prisma.SortOrder
 }
 
 export type StudyEventCreateNestedManyWithoutUserInput = {
@@ -431,12 +563,36 @@ export type StudyEventUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.StudyEventScalarWhereInput | Prisma.StudyEventScalarWhereInput[]
 }
 
+export type NullableEnumCardStatusFieldUpdateOperationsInput = {
+  set?: $Enums.CardStatus | null
+}
+
+export type NullableEnumStudyModeFieldUpdateOperationsInput = {
+  set?: $Enums.StudyMode | null
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type StudyEventCreateWithoutUserInput = {
   id?: string
   clientEventId: string
-  status: $Enums.CardStatus
+  status?: $Enums.CardStatus | null
   answeredAt: Date | string
   createdAt?: Date | string
+  mode?: $Enums.StudyMode | null
+  correct?: boolean | null
+  firstTry?: boolean | null
+  responseMs?: number | null
   flashcardId: string
   moduleId: string
 }
@@ -444,9 +600,13 @@ export type StudyEventCreateWithoutUserInput = {
 export type StudyEventUncheckedCreateWithoutUserInput = {
   id?: string
   clientEventId: string
-  status: $Enums.CardStatus
+  status?: $Enums.CardStatus | null
   answeredAt: Date | string
   createdAt?: Date | string
+  mode?: $Enums.StudyMode | null
+  correct?: boolean | null
+  firstTry?: boolean | null
+  responseMs?: number | null
   flashcardId: string
   moduleId: string
 }
@@ -483,9 +643,13 @@ export type StudyEventScalarWhereInput = {
   NOT?: Prisma.StudyEventScalarWhereInput | Prisma.StudyEventScalarWhereInput[]
   id?: Prisma.StringFilter<"StudyEvent"> | string
   clientEventId?: Prisma.StringFilter<"StudyEvent"> | string
-  status?: Prisma.EnumCardStatusFilter<"StudyEvent"> | $Enums.CardStatus
+  status?: Prisma.EnumCardStatusNullableFilter<"StudyEvent"> | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFilter<"StudyEvent"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StudyEvent"> | Date | string
+  mode?: Prisma.EnumStudyModeNullableFilter<"StudyEvent"> | $Enums.StudyMode | null
+  correct?: Prisma.BoolNullableFilter<"StudyEvent"> | boolean | null
+  firstTry?: Prisma.BoolNullableFilter<"StudyEvent"> | boolean | null
+  responseMs?: Prisma.IntNullableFilter<"StudyEvent"> | number | null
   flashcardId?: Prisma.StringFilter<"StudyEvent"> | string
   moduleId?: Prisma.StringFilter<"StudyEvent"> | string
   userId?: Prisma.StringFilter<"StudyEvent"> | string
@@ -494,9 +658,13 @@ export type StudyEventScalarWhereInput = {
 export type StudyEventCreateManyUserInput = {
   id?: string
   clientEventId: string
-  status: $Enums.CardStatus
+  status?: $Enums.CardStatus | null
   answeredAt: Date | string
   createdAt?: Date | string
+  mode?: $Enums.StudyMode | null
+  correct?: boolean | null
+  firstTry?: boolean | null
+  responseMs?: number | null
   flashcardId: string
   moduleId: string
 }
@@ -504,9 +672,13 @@ export type StudyEventCreateManyUserInput = {
 export type StudyEventUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientEventId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  status?: Prisma.NullableEnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mode?: Prisma.NullableEnumStudyModeFieldUpdateOperationsInput | $Enums.StudyMode | null
+  correct?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  firstTry?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   flashcardId?: Prisma.StringFieldUpdateOperationsInput | string
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -514,9 +686,13 @@ export type StudyEventUpdateWithoutUserInput = {
 export type StudyEventUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientEventId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  status?: Prisma.NullableEnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mode?: Prisma.NullableEnumStudyModeFieldUpdateOperationsInput | $Enums.StudyMode | null
+  correct?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  firstTry?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   flashcardId?: Prisma.StringFieldUpdateOperationsInput | string
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -524,9 +700,13 @@ export type StudyEventUncheckedUpdateWithoutUserInput = {
 export type StudyEventUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   clientEventId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  status?: Prisma.NullableEnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus | null
   answeredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mode?: Prisma.NullableEnumStudyModeFieldUpdateOperationsInput | $Enums.StudyMode | null
+  correct?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  firstTry?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  responseMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   flashcardId?: Prisma.StringFieldUpdateOperationsInput | string
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
@@ -539,6 +719,10 @@ export type StudyEventSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   status?: boolean
   answeredAt?: boolean
   createdAt?: boolean
+  mode?: boolean
+  correct?: boolean
+  firstTry?: boolean
+  responseMs?: boolean
   flashcardId?: boolean
   moduleId?: boolean
   userId?: boolean
@@ -551,6 +735,10 @@ export type StudyEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   answeredAt?: boolean
   createdAt?: boolean
+  mode?: boolean
+  correct?: boolean
+  firstTry?: boolean
+  responseMs?: boolean
   flashcardId?: boolean
   moduleId?: boolean
   userId?: boolean
@@ -563,6 +751,10 @@ export type StudyEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   answeredAt?: boolean
   createdAt?: boolean
+  mode?: boolean
+  correct?: boolean
+  firstTry?: boolean
+  responseMs?: boolean
   flashcardId?: boolean
   moduleId?: boolean
   userId?: boolean
@@ -575,12 +767,16 @@ export type StudyEventSelectScalar = {
   status?: boolean
   answeredAt?: boolean
   createdAt?: boolean
+  mode?: boolean
+  correct?: boolean
+  firstTry?: boolean
+  responseMs?: boolean
   flashcardId?: boolean
   moduleId?: boolean
   userId?: boolean
 }
 
-export type StudyEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientEventId" | "status" | "answeredAt" | "createdAt" | "flashcardId" | "moduleId" | "userId", ExtArgs["result"]["studyEvent"]>
+export type StudyEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "clientEventId" | "status" | "answeredAt" | "createdAt" | "mode" | "correct" | "firstTry" | "responseMs" | "flashcardId" | "moduleId" | "userId", ExtArgs["result"]["studyEvent"]>
 export type StudyEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -599,9 +795,13 @@ export type $StudyEventPayload<ExtArgs extends runtime.Types.Extensions.Internal
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     clientEventId: string
-    status: $Enums.CardStatus
+    status: $Enums.CardStatus | null
     answeredAt: Date
     createdAt: Date
+    mode: $Enums.StudyMode | null
+    correct: boolean | null
+    firstTry: boolean | null
+    responseMs: number | null
     flashcardId: string
     moduleId: string
     userId: string
@@ -1034,6 +1234,10 @@ export interface StudyEventFieldRefs {
   readonly status: Prisma.FieldRef<"StudyEvent", 'CardStatus'>
   readonly answeredAt: Prisma.FieldRef<"StudyEvent", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"StudyEvent", 'DateTime'>
+  readonly mode: Prisma.FieldRef<"StudyEvent", 'StudyMode'>
+  readonly correct: Prisma.FieldRef<"StudyEvent", 'Boolean'>
+  readonly firstTry: Prisma.FieldRef<"StudyEvent", 'Boolean'>
+  readonly responseMs: Prisma.FieldRef<"StudyEvent", 'Int'>
   readonly flashcardId: Prisma.FieldRef<"StudyEvent", 'String'>
   readonly moduleId: Prisma.FieldRef<"StudyEvent", 'String'>
   readonly userId: Prisma.FieldRef<"StudyEvent", 'String'>

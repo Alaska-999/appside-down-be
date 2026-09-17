@@ -20,8 +20,20 @@ export type FlashcardModel = runtime.Types.Result.DefaultSelection<Prisma.$Flash
 
 export type AggregateFlashcard = {
   _count: FlashcardCountAggregateOutputType | null
+  _avg: FlashcardAvgAggregateOutputType | null
+  _sum: FlashcardSumAggregateOutputType | null
   _min: FlashcardMinAggregateOutputType | null
   _max: FlashcardMaxAggregateOutputType | null
+}
+
+export type FlashcardAvgAggregateOutputType = {
+  strengthLevel: number | null
+  baselineLevel: number | null
+}
+
+export type FlashcardSumAggregateOutputType = {
+  strengthLevel: number | null
+  baselineLevel: number | null
 }
 
 export type FlashcardMinAggregateOutputType = {
@@ -32,6 +44,10 @@ export type FlashcardMinAggregateOutputType = {
   updatedAt: Date | null
   isStarred: boolean | null
   status: $Enums.CardStatus | null
+  strengthLevel: number | null
+  baselineLevel: number | null
+  lastCorrectAt: Date | null
+  lastWrongAt: Date | null
   moduleId: string | null
 }
 
@@ -43,6 +59,10 @@ export type FlashcardMaxAggregateOutputType = {
   updatedAt: Date | null
   isStarred: boolean | null
   status: $Enums.CardStatus | null
+  strengthLevel: number | null
+  baselineLevel: number | null
+  lastCorrectAt: Date | null
+  lastWrongAt: Date | null
   moduleId: string | null
 }
 
@@ -54,10 +74,24 @@ export type FlashcardCountAggregateOutputType = {
   updatedAt: number
   isStarred: number
   status: number
+  strengthLevel: number
+  baselineLevel: number
+  lastCorrectAt: number
+  lastWrongAt: number
   moduleId: number
   _all: number
 }
 
+
+export type FlashcardAvgAggregateInputType = {
+  strengthLevel?: true
+  baselineLevel?: true
+}
+
+export type FlashcardSumAggregateInputType = {
+  strengthLevel?: true
+  baselineLevel?: true
+}
 
 export type FlashcardMinAggregateInputType = {
   id?: true
@@ -67,6 +101,10 @@ export type FlashcardMinAggregateInputType = {
   updatedAt?: true
   isStarred?: true
   status?: true
+  strengthLevel?: true
+  baselineLevel?: true
+  lastCorrectAt?: true
+  lastWrongAt?: true
   moduleId?: true
 }
 
@@ -78,6 +116,10 @@ export type FlashcardMaxAggregateInputType = {
   updatedAt?: true
   isStarred?: true
   status?: true
+  strengthLevel?: true
+  baselineLevel?: true
+  lastCorrectAt?: true
+  lastWrongAt?: true
   moduleId?: true
 }
 
@@ -89,6 +131,10 @@ export type FlashcardCountAggregateInputType = {
   updatedAt?: true
   isStarred?: true
   status?: true
+  strengthLevel?: true
+  baselineLevel?: true
+  lastCorrectAt?: true
+  lastWrongAt?: true
   moduleId?: true
   _all?: true
 }
@@ -131,6 +177,18 @@ export type FlashcardAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: FlashcardAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: FlashcardSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: FlashcardMinAggregateInputType
@@ -161,6 +219,8 @@ export type FlashcardGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   _count?: FlashcardCountAggregateInputType | true
+  _avg?: FlashcardAvgAggregateInputType
+  _sum?: FlashcardSumAggregateInputType
   _min?: FlashcardMinAggregateInputType
   _max?: FlashcardMaxAggregateInputType
 }
@@ -173,8 +233,14 @@ export type FlashcardGroupByOutputType = {
   updatedAt: Date
   isStarred: boolean
   status: $Enums.CardStatus
+  strengthLevel: number
+  baselineLevel: number
+  lastCorrectAt: Date | null
+  lastWrongAt: Date | null
   moduleId: string
   _count: FlashcardCountAggregateOutputType | null
+  _avg: FlashcardAvgAggregateOutputType | null
+  _sum: FlashcardSumAggregateOutputType | null
   _min: FlashcardMinAggregateOutputType | null
   _max: FlashcardMaxAggregateOutputType | null
 }
@@ -205,6 +271,10 @@ export type FlashcardWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Flashcard"> | Date | string
   isStarred?: Prisma.BoolFilter<"Flashcard"> | boolean
   status?: Prisma.EnumCardStatusFilter<"Flashcard"> | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFilter<"Flashcard"> | number
+  baselineLevel?: Prisma.IntFilter<"Flashcard"> | number
+  lastCorrectAt?: Prisma.DateTimeNullableFilter<"Flashcard"> | Date | string | null
+  lastWrongAt?: Prisma.DateTimeNullableFilter<"Flashcard"> | Date | string | null
   moduleId?: Prisma.StringFilter<"Flashcard"> | string
   module?: Prisma.XOR<Prisma.ModuleScalarRelationFilter, Prisma.ModuleWhereInput>
 }
@@ -217,6 +287,10 @@ export type FlashcardOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   isStarred?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  strengthLevel?: Prisma.SortOrder
+  baselineLevel?: Prisma.SortOrder
+  lastCorrectAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastWrongAt?: Prisma.SortOrderInput | Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   module?: Prisma.ModuleOrderByWithRelationInput
 }
@@ -232,6 +306,10 @@ export type FlashcardWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Flashcard"> | Date | string
   isStarred?: Prisma.BoolFilter<"Flashcard"> | boolean
   status?: Prisma.EnumCardStatusFilter<"Flashcard"> | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFilter<"Flashcard"> | number
+  baselineLevel?: Prisma.IntFilter<"Flashcard"> | number
+  lastCorrectAt?: Prisma.DateTimeNullableFilter<"Flashcard"> | Date | string | null
+  lastWrongAt?: Prisma.DateTimeNullableFilter<"Flashcard"> | Date | string | null
   moduleId?: Prisma.StringFilter<"Flashcard"> | string
   module?: Prisma.XOR<Prisma.ModuleScalarRelationFilter, Prisma.ModuleWhereInput>
 }, "id">
@@ -244,10 +322,16 @@ export type FlashcardOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   isStarred?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  strengthLevel?: Prisma.SortOrder
+  baselineLevel?: Prisma.SortOrder
+  lastCorrectAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastWrongAt?: Prisma.SortOrderInput | Prisma.SortOrder
   moduleId?: Prisma.SortOrder
   _count?: Prisma.FlashcardCountOrderByAggregateInput
+  _avg?: Prisma.FlashcardAvgOrderByAggregateInput
   _max?: Prisma.FlashcardMaxOrderByAggregateInput
   _min?: Prisma.FlashcardMinOrderByAggregateInput
+  _sum?: Prisma.FlashcardSumOrderByAggregateInput
 }
 
 export type FlashcardScalarWhereWithAggregatesInput = {
@@ -261,6 +345,10 @@ export type FlashcardScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Flashcard"> | Date | string
   isStarred?: Prisma.BoolWithAggregatesFilter<"Flashcard"> | boolean
   status?: Prisma.EnumCardStatusWithAggregatesFilter<"Flashcard"> | $Enums.CardStatus
+  strengthLevel?: Prisma.IntWithAggregatesFilter<"Flashcard"> | number
+  baselineLevel?: Prisma.IntWithAggregatesFilter<"Flashcard"> | number
+  lastCorrectAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Flashcard"> | Date | string | null
+  lastWrongAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Flashcard"> | Date | string | null
   moduleId?: Prisma.StringWithAggregatesFilter<"Flashcard"> | string
 }
 
@@ -272,6 +360,10 @@ export type FlashcardCreateInput = {
   updatedAt?: Date | string
   isStarred?: boolean
   status?: $Enums.CardStatus
+  strengthLevel?: number
+  baselineLevel?: number
+  lastCorrectAt?: Date | string | null
+  lastWrongAt?: Date | string | null
   module: Prisma.ModuleCreateNestedOneWithoutFlashcardsInput
 }
 
@@ -283,6 +375,10 @@ export type FlashcardUncheckedCreateInput = {
   updatedAt?: Date | string
   isStarred?: boolean
   status?: $Enums.CardStatus
+  strengthLevel?: number
+  baselineLevel?: number
+  lastCorrectAt?: Date | string | null
+  lastWrongAt?: Date | string | null
   moduleId: string
 }
 
@@ -294,6 +390,10 @@ export type FlashcardUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isStarred?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  baselineLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  lastCorrectAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastWrongAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   module?: Prisma.ModuleUpdateOneRequiredWithoutFlashcardsNestedInput
 }
 
@@ -305,6 +405,10 @@ export type FlashcardUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isStarred?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  baselineLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  lastCorrectAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastWrongAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -316,6 +420,10 @@ export type FlashcardCreateManyInput = {
   updatedAt?: Date | string
   isStarred?: boolean
   status?: $Enums.CardStatus
+  strengthLevel?: number
+  baselineLevel?: number
+  lastCorrectAt?: Date | string | null
+  lastWrongAt?: Date | string | null
   moduleId: string
 }
 
@@ -327,6 +435,10 @@ export type FlashcardUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isStarred?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  baselineLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  lastCorrectAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastWrongAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type FlashcardUncheckedUpdateManyInput = {
@@ -337,6 +449,10 @@ export type FlashcardUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isStarred?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  baselineLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  lastCorrectAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastWrongAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   moduleId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -358,7 +474,16 @@ export type FlashcardCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   isStarred?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  strengthLevel?: Prisma.SortOrder
+  baselineLevel?: Prisma.SortOrder
+  lastCorrectAt?: Prisma.SortOrder
+  lastWrongAt?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
+}
+
+export type FlashcardAvgOrderByAggregateInput = {
+  strengthLevel?: Prisma.SortOrder
+  baselineLevel?: Prisma.SortOrder
 }
 
 export type FlashcardMaxOrderByAggregateInput = {
@@ -369,6 +494,10 @@ export type FlashcardMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   isStarred?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  strengthLevel?: Prisma.SortOrder
+  baselineLevel?: Prisma.SortOrder
+  lastCorrectAt?: Prisma.SortOrder
+  lastWrongAt?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
 }
 
@@ -380,7 +509,16 @@ export type FlashcardMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   isStarred?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  strengthLevel?: Prisma.SortOrder
+  baselineLevel?: Prisma.SortOrder
+  lastCorrectAt?: Prisma.SortOrder
+  lastWrongAt?: Prisma.SortOrder
   moduleId?: Prisma.SortOrder
+}
+
+export type FlashcardSumOrderByAggregateInput = {
+  strengthLevel?: Prisma.SortOrder
+  baselineLevel?: Prisma.SortOrder
 }
 
 export type FlashcardCreateNestedManyWithoutModuleInput = {
@@ -437,6 +575,10 @@ export type FlashcardCreateWithoutModuleInput = {
   updatedAt?: Date | string
   isStarred?: boolean
   status?: $Enums.CardStatus
+  strengthLevel?: number
+  baselineLevel?: number
+  lastCorrectAt?: Date | string | null
+  lastWrongAt?: Date | string | null
 }
 
 export type FlashcardUncheckedCreateWithoutModuleInput = {
@@ -447,6 +589,10 @@ export type FlashcardUncheckedCreateWithoutModuleInput = {
   updatedAt?: Date | string
   isStarred?: boolean
   status?: $Enums.CardStatus
+  strengthLevel?: number
+  baselineLevel?: number
+  lastCorrectAt?: Date | string | null
+  lastWrongAt?: Date | string | null
 }
 
 export type FlashcardCreateOrConnectWithoutModuleInput = {
@@ -486,6 +632,10 @@ export type FlashcardScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Flashcard"> | Date | string
   isStarred?: Prisma.BoolFilter<"Flashcard"> | boolean
   status?: Prisma.EnumCardStatusFilter<"Flashcard"> | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFilter<"Flashcard"> | number
+  baselineLevel?: Prisma.IntFilter<"Flashcard"> | number
+  lastCorrectAt?: Prisma.DateTimeNullableFilter<"Flashcard"> | Date | string | null
+  lastWrongAt?: Prisma.DateTimeNullableFilter<"Flashcard"> | Date | string | null
   moduleId?: Prisma.StringFilter<"Flashcard"> | string
 }
 
@@ -497,6 +647,10 @@ export type FlashcardCreateManyModuleInput = {
   updatedAt?: Date | string
   isStarred?: boolean
   status?: $Enums.CardStatus
+  strengthLevel?: number
+  baselineLevel?: number
+  lastCorrectAt?: Date | string | null
+  lastWrongAt?: Date | string | null
 }
 
 export type FlashcardUpdateWithoutModuleInput = {
@@ -507,6 +661,10 @@ export type FlashcardUpdateWithoutModuleInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isStarred?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  baselineLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  lastCorrectAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastWrongAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type FlashcardUncheckedUpdateWithoutModuleInput = {
@@ -517,6 +675,10 @@ export type FlashcardUncheckedUpdateWithoutModuleInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isStarred?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  baselineLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  lastCorrectAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastWrongAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type FlashcardUncheckedUpdateManyWithoutModuleInput = {
@@ -527,6 +689,10 @@ export type FlashcardUncheckedUpdateManyWithoutModuleInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   isStarred?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumCardStatusFieldUpdateOperationsInput | $Enums.CardStatus
+  strengthLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  baselineLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  lastCorrectAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastWrongAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -539,6 +705,10 @@ export type FlashcardSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   updatedAt?: boolean
   isStarred?: boolean
   status?: boolean
+  strengthLevel?: boolean
+  baselineLevel?: boolean
+  lastCorrectAt?: boolean
+  lastWrongAt?: boolean
   moduleId?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["flashcard"]>
@@ -551,6 +721,10 @@ export type FlashcardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   updatedAt?: boolean
   isStarred?: boolean
   status?: boolean
+  strengthLevel?: boolean
+  baselineLevel?: boolean
+  lastCorrectAt?: boolean
+  lastWrongAt?: boolean
   moduleId?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["flashcard"]>
@@ -563,6 +737,10 @@ export type FlashcardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   updatedAt?: boolean
   isStarred?: boolean
   status?: boolean
+  strengthLevel?: boolean
+  baselineLevel?: boolean
+  lastCorrectAt?: boolean
+  lastWrongAt?: boolean
   moduleId?: boolean
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["flashcard"]>
@@ -575,10 +753,14 @@ export type FlashcardSelectScalar = {
   updatedAt?: boolean
   isStarred?: boolean
   status?: boolean
+  strengthLevel?: boolean
+  baselineLevel?: boolean
+  lastCorrectAt?: boolean
+  lastWrongAt?: boolean
   moduleId?: boolean
 }
 
-export type FlashcardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "term" | "definition" | "createdAt" | "updatedAt" | "isStarred" | "status" | "moduleId", ExtArgs["result"]["flashcard"]>
+export type FlashcardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "term" | "definition" | "createdAt" | "updatedAt" | "isStarred" | "status" | "strengthLevel" | "baselineLevel" | "lastCorrectAt" | "lastWrongAt" | "moduleId", ExtArgs["result"]["flashcard"]>
 export type FlashcardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   module?: boolean | Prisma.ModuleDefaultArgs<ExtArgs>
 }
@@ -602,6 +784,10 @@ export type $FlashcardPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     updatedAt: Date
     isStarred: boolean
     status: $Enums.CardStatus
+    strengthLevel: number
+    baselineLevel: number
+    lastCorrectAt: Date | null
+    lastWrongAt: Date | null
     moduleId: string
   }, ExtArgs["result"]["flashcard"]>
   composites: {}
@@ -1034,6 +1220,10 @@ export interface FlashcardFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"Flashcard", 'DateTime'>
   readonly isStarred: Prisma.FieldRef<"Flashcard", 'Boolean'>
   readonly status: Prisma.FieldRef<"Flashcard", 'CardStatus'>
+  readonly strengthLevel: Prisma.FieldRef<"Flashcard", 'Int'>
+  readonly baselineLevel: Prisma.FieldRef<"Flashcard", 'Int'>
+  readonly lastCorrectAt: Prisma.FieldRef<"Flashcard", 'DateTime'>
+  readonly lastWrongAt: Prisma.FieldRef<"Flashcard", 'DateTime'>
   readonly moduleId: Prisma.FieldRef<"Flashcard", 'String'>
 }
     

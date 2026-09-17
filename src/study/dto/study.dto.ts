@@ -1,5 +1,17 @@
 import { Type } from 'class-transformer';
-import { ArrayMaxSize, IsArray, IsEnum, IsISO8601, IsUUID, ValidateNested } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsISO8601,
+  IsInt,
+  IsOptional,
+  IsUUID,
+  Max,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 
 export class StudyEventInputDto {
   @IsUUID()
@@ -11,8 +23,27 @@ export class StudyEventInputDto {
   @IsUUID()
   moduleId!: string;
 
+  @IsOptional()
   @IsEnum(['KNOWN', 'STILL_LEARNING'])
-  status!: 'KNOWN' | 'STILL_LEARNING';
+  status?: 'KNOWN' | 'STILL_LEARNING';
+
+  @IsOptional()
+  @IsEnum(['FLASHCARDS', 'MATCH', 'TEST', 'LEARN'])
+  mode?: 'FLASHCARDS' | 'MATCH' | 'TEST' | 'LEARN';
+
+  @IsOptional()
+  @IsBoolean()
+  correct?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  firstTry?: boolean;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(600000)
+  responseMs?: number;
 
   @IsISO8601()
   answeredAt!: string;

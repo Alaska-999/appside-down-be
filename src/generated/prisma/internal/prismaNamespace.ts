@@ -1128,6 +1128,10 @@ export const FlashcardScalarFieldEnum = {
   updatedAt: 'updatedAt',
   isStarred: 'isStarred',
   status: 'status',
+  strengthLevel: 'strengthLevel',
+  baselineLevel: 'baselineLevel',
+  lastCorrectAt: 'lastCorrectAt',
+  lastWrongAt: 'lastWrongAt',
   moduleId: 'moduleId'
 } as const
 
@@ -1140,6 +1144,10 @@ export const StudyEventScalarFieldEnum = {
   status: 'status',
   answeredAt: 'answeredAt',
   createdAt: 'createdAt',
+  mode: 'mode',
+  correct: 'correct',
+  firstTry: 'firstTry',
+  responseMs: 'responseMs',
   flashcardId: 'flashcardId',
   moduleId: 'moduleId',
   userId: 'userId'
@@ -1238,6 +1246,20 @@ export type EnumCardStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'CardStatus[]'
  */
 export type ListEnumCardStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CardStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'StudyMode'
+ */
+export type EnumStudyModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudyMode'>
+    
+
+
+/**
+ * Reference to a field of type 'StudyMode[]'
+ */
+export type ListEnumStudyModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudyMode[]'>
     
 
 
