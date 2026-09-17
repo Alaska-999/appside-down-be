@@ -1,4 +1,4 @@
-# brnrv-be
+# appside-down-be
 
 Backend API for a flashcard-based learning app, built with [NestJS](https://nestjs.com/) and PostgreSQL (via Prisma).
 
@@ -54,16 +54,16 @@ npm install
 
 Copy `.env.production.example` to `.env` and fill in real values. Required variables (validated on boot via Joi):
 
-| Variable              | Description                                         |
-| --------------------- | ---------------------------------------------------- |
-| `DATABASE_URL`        | PostgreSQL connection string                         |
-| `AT_SECRET`           | Access token JWT secret (min 32 chars)               |
-| `RT_SECRET`           | Refresh token JWT secret (min 32 chars, must differ from `AT_SECRET`) |
-| `RESEND_API_KEY_DEV`  | Resend API key for sending emails                    |
-| `REDIS_HOST`          | Redis host (defaults to `localhost`)                 |
-| `REDIS_PORT`          | Redis port (defaults to `6379`)                      |
-| `DB_STATEMENT_TIMEOUT_MS` | Postgres statement timeout (HTTP: 2s default, worker: 10s) |
-| `PORT`                | HTTP port (defaults to `5111`)                       |
+| Variable                  | Description                                                           |
+| ------------------------- | --------------------------------------------------------------------- |
+| `DATABASE_URL`            | PostgreSQL connection string                                          |
+| `AT_SECRET`               | Access token JWT secret (min 32 chars)                                |
+| `RT_SECRET`               | Refresh token JWT secret (min 32 chars, must differ from `AT_SECRET`) |
+| `RESEND_API_KEY_DEV`      | Resend API key for sending emails                                     |
+| `REDIS_HOST`              | Redis host (defaults to `localhost`)                                  |
+| `REDIS_PORT`              | Redis port (defaults to `6379`)                                       |
+| `DB_STATEMENT_TIMEOUT_MS` | Postgres statement timeout (HTTP: 2s default, worker: 10s)            |
+| `PORT`                    | HTTP port (defaults to `5111`)                                        |
 
 ### 3. Start local infrastructure
 
